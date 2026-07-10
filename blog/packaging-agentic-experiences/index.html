@@ -1,0 +1,119 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v7.0.7"><title>Packaging agentic experiences: portable apps that run on your host · Pupa</title><meta name="description" content="The valuable thing an agent produces isn't a transcript, and it isn't a folder of files — it's the agentic experience you configured. Pupa crystallises that into a typed app you can package, share, and re-run on any host."><meta name="color-scheme" content="dark light"><link rel="icon" type="image/svg+xml" href="/website/favicon.svg"><meta property="og:title" content="Packaging agentic experiences: portable apps that run on your host · Pupa"><meta property="og:description" content="The valuable thing an agent produces isn't a transcript, and it isn't a folder of files — it's the agentic experience you configured. Pupa crystallises that into a typed app you can package, share, and re-run on any host."><meta property="og:type" content="website"><link rel="stylesheet" href="/website/_astro/BaseLayout.CBm-CkCN.css"></head><body><header class="site-header"><div class="container bar"><a href="/website/" class="brand"><svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pupa logo"><defs><linearGradient id="pupaGrad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#7c9cff"></stop><stop offset="1" stop-color="#b48cff"></stop></linearGradient></defs><rect x="2" y="2" width="28" height="28" rx="8" fill="url(#pupaGrad)"></rect><rect x="8" y="8" width="7" height="7" rx="2" fill="#0d0f13" opacity="0.85"></rect><rect x="17" y="8" width="7" height="7" rx="2" fill="#0d0f13" opacity="0.55"></rect><rect x="8" y="17" width="7" height="7" rx="2" fill="#0d0f13" opacity="0.55"></rect><rect x="17" y="17" width="7" height="7" rx="3.5" fill="#0d0f13" opacity="0.85"></rect></svg>Pupa</a><nav class="nav" aria-label="Primary"><a href="/website/blog">Blog</a><a href="https://github.com/pupa-app/marketplace">Marketplace</a><a href="https://github.com/pupa-app">GitHub</a><a href="/website/support">Support</a></nav></div></header><main><article class="section container"><a class="back-link" href="/website/blog">← All posts</a><div class="page-head" style="padding-block:0 1.5rem"><h1>Packaging agentic experiences: portable apps that run on your host</h1><p class="page-sub">July 10, 2026 · Pupa team<span class="badge-draft">Draft</span></p></div><div class="prose"><h2 id="the-thesis">The thesis</h2>
+<p>The valuable thing an agent produces isn’t a transcript — and it isn’t a folder
+of files either. It’s the <strong>agentic experience</strong> you configured. Shipping
+<em>instructions and assets</em> is already possible: a Claude Code plugin, a skills
+hub, a repo of prompts. What isn’t yet possible is shipping a <strong>structured app
+the agent operates natively</strong> — typed surfaces it reads and writes <em>with you</em>,
+persisting as one coherent thing across projects. Pupa <strong>crystallises an
+experience into that app structure</strong>, so it can be produced once, refined over
+time, and handed to someone who runs it on their own host.</p>
+<blockquote>
+<p>Pupa turns an agentic experience into a persistent, typed app the agent works
+in with you — and that app is the portable unit.</p>
+</blockquote>
+<h2 id="the-problem--you-can-ship-files-not-an-app-the-agent-uses">The problem — you can ship files, not an app the agent uses</h2>
+<p>Portability of <em>content</em> is largely solved: you can already ship a Claude Code
+plugin, a skills hub, a repo of prompts and assets. But those are <strong>instructions
+and files the agent references</strong> — not an <strong>app the agent operates</strong>. Nothing
+makes the asset a live, typed workspace the agent reads and writes as first-class
+tools, that you and it edit together in one surface, and that persists as a
+single coherent thing across projects. So every good workflow gets rebuilt per
+project, and “sharing” means handing over notes, not a working app.</p>
+<h2 id="what-pupa-is">What Pupa is</h2>
+<p>A chat-driven canvas that <strong>moulds into the shape you ask for</strong> — tracker,
+calendar, checklist, slack rooms, calculator, charts — backed by a long-lived
+<strong>Memories filesystem</strong>. The side-panel chat drives the canvas through frontend
+tools; the app speaks plain <strong>AG-UI</strong> over one SSE stream to a <strong>swappable
+backend</strong> (FastAPI + LangGraph). Native SwiftUI (iOS / macOS).</p>
+<p>The unit is a <strong>MyApp</strong>: typed components that reference each other, plus its
+memories and its agent config (orchestrator + personas + skills + crons). A
+MyApp <em>is</em> a packaged agentic experience — and it’s an app the agent uses, not
+just files it reads.</p>
+<h2 id="the-portable-standard--the-pupa-bundle">The portable standard — the <code>.pupa</code> bundle</h2>
+<ul>
+<li><strong>Inert JSON.</strong> Header + the whole <code>MyApp</code> tree + memories. <strong>No executable
+content</strong> — all rebuild logic lives in the app, dispatched by component
+<code>kind</code>.</li>
+<li><strong>Self-contained + forward-compatible.</strong> The app tree is the single source of
+truth, so bundles load across versions.</li>
+<li><strong>Hostile-validated import.</strong> Size caps, magic/version checks, a settings
+allow-list, memory-path guards, fresh IDs, ref pruning; tap-to-open shows a
+confirm sheet naming the app + agent prompts.</li>
+<li><strong>Sharing = publishing.</strong> Export is a system Share action; a library bundle
+packs <em>every</em> MyApp into one file.</li>
+</ul>
+<h2 id="what-actually-makes-it-different">What actually makes it different</h2>
+<p><strong>(a) The asset is an app the agent operates natively.</strong> Typed components the
+agent reads and writes as first-class tools, while you watch and edit the <em>same</em>
+surface.</p>
+<p><strong>(b) It persists as one app across projects.</strong> A solid, repeatable scaffold for
+producing, refining, and improving an experience over time.</p>
+<p><strong>(c) Portable experience, local execution — with a setup skill as installer.</strong>
+The bundle ships structure and intent but no runtime; on import it runs on
+<strong>your</strong> host (your backend, tools/MCP, shell, data).</p>
+<p><strong>The boundary (also the safety story).</strong> What travels: the app structure,
+personas, skills, intent. What’s re-earned on the new host: tool availability,
+credentials, private data. The bundle is inert — it can’t act until you grant it
+your host’s capabilities.</p>
+<h2 id="levels-of-packaging-the-ladder">Levels of packaging (the ladder)</h2>
+<ul>
+<li><strong>L0 — a typed component.</strong> A tracker/chart the agent operates directly.</li>
+<li><strong>L1 — a questionnaire.</strong> A repeatable intake frozen into a typed form.</li>
+<li><strong>L2 — a multi-component pipeline.</strong> Cross-linked components modelling a real
+recurring workflow.</li>
+<li><strong>L3 — a self-improving experience.</strong> Personas, subagents, skills, memory that
+make the app get better with use — plus a setup skill so it installs cleanly
+elsewhere.</li>
+</ul>
+<h2 id="the-meta-harness-view">The meta-harness view</h2>
+<p>A MyApp is itself a small <strong>agent harness</strong> that persists across projects: its
+own AGENTS.md orchestrator + subagent personas, skills that become slash commands
+and model-loadable playbooks, memories as the long-term store, crons for cadence.
+So Pupa isn’t one app — it’s a <strong>harness that ships harnesses</strong>, and the <code>.pupa</code>
+bundle + setup skill are how one travels and installs.</p>
+<h2 id="on-ramp-example--blog-studio">On-ramp example — “Blog Studio”</h2>
+<p>A one-component MyApp — a kanban tracker of posts moving through <em>Research →
+Outline → Draft → Review → Publish</em>. Not notes the agent reads — an <strong>app the
+agent operates with me</strong>, adding rows and moving stages as first-class actions.
+Export it and anyone inherits the same working pipeline.</p>
+<h2 id="example-a--the-questionnaire-l1">Example A — the Questionnaire (L1)</h2>
+<p>A repeatable intake — onboarding survey, health intake, project brief — as a
+typed app the agent fills <em>with</em> you: it asks conversationally, validates, and
+writes structured answers into typed fields. Export the <code>.pupa</code> and anyone runs
+the <em>same</em> intake for the <em>same</em> typed output.</p>
+<h2 id="example-b--the-job-search-flagship-l2l3">Example B — the Job Search (flagship, L2/L3)</h2>
+<ul>
+<li><strong>Components:</strong> tracker of applications, calendar of interviews, chart of
+pipeline-by-stage, memories holding CV + preferences.</li>
+<li><strong>Personas:</strong> <em>researcher</em>, <em>tailor</em>, <em>outreach</em> writer — each with handoff
+limits.</li>
+<li><strong>A standard setup skill</strong> installs the experience on a new host.</li>
+<li><strong>Rides your host:</strong> hand it to a friend and they inherit your entire method
+minus your private records.</li>
+</ul>
+<h2 id="open-source--extensible--bring-your-own-component">Open source &amp; extensible — bring your own component</h2>
+<ul>
+<li><strong>Add your own canvas shape.</strong> The component set isn’t a fixed menu — it’s an
+extension point, with a documented “adding a component” recipe and
+compiler-enforced completeness.</li>
+<li><strong>Bring your own design.</strong> The AG-UI client is a standalone Swift package
+(AGUIKit) with no dependency on Pupa’s UI.</li>
+</ul>
+<h2 id="why-it-matters">Why it matters</h2>
+<ul>
+<li><strong>A real unit to share</strong> — a typed app the agent operates, persisting across
+projects.</li>
+<li><strong>A standard to refine</strong> — one solid structure to improve experiences over
+time.</li>
+<li><strong>Open &amp; extensible</strong> — new component kinds and designs come from the
+community.</li>
+<li><strong>No lock-in</strong> — inert JSON, inspectable, rebuilt by the open client.</li>
+<li><strong>Safety</strong> — inert bundle + hostile-validated import + a clear travels/re-earned
+boundary.</li>
+</ul>
+<h2 id="roadmap--close">Roadmap / close</h2>
+<p>The follow-on is a <strong>remote marketplace</strong>: store/serve bundles, an in-app
+browser, plus signatures and moderation. Agents will keep talking — Pupa is where
+an experience <strong>crystallises into an app you package, distribute, refine, and
+re-run on any host</strong>.</p>
+</div></article></main><footer class="site-footer"><div class="container bar"><div class="foot-links"><a href="/website/privacy">Privacy</a><a href="/website/terms">Terms</a><a href="/website/support">Support</a><a href="https://github.com/pupa-app">GitHub</a></div><div>© 2026 Pupa</div></div></footer></body></html>
