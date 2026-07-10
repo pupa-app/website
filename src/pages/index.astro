@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const GITHUB_ORG = 'https://github.com/pupa-app';
+const MARKETPLACE = 'https://github.com/pupa-app/marketplace';
+
+const verbs = [
+  {
+    verb: 'Use',
+    title: 'Use a MyApp daily',
+    body: 'Chat drives a typed canvas. Ask, and the surface moulds into a tracker, calendar, checklist, chart, or a room — the agent reads and writes it as first-class tools while you watch and edit the same surface.',
+  },
+  {
+    verb: 'Build',
+    title: 'Build a MyApp',
+    body: 'Mould the canvas into the shape you need — trackers, calendars, checklists, slack rooms, calculators, charts — cross-linked into one coherent app, backed by a long-lived Memories filesystem that survives sessions.',
+  },
+  {
+    verb: 'Share',
+    title: 'Share a MyApp',
+    body: 'Export any MyApp as an inert-JSON .pupa bundle and hand it to someone who runs it on their own host. Import and distribute through the marketplace — a plain HTTPS index anyone can host.',
+  },
+  {
+    verb: 'Contribute',
+    title: 'Contribute code',
+    body: 'Add new canvas components to the app or new agent hookups to the backend. Components are just SwiftUI views with a typed model — no agentic knowledge needed to build agent-compatible surfaces.',
+  },
+];
+
+const repos = [
+  {
+    name: 'pupa-app/pupa',
+    url: `${GITHUB_ORG}/pupa`,
+    desc: 'The native iOS / macOS client — SwiftUI canvas, side-panel chat, Memories filesystem. Bundles AGUIKit, a standalone Swift AG-UI client package with no dependency on Pupa’s UI.',
+  },
+  {
+    name: 'pupa-app/pupa-backend',
+    url: `${GITHUB_ORG}/pupa-backend`,
+    desc: 'The user-owned backend — FastAPI + LangGraph, speaking AG-UI over one SSE stream. Run it locally next to the app or deploy your own in the cloud. Pair-once auth; your keys stay yours.',
+  },
+  {
+    name: 'pupa-app/marketplace',
+    url: MARKETPLACE,
+    desc: 'A catalog of .pupa bundles you can browse and install from the app — just an HTTPS index.json anyone can host. App content is CC0; tooling is MIT.',
+  },
+];
+---
+<BaseLayout title="Pupa">
+  <!-- Hero -->
+  <section class="hero container">
+    <span class="eyebrow">Open-source agent app · iOS &amp; macOS</span>
+    <h1>Pupa</h1>
+    <p class="lead">
+      Pupa turns an agentic experience into a persistent, typed app the agent
+      works in with you — and that app is the portable unit.
+    </p>
+    <p class="subline">
+      A SwiftUI canvas that moulds into the shape you ask for — tracker,
+      calendar, checklist, slack rooms, calculator, charts — driven by a
+      side-panel chat, backed by a long-lived Memories filesystem, and speaking
+      plain AG-UI to a backend you own.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href={GITHUB_ORG}>View on GitHub</a>
+      <a class="btn" href={MARKETPLACE}>Browse the marketplace</a>
+    </div>
+  </section>
+
+  <!-- Four verbs -->
+  <section class="section container">
+    <p class="section-eyebrow">Four ways in</p>
+    <h2>Use, build, share, contribute</h2>
+    <p class="section-lead">
+      Pupa is one product with four doors. Live in a MyApp day-to-day, shape new
+      ones, pass them to other people, or extend the open-source machinery
+      underneath.
+    </p>
+    <div class="card-grid">
+      {verbs.map((v) => (
+        <article class="card">
+          <span class="verb">{v.verb}</span>
+          <h3>{v.title}</h3>
+          <p>{v.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- The .pupa bundle -->
+  <section class="section container">
+    <div class="panel">
+      <p class="section-eyebrow">The portable standard</p>
+      <h2>The <code>.pupa</code> bundle</h2>
+      <p class="section-lead" style="margin-bottom:1.2rem">
+        A MyApp — its typed components, its memories, and its agent config — packs
+        into a single portable file. The bundle ships the structure and intent,
+        but no runtime: on import it runs on <strong>your</strong> host.
+      </p>
+      <ul>
+        <li>
+          <strong>Inert JSON.</strong> Header plus the whole MyApp tree and its
+          memories. No executable content — all rebuild logic lives in the open
+          client, dispatched by component <code>kind</code>.
+        </li>
+        <li>
+          <strong>Hostile-validated import.</strong> Size caps, magic and version
+          checks, a settings allow-list, memory-path guards, fresh IDs, and ref
+          pruning. Tap-to-open shows a confirm sheet naming the app and its agent
+          prompts before anything installs.
+        </li>
+        <li>
+          <strong>Portable experience, local execution.</strong> What travels is
+          the app structure, personas, skills, and intent. What’s re-earned on the
+          new host is tool availability, credentials, and private data. The bundle
+          can’t act until you grant it your host’s capabilities.
+        </li>
+        <li>
+          <strong>No lock-in.</strong> Inspectable JSON, rebuilt by the open
+          client, forward-compatible across app versions.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Open source -->
+  <section class="section container">
+    <p class="section-eyebrow">Open source</p>
+    <h2>Everything is open, and swappable</h2>
+    <p class="section-lead">
+      The client, the backend, and the marketplace are all open source. The AG-UI
+      client ships as a standalone Swift package so anyone building an agent client
+      on Apple platforms can reuse it without taking on Pupa’s UI.
+    </p>
+    <div class="repo-grid">
+      {repos.map((r) => (
+        <a class="repo" href={r.url}>
+          <div class="repo-name">{r.name}</div>
+          <p>{r.desc}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

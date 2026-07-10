@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const GITHUB_ORG = 'https://github.com/pupa-app';
+const repos = [
+  { name: 'pupa', label: 'the iOS / macOS app', url: `${GITHUB_ORG}/pupa/issues` },
+  { name: 'pupa-backend', label: 'the backend', url: `${GITHUB_ORG}/pupa-backend/issues` },
+  { name: 'marketplace', label: 'the marketplace', url: `${GITHUB_ORG}/marketplace/issues` },
+];
+---
+<BaseLayout title="Support" description="Get help with Pupa — GitHub issues and answers to common questions.">
+  <section class="section container">
+    <div class="page-head" style="padding-block:0 1rem">
+      <h1>Support</h1>
+      <p class="page-sub">Pupa is open source. Here's how to get help.</p>
+    </div>
+
+    <div class="prose">
+      <h2>Report a bug or request a feature</h2>
+      <p>
+        The fastest way to get help is to open an issue on the relevant
+        repository. Pick the one that matches your problem:
+      </p>
+      <ul>
+        {repos.map((r) => (
+          <li>
+            <a href={r.url}><code>{r.name}</code></a> — issues for {r.label}.
+          </li>
+        ))}
+      </ul>
+
+      <h2>Frequently asked questions</h2>
+      <div class="faq">
+        <details>
+          <summary>How do I pair the app to a backend?</summary>
+          <p>
+            Run your own backend (locally with <code>pupa-backend run</code>, or
+            deploy your own cloud instance), then mint a pairing code with
+            <code>pupa-backend pair</code>. In the app, go to Settings ▸ Backend ▸
+            Edit and paste or scan the code. The app defaults to
+            <code>http://localhost:8004/</code>; point it at a hosted instance from
+            the same screen. Full instructions are in the
+            <a href={`${GITHUB_ORG}/pupa-backend`}>pupa-backend</a> README.
+          </p>
+        </details>
+
+        <details>
+          <summary>How do I import a <code>.pupa</code> bundle?</summary>
+          <p>
+            Open a <code>.pupa</code> file with Pupa (for example, tap one you
+            downloaded), or use Settings ▸ Import &amp; Export. On import the app
+            shows a confirm sheet naming the MyApp and its agent prompts — review
+            them, then install. Bundles are inert JSON and are validated as
+            untrusted input, so nothing runs until you grant it your host's
+            capabilities.
+          </p>
+        </details>
+
+        <details>
+          <summary>How do I install apps from the marketplace?</summary>
+          <p>
+            In the app, open Settings ▸ Marketplace, pick an app, review its agent
+            prompts in the install preview, and install. A marketplace is just an
+            HTTPS <code>index.json</code> pointing at <code>.pupa</code> files —
+            the official one is on
+            <a href={`${GITHUB_ORG}/marketplace`}>GitHub</a>, and anyone can host
+            their own.
+          </p>
+        </details>
+
+        <details>
+          <summary>How do I publish my own MyApp?</summary>
+          <p>
+            Export your MyApp as a <code>.pupa</code> file from Settings ▸ Import
+            &amp; Export, then fork the
+            <a href={`${GITHUB_ORG}/marketplace`}>marketplace</a> repo, add a
+            directory under <code>apps/</code> with your bundle and metadata, run
+            the validator, and open a pull request. The repo's CONTRIBUTING guide
+            walks through the checklist.
+          </p>
+        </details>
+
+        <details>
+          <summary>Which model providers does Pupa support?</summary>
+          <p>
+            Your backend does the talking to the model, so it supports whatever
+            your backend is configured with — Anthropic, Amazon Bedrock, or any
+            OpenAI-compatible endpoint. Credentials live in your backend's
+            environment; they never reach the app.
+          </p>
+        </details>
+
+        <details>
+          <summary>Do I need to know how agents work to contribute a component?</summary>
+          <p>
+            No. A canvas component is a self-contained SwiftUI view with a typed
+            data model plus render and mutator tools. The
+            <a href={`${GITHUB_ORG}/pupa`}>pupa</a> repo ships an "adding a
+            component" recipe, and the compiler enforces completeness — no agentic
+            knowledge required to build an agent-compatible surface.
+          </p>
+        </details>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

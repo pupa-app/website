@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const GITHUB_ORG = 'https://github.com/pupa-app';
+---
+<BaseLayout title="Terms of Use" description="Terms of use for Pupa — MIT-licensed software, provided as-is, with you responsible for your own backend and API keys.">
+  <section class="section container">
+    <div class="page-head" style="padding-block:0 1rem">
+      <h1>Terms of Use</h1>
+      <p class="effective">Effective date: July 10, 2026</p>
+    </div>
+
+    <div class="prose">
+      <p>
+        These terms cover your use of the Pupa app and its related open-source
+        projects. By using Pupa, you agree to them.
+      </p>
+
+      <h2>The software</h2>
+      <p>
+        Pupa is <strong>open-source software licensed under the MIT License</strong>.
+        The source is public across the
+        <a href={GITHUB_ORG}>pupa-app</a> organization — the app, the backend, and
+        the marketplace tooling. You may use, modify, and redistribute it under the
+        terms of that license.
+      </p>
+
+      <h2>Provided "as is"</h2>
+      <p>
+        The software is provided <strong>"as is", without warranty of any kind</strong>,
+        express or implied, including but not limited to the warranties of
+        merchantability, fitness for a particular purpose, and non-infringement. To
+        the maximum extent permitted by law, the authors and copyright holders shall
+        not be liable for any claim, damages, or other liability, whether in an
+        action of contract, tort, or otherwise, arising from, out of, or in
+        connection with the software or its use.
+      </p>
+
+      <h2>Your backend and your keys</h2>
+      <p>
+        Pupa connects to a backend that <strong>you run and own</strong>. You are
+        responsible for:
+      </p>
+      <ul>
+        <li>Running and securing your own backend, locally or in your own cloud account.</li>
+        <li>Providing and safeguarding your own model-provider API keys and credentials.</li>
+        <li>Any costs, usage, and terms imposed by the model providers or services you configure your backend to use.</li>
+        <li>Complying with the terms of any third-party service your backend connects to.</li>
+      </ul>
+
+      <h2>Marketplace content</h2>
+      <p>
+        MyApp bundles contributed to the official marketplace are released under
+        <strong>CC0 1.0 (public domain dedication)</strong>; the marketplace's own
+        tooling, scripts, and docs are MIT-licensed. Bundles are inert JSON, but
+        they carry <strong>agent prompts</strong> that run with the tools you have
+        configured once installed. Marketplace review is a moderation layer, not a
+        guarantee — review a bundle's prompts in the install preview before
+        accepting it. You install and run third-party bundles at your own risk.
+      </p>
+
+      <h2>Acceptable use</h2>
+      <p>
+        You are responsible for how you use Pupa and for the content you generate
+        with it. Do not use Pupa to violate the law or the terms of the services and
+        model providers it connects to on your behalf.
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        We may update these terms as the projects evolve. Material changes will be
+        reflected here with a revised effective date.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Questions about these terms? Open an issue on
+        <a href={`${GITHUB_ORG}/pupa`}>GitHub</a>.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

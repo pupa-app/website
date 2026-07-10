@@ -1,0 +1,17 @@
+---
+import { href } from '../lib/href';
+
+const YEAR = 2026;
+const GITHUB_ORG = 'https://github.com/pupa-app';
+---
+<footer class="site-footer">
+  <div class="container bar">
+    <div class="foot-links">
+      <a href={href('/privacy')}>Privacy</a>
+      <a href={href('/terms')}>Terms</a>
+      <a href={href('/support')}>Support</a>
+      <a href={GITHUB_ORG}>GitHub</a>
+    </div>
+    <div>© {YEAR} Pupa</div>
+  </div>
+</footer>

@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { href } from '../../lib/href';
+
+// In production, hide drafts; in dev, show everything.
+const isDev = import.meta.env.DEV;
+const posts = (await getCollection('blog'))
+  .filter((p) => isDev || !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+<BaseLayout title="Blog" description="Writing from the Pupa team on packaging agentic experiences.">
+  <section class="page-head container">
+    <h1>Blog</h1>
+    <p class="page-sub">Notes from the Pupa team on packaging agentic experiences.</p>
+  </section>
+
+  <section class="section container" style="padding-top:1rem">
+    {posts.length === 0 ? (
+      <p style="color:var(--text-dim)">No posts yet — check back soon.</p>
+    ) : (
+      <ul class="post-list">
+        {posts.map((post) => (
+          <li class="post-item">
+            <div class="post-meta">
+              {fmt(post.data.date)} · {post.data.author}
+            </div>
+            <h3>
+              <a href={href(`/blog/${post.id}`)}>{post.data.title}</a>
+              {post.data.draft && <span class="badge-draft">Draft</span>}
+            </h3>
+            {post.data.description && <p>{post.data.description}</p>}
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</BaseLayout>

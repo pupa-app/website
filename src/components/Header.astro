@@ -1,0 +1,21 @@
+---
+import Logo from './Logo.astro';
+import { href } from '../lib/href';
+
+const GITHUB_ORG = 'https://github.com/pupa-app';
+const MARKETPLACE = 'https://github.com/pupa-app/marketplace';
+---
+<header class="site-header">
+  <div class="container bar">
+    <a href={href('/')} class="brand">
+      <Logo size={26} />
+      Pupa
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href={href('/blog')}>Blog</a>
+      <a href={MARKETPLACE}>Marketplace</a>
+      <a href={GITHUB_ORG}>GitHub</a>
+      <a href={href('/support')}>Support</a>
+    </nav>
+  </div>
+</header>
