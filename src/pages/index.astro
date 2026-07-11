@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { href } from '../lib/href';
 
 const GITHUB_ORG = 'https://github.com/pupa-app';
 const MARKETPLACE = 'https://github.com/pupa-app/marketplace';
@@ -48,17 +49,18 @@ const repos = [
 <BaseLayout title="Pupa">
   <!-- Hero -->
   <section class="hero container">
-    <span class="eyebrow">Open-source agent app · iOS &amp; macOS</span>
+    <span class="eyebrow">Open-source · iOS &amp; macOS</span>
     <h1>Pupa</h1>
     <p class="lead">
-      Pupa turns an agentic experience into a persistent, typed app the agent
-      works in with you — and that app is the portable unit.
+      A pupa is the quiet stage where a caterpillar turns into a butterfly.
+      Pupa is where an idea turns into an app — you say what you want, and it
+      takes shape in front of you.
     </p>
     <p class="subline">
-      A SwiftUI canvas that moulds into the shape you ask for — tracker,
-      calendar, checklist, slack rooms, calculator, charts — driven by a
-      side-panel chat, backed by a long-lived Memories filesystem, and speaking
-      plain AG-UI to a backend you own.
+      <strong>Brew</strong> a little app for anything — a tracker, a planner, a
+      checklist, a chart. <strong>Use</strong> it every day. <strong>Share</strong>
+      it with anyone. Each app grows and changes as you talk to it, and remembers
+      what matters to you.
     </p>
     <div class="cta-row">
       <a class="btn btn-primary" href={GITHUB_ORG}>View on GitHub</a>
@@ -77,10 +79,20 @@ const repos = [
     </p>
     <div class="card-grid">
       {verbs.map((v) => (
-        <article class="card">
+        <article class={v.verb === 'Share' ? 'card card--reveal' : 'card'}>
           <span class="verb">{v.verb}</span>
           <h3>{v.title}</h3>
           <p>{v.body}</p>
+          {v.verb === 'Share' && (
+            <figure class="share-flow__panel">
+              <img
+                src={href('/share-flow.png')}
+                width="768"
+                height="720"
+                alt="Publish a MyApp to the marketplace, import one from it, or share directly device-to-device."
+              />
+            </figure>
+          )}
         </article>
       ))}
     </div>
