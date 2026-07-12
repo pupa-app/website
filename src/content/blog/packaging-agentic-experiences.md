@@ -3,7 +3,7 @@ title: "Packaging agentic experiences: portable apps that run on your host"
 description: "The valuable thing an agent produces isn't a transcript, and it isn't a folder of files — it's the agentic experience you configured. Pupa crystallises that into a typed app you can package, share, and re-run on any host."
 author: "Pupa team"
 date: 2026-07-10
-draft: true
+draft: false
 ---
 
 ## The thesis
@@ -25,10 +25,14 @@ time, and handed to someone who runs it on their own host.
 Portability of *content* is largely solved: you can already ship a Claude Code
 plugin, a skills hub, a repo of prompts and assets. But those are **instructions
 and files the agent references** — not an **app the agent operates**. Nothing
-makes the asset a live, typed workspace the agent reads and writes as first-class
-tools, that you and it edit together in one surface, and that persists as a
-single coherent thing across projects. So every good workflow gets rebuilt per
-project, and "sharing" means handing over notes, not a working app.
+makes the asset:
+
+- a **live, typed workspace** the agent reads and writes as first-class tools,
+- that **you and it edit together** in one surface,
+- and that **persists as a single coherent thing** across projects.
+
+So every good workflow gets rebuilt per project, and "sharing" means handing over
+notes, not a working app.
 
 ![Usual agentic setup vs. Pupa: a specific harness, scattered docs, plugins, personal app assets, and workflows collapse into a single portable Pupa MyApp.](./agentic-setup.png)
 

@@ -96,7 +96,12 @@ const sections = [
     <div class="tut-layout">
     <aside class="tut-nav">
       <details class="tut-nav__box" open>
-        <summary class="tut-nav__title">On this page</summary>
+        <summary class="tut-nav__title">
+          <span class="tut-nav__heading">
+            <span class="tut-nav__title-label">On this page</span>
+            <span class="tut-nav__current" aria-hidden="true"></span>
+          </span>
+        </summary>
         <nav aria-label="On this page">
           <ul>
             {sections.map((s) => (
@@ -111,8 +116,7 @@ const sections = [
 
     <div class="tut-content">
     <!-- Quick setup: fastest path to a running Pupa -->
-    <div class="setup" id="quick-setup" style="border-top:none;padding-top:0;margin-top:0">
-      <p class="section-eyebrow">Start here</p>
+    <div class="setup" id="quick-setup">
       <h2 style="margin-top:0">Quick setup</h2>
       <p class="setup__lead">
         The fastest path to a working Pupa: run the backend on your own machine
@@ -154,7 +158,6 @@ pupa-backend setup</code></pre>
     <!-- MyApp: what it is, and how to use / build / share one -->
     <div class="panel--split" id="myapp">
       <div class="panel__body">
-        <p class="section-eyebrow">The core idea</p>
         <h2 style="margin-top:0">MyApp</h2>
         <p class="section-lead" style="margin-bottom:1.5rem">
           A MyApp is the thing you make in Pupa. Here’s what one is, and how to
@@ -190,15 +193,10 @@ pupa-backend setup</code></pre>
           </li>
         </ul>
       </div>
-      <div class="panel__media">
-        <div class="tut__video tut__video--soon" aria-label="Video coming soon">
-          <span class="tut__play" aria-hidden="true">▶</span>
-          <span class="tut__soon-label">
-            Components, memories &amp; the agent — plus history &amp; lock
-          </span>
-          <span class="tut__soon-sub">Video walkthrough coming soon</span>
-        </div>
-      </div>
+      <p class="tut__soon-note">
+        <span class="tut__soon-note-icon" aria-hidden="true">▶</span>
+        <span>Video walkthrough coming soon — components, memories &amp; the agent, plus history &amp; lock.</span>
+      </p>
     </div>
 
     <!-- Use / Build / Share walkthroughs -->
@@ -255,7 +253,6 @@ pupa-backend setup</code></pre>
     <!-- Data flow & privacy -->
     <div class="panel--split" id="data-privacy">
       <div class="panel__body">
-        <p class="section-eyebrow">Under the hood</p>
         <h2 style="margin-top:0">Where your data lives</h2>
         <p class="section-lead" style="margin-bottom:1rem">
           Pupa has no cloud of its own. Your apps run on your devices, sync
@@ -293,8 +290,7 @@ pupa-backend setup</code></pre>
 
     <!-- Backend setup -->
     <div class="setup" id="backend-setup">
-      <p class="section-eyebrow">Backend setup</p>
-      <h2>Run your own backend</h2>
+      <h2 style="margin-top:0">Run your own backend</h2>
       <p class="setup__lead">
         Pupa is user-owned: the app pairs to a backend <em>you</em> run, and your
         model credentials never leave your machine. Pick a harness or model
@@ -487,29 +483,55 @@ DATABASE_URL=$&#123;&#123;Postgres.DATABASE_URL&#125;&#125;      # reference the
       .map((id) => document.getElementById(id))
       .filter(Boolean);
     if (targets.length) {
-      const visible = new Set();
       let current = null;
+      const currentLabel = document.querySelector('.tut-nav__current');
       const setActive = (id) => {
         if (id === current) return;
         if (current) navLinks.get(current)?.classList.remove('is-active');
         current = id;
-        navLinks.get(id)?.classList.add('is-active');
+        const link = navLinks.get(id);
+        link?.classList.add('is-active');
+        // Reflect the current section in the collapsed mobile TOC bar.
+        if (currentLabel) currentLabel.textContent = link?.textContent?.trim() ?? '';
       };
-      const observer = new IntersectionObserver(
-        (entries) => {
-          for (const e of entries) {
-            if (e.isIntersecting) visible.add(e.target);
-            else visible.delete(e.target);
-          }
-          // Pick the topmost section currently on screen.
-          const top = [...visible].sort(
-            (a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top,
-          )[0];
-          if (top) setActive(top.id);
-        },
-        { rootMargin: '-76px 0px -70% 0px', threshold: 0 },
-      );
-      for (const t of targets) observer.observe(t);
+      // Active = the last heading scrolled past the offset line. Because targets
+      // are in document order (tops increasing), this lands on the deepest
+      // heading in view — so a subsection like "Claude Code" is highlighted
+      // instead of its tall parent container "Backend setup". Kept just above
+      // the headings' scroll-margin-top (7rem) so a clicked anchor, which rests
+      // at that offset, registers as the current section.
+      const OFFSET = 120;
+      let ticking = false;
+      const update = () => {
+        ticking = false;
+        let activeId = targets[0].id;
+        for (const t of targets) {
+          if (t.getBoundingClientRect().top - OFFSET <= 0) activeId = t.id;
+          else break;
+        }
+        setActive(activeId);
+      };
+      const onScroll = () => {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+      update();
+    }
+  </script>
+
+  <script>
+    // Mobile: the TOC is a sticky collapsible bar (collapsed by default, open
+    // on desktop). Tapping a section closes it so it doesn't cover the content.
+    const tocBox = document.querySelector<HTMLDetailsElement>('.tut-nav__box');
+    if (tocBox) {
+      const mq = window.matchMedia('(max-width: 860px)');
+      const sync = () => { tocBox.open = !mq.matches; };
+      sync();
+      mq.addEventListener('change', sync);
+      for (const a of tocBox.querySelectorAll('a')) {
+        a.addEventListener('click', () => { if (mq.matches) tocBox.open = false; });
+      }
     }
   </script>
 

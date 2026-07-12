@@ -180,6 +180,14 @@ main {
    a hamburger dropdown on narrow screens (below) so options never wrap. */
 .nav-menu { display: contents; }
 .nav-menu__btn { display: none; }
+/* A closed <details> hides its non-summary content, so `display: contents`
+   alone leaves the desktop links invisible. Reveal the content box so the
+   links sit inline in the bar; on mobile the `.nav` display rules below still
+   control the open/closed dropdown. */
+.nav-menu::details-content {
+  content-visibility: visible;
+  display: contents;
+}
 
 @media (max-width: 640px) {
   .nav-menu { display: block; position: relative; }
@@ -510,7 +518,12 @@ main {
 .card-grid {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  /* Even splits only for the four verb cards: 2×2 on desktop/tablet, a single
+     column when narrow. `auto-fit` would wrap to an ugly 3+1 at mid widths. */
+  grid-template-columns: repeat(2, 1fr);
+}
+@media (max-width: 520px) {
+  .card-grid { grid-template-columns: 1fr; }
 }
 .card {
   background: var(--bg-elev);
@@ -584,34 +597,10 @@ main {
   pointer-events: auto;
 }
 
-/* Export walkthrough clip, hover-played at the top of the reveal panel */
-.share-flow__video {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-height: 60vh;
-  object-fit: contain;
-  background: #000;
-  border-bottom: 1px solid var(--border);
-  border-radius: var(--radius) var(--radius) 0 0;
-}
-
-/* White frame so the red/black diagram reads on the dark theme */
-.share-flow__img {
-  display: block;
-  width: 100%;
-  height: auto;
-  background: #fff;
-  border-bottom: 1px solid var(--border);
-  border-radius: var(--radius) var(--radius) 0 0;
-  padding: 0.9rem;
-}
-/* When the clip sits above it, the diagram is no longer the top element */
-.share-flow__video + .share-flow__img { border-radius: 0; }
-
-/* The .pupa-bundle "portable standard" block, revealed alongside the diagram */
+/* Panel order: the "portable standard" summary leads, then the diagram, then
+   the export walkthrough clip at the bottom. */
 .share-flow__standard {
-  padding: 1.25rem 1.35rem 1.4rem;
+  padding: 1.25rem 1.35rem 1.1rem;
 }
 .share-flow__standard .section-eyebrow { margin-bottom: 0.35rem; }
 .share-flow__standard h3 {
@@ -621,17 +610,31 @@ main {
 .share-flow__standard > p {
   color: var(--text-dim);
   font-size: 0.92rem;
-  margin-bottom: 0.9rem;
+  margin-bottom: 0;
 }
-.share-flow__standard ul {
-  color: var(--text-dim);
-  font-size: 0.88rem;
-  padding-left: 1.15rem;
-  margin: 0;
-}
-.share-flow__standard li { margin-bottom: 0.5rem; }
-.share-flow__standard li:last-child { margin-bottom: 0; }
 .share-flow__standard strong { color: var(--text); }
+
+/* White frame so the red/black diagram reads on the dark theme */
+.share-flow__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 0.9rem;
+}
+
+/* Export walkthrough clip, hover-played at the bottom of the reveal panel */
+.share-flow__video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 60vh;
+  object-fit: contain;
+  background: #000;
+  border-radius: 0 0 var(--radius) var(--radius);
+}
 
 /* Touch / no-hover: no hover available, so collapse the panel inline and open
    it on tap (via .is-open) — saves vertical space vs. always-open. */
@@ -745,6 +748,72 @@ main {
 .panel__body ul { color: var(--text-dim); padding-left: 1.2rem; }
 .panel__body li { margin-bottom: 0.5rem; }
 .panel__body li strong { color: var(--text); }
+
+/* ---- Contribute card: hover-reveal open-source repos ----
+   Left-anchored like the other reveal panels. On the 960px-max desktop grid
+   the cards wrap to 3 columns, so Contribute (the 4th) sits at the left of the
+   second row and the popover opens rightward within the container. */
+.repo-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: auto;
+  width: min(680px, 92vw);
+  z-index: 5;
+  margin: 0.5rem 0 0;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-6px);
+  background: var(--bg-elev);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.4);
+  transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+.card--reveal:hover .repo-panel {
+  max-height: 1100px;
+  opacity: 1;
+  transform: translateY(0);
+  border: 1px solid var(--border);
+  overflow-y: auto;
+  pointer-events: auto;
+}
+.repo-panel__inner { padding: 1.35rem; }
+.repo-panel__inner .section-eyebrow { margin-bottom: 0.35rem; }
+.repo-panel__title { font-size: 1.15rem; margin: 0 0 0.5rem; }
+.repo-panel__lead {
+  color: var(--text-dim);
+  font-size: 0.92rem;
+  margin-bottom: 1rem;
+}
+/* Single column inside the popover so the three repos read as a clean list */
+.repo-panel .repo-grid { grid-template-columns: 1fr; gap: 0.7rem; }
+
+@media (hover: none) {
+  .repo-panel {
+    position: static;
+    width: auto;
+    max-height: 0;
+    opacity: 0;
+    transform: none;
+    overflow: hidden;
+    pointer-events: none;
+    border: 0;
+    margin-top: 0;
+  }
+  .card--reveal.is-open .repo-panel {
+    max-height: 2200px;
+    opacity: 1;
+    overflow: visible;
+    pointer-events: auto;
+    border: 1px solid var(--border);
+    margin-top: 1rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .repo-panel { transition: none; }
+}
 
 /* ---- Repo list ---- */
 .repo-grid {
@@ -901,6 +970,14 @@ main {
 }
 .tut-nav__box:not([open]) .tut-nav__title::after { transform: rotate(-45deg); }
 .tut-nav__title:hover { color: var(--text-dim); }
+.tut-nav__heading {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  min-width: 0;
+}
+/* The live "current section" label only appears in the collapsed mobile bar. */
+.tut-nav__current { display: none; }
 .tut-nav ul {
   list-style: none;
   margin: 0;
@@ -943,6 +1020,22 @@ main {
 
 /* Anchored sections clear the sticky header when jumped to */
 .tut-content [id] { scroll-margin-top: 4.75rem; }
+
+/* Consistent vertical rhythm + dividers between the major content blocks so
+   sections read as evenly separated instead of ad-hoc. */
+.tut-content > .setup,
+.tut-content > .panel--split,
+.tut-content > .tut {
+  margin-top: 3rem;
+  padding-top: 3rem;
+  padding-bottom: 0;
+  border-top: 1px solid var(--border-soft);
+}
+.tut-content > :first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
 
 /* ---- Backend setup section ---- */
 .setup {
@@ -1108,26 +1201,77 @@ button.btn { font: inherit; font-weight: 550; font-size: 0.97rem; cursor: pointe
   text-transform: uppercase;
   color: var(--text-faint);
 }
+/* Compact inline "coming soon" note (replaces the oversized placeholder box) */
+.tut__soon-note {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.25rem 0 0;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  background: var(--bg-elev);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+}
+.tut__soon-note-icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.7rem;
+  padding-left: 0.1rem;
+}
 
 @media (max-width: 860px) {
-  /* Sidebar stacks above the content as a collapsible card, no longer sticky */
+  /* Block (not grid) so the sticky TOC can travel the whole page instead of
+     being trapped in its own short grid row and scrolling away up top. */
   .tut-layout {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
+    display: block;
   }
+  /* The TOC becomes a compact bar that sticks just under the site header, so
+     the current section is always visible and the full list is a tap away. */
   .tut-nav {
-    position: static;
-    top: auto;
+    position: sticky;
+    top: 3.4rem;
+    z-index: 5;
+    margin-bottom: 1.25rem;
   }
   .tut-nav__box {
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     background: var(--bg-elev);
     padding: 0.65rem 0.9rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
   }
   .tut-nav__box[open] { padding-bottom: 0.9rem; }
   .tut-nav__title { margin-bottom: 0; }
   .tut-nav__box[open] .tut-nav__title { margin-bottom: 0.6rem; }
+  /* Show the live current section beside the label. */
+  .tut-nav__heading { flex-wrap: wrap; align-items: baseline; }
+  .tut-nav__current {
+    display: inline;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--accent);
+  }
+  .tut-nav__current:not(:empty)::before {
+    content: "·\00a0";
+    color: var(--text-faint);
+  }
+  /* Long TOC scrolls within the dropdown instead of taking the whole screen. */
+  .tut-nav__box[open] nav {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  /* Jumped-to sections clear both the header and the sticky TOC bar. */
+  .tut-content [id] { scroll-margin-top: 7rem; }
 }
 
 @media (max-width: 720px) {

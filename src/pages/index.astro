@@ -147,15 +147,36 @@ const repos = [
     <h2>Use, build, share, contribute</h2>
     <div class="card-grid">
       {verbs.map((v) => (
-        <article class={v.verb === 'Share' || v.verb === 'Use' ? 'card card--reveal' : 'card'}>
+        <article class={v.verb === 'Share' || v.verb === 'Use' || v.verb === 'Contribute' ? 'card card--reveal' : 'card'}>
           <span class="verb">{v.verb}</span>
           <h3>{v.title}</h3>
           <p>{v.body}</p>
-          {(v.verb === 'Use' || v.verb === 'Share') && (
+          {(v.verb === 'Use' || v.verb === 'Share' || v.verb === 'Contribute') && (
             <span class="reveal-hint" aria-hidden="true">
-              <span class="reveal-hint__label">Tap to preview</span>
+              <span class="reveal-hint__label">{v.verb === 'Contribute' ? 'Tap for the repos' : 'Tap to preview'}</span>
               <span class="reveal-hint__chev">▾</span>
             </span>
+          )}
+          {v.verb === 'Contribute' && (
+            <div class="repo-panel">
+              <div class="repo-panel__inner">
+                <p class="section-eyebrow">Open source</p>
+                <h3 class="repo-panel__title">Everything is open, and swappable</h3>
+                <p class="repo-panel__lead">
+                  The client, the backend, and the marketplace are all developed
+                  in the open. See <a href={`${GITHUB_ORG}/pupa/issues`}>the repos</a>
+                  {' '}for each project’s terms.
+                </p>
+                <div class="repo-grid">
+                  {repos.map((r) => (
+                    <a class="repo" href={r.url}>
+                      <div class="repo-name">{r.name}</div>
+                      <p>{r.desc}</p>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
           )}
           {v.verb === 'Use' && (
             <div class="use-demo__panel">
@@ -173,6 +194,21 @@ const repos = [
           )}
           {v.verb === 'Share' && (
             <div class="share-flow__panel">
+              <div class="share-flow__standard">
+                <p class="section-eyebrow">The portable standard</p>
+                <h3>The <code>.pupa</code> bundle</h3>
+                <p>
+                  One portable file holding a MyApp’s blocks, memories, and agent
+                  config — no runtime. On import it runs on <strong>your</strong> host. Share directly or to marketplace to be imported by others.
+                </p>
+              </div>
+              <img
+                class="share-flow__img"
+                src={href('/share-flow.png')}
+                width="768"
+                height="720"
+                alt="Publish a MyApp to the marketplace, import one from it, or share directly device-to-device."
+              />
               <video
                 class="share-flow__video"
                 src={href('/videos/export.mp4')}
@@ -183,68 +219,9 @@ const repos = [
                 preload="metadata"
                 title="Exporting a MyApp as a portable .pupa bundle"
               />
-              <img
-                class="share-flow__img"
-                src={href('/share-flow.png')}
-                width="768"
-                height="720"
-                alt="Publish a MyApp to the marketplace, import one from it, or share directly device-to-device."
-              />
-              <div class="share-flow__standard">
-                <p class="section-eyebrow">The portable standard</p>
-                <h3>The <code>.pupa</code> bundle</h3>
-                <p>
-                  A MyApp — its blocks, its memories, and its agent
-                  config — packs into a single portable file. The bundle ships the
-                  structure and intent, but no runtime: on import it runs on{' '}
-                  <strong>your</strong> host.
-                </p>
-                <ul>
-                  <li>
-                    <strong>Inert JSON.</strong> Header plus the whole MyApp tree
-                    and its memories. No executable content — all rebuild logic
-                    lives in the open client, dispatched by component <code>kind</code>.
-                  </li>
-                  <li>
-                    <strong>Hostile-validated import.</strong> Size caps, magic and
-                    version checks, a settings allow-list, memory-path guards, fresh
-                    IDs, and ref pruning. Tap-to-open shows a confirm sheet naming
-                    the app and its agent prompts before anything installs.
-                  </li>
-                  <li>
-                    <strong>Portable experience, local execution.</strong> What
-                    travels is the app structure, personas, skills, and intent.
-                    What’s re-earned on the new host is tool availability,
-                    credentials, and private data.
-                  </li>
-                  <li>
-                    <strong>No lock-in.</strong> Inspectable JSON, rebuilt by the
-                    open client, forward-compatible across app versions.
-                  </li>
-                </ul>
-              </div>
             </div>
           )}
         </article>
-      ))}
-    </div>
-  </section>
-
-  <!-- Open source -->
-  <section class="section container">
-    <p class="section-eyebrow">Open source</p>
-    <h2>Everything is open, and swappable</h2>
-    <p class="section-lead">
-      The client, the backend, and the marketplace are all developed in the open.
-      See <a href={`${GITHUB_ORG}/pupa/issues`}>the
-      repos</a> for each project’s terms.
-    </p>
-    <div class="repo-grid">
-      {repos.map((r) => (
-        <a class="repo" href={r.url}>
-          <div class="repo-name">{r.name}</div>
-          <p>{r.desc}</p>
-        </a>
       ))}
     </div>
   </section>
@@ -270,7 +247,7 @@ const repos = [
     // controls, links) don't toggle it shut.
     if (window.matchMedia('(hover: none)').matches) {
       for (const card of document.querySelectorAll<HTMLElement>('.card--reveal')) {
-        const panel = card.querySelector('.share-flow__panel, .use-demo__panel');
+        const panel = card.querySelector('.share-flow__panel, .use-demo__panel, .repo-panel');
         card.addEventListener('click', (e) => {
           if (panel && e.target instanceof Node && panel.contains(e.target)) return;
           card.classList.toggle('is-open');
