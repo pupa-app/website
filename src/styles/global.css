@@ -588,13 +588,17 @@ main {
   transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
   pointer-events: none;
 }
-.card--reveal:hover .share-flow__panel {
-  max-height: 1100px;
-  opacity: 1;
-  transform: translateY(0);
-  border: 1px solid var(--border);
-  overflow-y: auto;
-  pointer-events: auto;
+/* Guarded to hover-capable pointers: on touch, tapping triggers a sticky
+   :hover that would otherwise keep the panel open after .is-open is toggled off. */
+@media (hover: hover) {
+  .card--reveal:hover .share-flow__panel {
+    max-height: 1100px;
+    opacity: 1;
+    transform: translateY(0);
+    border: 1px solid var(--border);
+    overflow-y: auto;
+    pointer-events: auto;
+  }
 }
 
 /* Panel order: the "portable standard" summary leads, then the diagram, then
@@ -682,12 +686,14 @@ main {
   transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
   pointer-events: none;
 }
-.card--reveal:hover .use-demo__panel {
-  max-height: 900px;
-  opacity: 1;
-  transform: translateY(0);
-  border: 1px solid var(--border);
-  pointer-events: auto;
+@media (hover: hover) {
+  .card--reveal:hover .use-demo__panel {
+    max-height: 900px;
+    opacity: 1;
+    transform: translateY(0);
+    border: 1px solid var(--border);
+    pointer-events: auto;
+  }
 }
 .use-demo__video {
   display: block;
@@ -771,13 +777,15 @@ main {
   transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
   pointer-events: none;
 }
-.card--reveal:hover .repo-panel {
-  max-height: 1100px;
-  opacity: 1;
-  transform: translateY(0);
-  border: 1px solid var(--border);
-  overflow-y: auto;
-  pointer-events: auto;
+@media (hover: hover) {
+  .card--reveal:hover .repo-panel {
+    max-height: 1100px;
+    opacity: 1;
+    transform: translateY(0);
+    border: 1px solid var(--border);
+    overflow-y: auto;
+    pointer-events: auto;
+  }
 }
 .repo-panel__inner { padding: 1.35rem; }
 .repo-panel__inner .section-eyebrow { margin-bottom: 0.35rem; }
