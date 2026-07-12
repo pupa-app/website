@@ -11,12 +11,17 @@ const MARKETPLACE = 'https://github.com/pupa-app/marketplace';
       <Logo size={26} />
       Pupa
     </a>
-    <nav class="nav" aria-label="Primary">
-      <a href={href('/tutorials')}>Tutorials</a>
-      <a href={href('/blog')}>Blog</a>
-      <a href={MARKETPLACE}>Marketplace</a>
-      <a href={GITHUB_ORG}>GitHub</a>
-      <a href={href('/support')}>Support</a>
-    </nav>
+    <details class="nav-menu">
+      <summary class="nav-menu__btn" aria-label="Toggle navigation menu">
+        <span class="nav-menu__icon" aria-hidden="true"></span>
+      </summary>
+      <nav class="nav" aria-label="Primary">
+        <a href={href('/tutorials')}>Tutorials</a>
+        <a href={href('/blog')}>Blog</a>
+        <a href={MARKETPLACE}>Marketplace</a>
+        <a href={GITHUB_ORG}>GitHub</a>
+        <a href={href('/support')}>Support</a>
+      </nav>
+    </details>
   </div>
 </header>

@@ -17,7 +17,7 @@ const tutorials = [
     blurb:
       'A MyApp is something you live in. You just talk to it, and the agent snaps the blocks into place while you watch and edit the same view.',
     steps: [
-      'Open a MyApp from your library — a tracker, a planner, a checklist, a chart, or a room.',
+      'Open a MyApp from your library — each one blends whatever blocks it needs (trackers, calendars, checklists, charts, rooms) with its own Memories and agent setup.',
       'Type what you want in the side-panel chat: “log today’s run”, “add milk to the list”, “show me this month”.',
       'The blocks rearrange in front of you. Edit any field by hand too — you and the agent share one screen.',
       'It remembers. The long-lived Memories filesystem keeps what matters across sessions and devices.',
@@ -203,7 +203,7 @@ pupa-backend setup</code></pre>
 
     <!-- Use / Build / Share walkthroughs -->
     {tutorials.map((t) => (
-      <div class="tut" id={t.id}>
+      <div class={`tut${t.videoSrc || t.video ? ' tut--has-demo' : ''}`} id={t.id}>
         <div class="tut__body">
           <span class="verb">{t.verb}</span>
           <h2>{t.title}</h2>
@@ -211,7 +211,15 @@ pupa-backend setup</code></pre>
           <ol class="tut__steps">
             {t.steps.map((s) => <li set:html={s} />)}
           </ol>
-          <a class="btn" href={t.doc}>Read the docs</a>
+          <div class="tut__actions">
+            <a class="btn" href={t.doc}>Read the docs</a>
+            {(t.videoSrc || t.video) && (
+              <button type="button" class="btn tut__demo-btn" aria-expanded="false">
+                <span class="tut__demo-icon" aria-hidden="true">▶</span>
+                <span class="tut__demo-label">See demo</span>
+              </button>
+            )}
+          </div>
         </div>
         <div class="tut__media">
           {t.videoSrc ? (
@@ -528,6 +536,26 @@ DATABASE_URL=$&#123;&#123;Postgres.DATABASE_URL&#125;&#125;      # reference the
           btn.textContent = 'Copy';
           btn.classList.remove('is-copied');
         }, 1600);
+      });
+    }
+  </script>
+
+  <script>
+    // Demo videos stay hidden until requested — "See demo" reveals the clip
+    // for that tutorial (and starts playback); clicking again hides it.
+    for (const btn of document.querySelectorAll<HTMLButtonElement>('.tut__demo-btn')) {
+      const card = btn.closest('.tut');
+      if (!card) continue;
+      const label = btn.querySelector('.tut__demo-label');
+      const video = card.querySelector<HTMLVideoElement>('video');
+      btn.addEventListener('click', () => {
+        const open = card.classList.toggle('is-demo-open');
+        btn.setAttribute('aria-expanded', String(open));
+        if (label) label.textContent = open ? 'Hide demo' : 'See demo';
+        if (video) {
+          if (open) video.play().catch(() => {});
+          else { video.pause(); video.currentTime = 0; }
+        }
       });
     }
   </script>

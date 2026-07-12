@@ -176,6 +176,72 @@ main {
 }
 .nav a:hover { color: var(--text); text-decoration: none; }
 
+/* Nav wrapper: transparent on desktop so links sit inline in the bar; becomes
+   a hamburger dropdown on narrow screens (below) so options never wrap. */
+.nav-menu { display: contents; }
+.nav-menu__btn { display: none; }
+
+@media (max-width: 640px) {
+  .nav-menu { display: block; position: relative; }
+  .nav-menu__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    cursor: pointer;
+    list-style: none;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg-elev);
+  }
+  .nav-menu__btn::-webkit-details-marker { display: none; }
+  /* Three-bar icon, drawn from one span + its two pseudo-elements. */
+  .nav-menu__icon,
+  .nav-menu__icon::before,
+  .nav-menu__icon::after {
+    display: block;
+    width: 20px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--text);
+    transition: transform 0.25s ease, opacity 0.2s ease, background 0.2s ease;
+  }
+  .nav-menu__icon { position: relative; }
+  .nav-menu__icon::before,
+  .nav-menu__icon::after { content: ''; position: absolute; left: 0; }
+  .nav-menu__icon::before { top: -6px; }
+  .nav-menu__icon::after { top: 6px; }
+  /* Open state: morph the bars into an X. */
+  .nav-menu[open] .nav-menu__icon { background: transparent; }
+  .nav-menu[open] .nav-menu__icon::before { transform: translateY(6px) rotate(45deg); }
+  .nav-menu[open] .nav-menu__icon::after { transform: translateY(-6px) rotate(-45deg); }
+
+  /* The links become a dropdown panel anchored under the button. */
+  .nav {
+    display: none;
+    position: absolute;
+    top: calc(100% + 0.7rem);
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    min-width: 12rem;
+    padding: 0.4rem;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.4);
+  }
+  .nav-menu[open] .nav { display: flex; }
+  .nav a {
+    padding: 0.6rem 0.7rem;
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+  }
+  .nav a:hover { background: var(--accent-soft); }
+}
+
 /* ---- Footer ---- */
 .site-footer {
   flex-shrink: 0;
@@ -416,6 +482,29 @@ main {
 }
 .why__lead:last-child { margin-bottom: 0; }
 .why__lead strong { color: var(--text); }
+
+/* Collapse the deeper "why" paragraphs behind a Read more toggle so the
+   section leads with a teaser instead of a wall of text. */
+.why__more { margin-top: 1rem; }
+.why__more-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.95rem;
+  list-style: none;
+  width: fit-content;
+  margin-inline: auto;
+}
+.why__more-toggle::-webkit-details-marker { display: none; }
+.why__more-label::before { content: 'Read more'; }
+.why__more[open] .why__more-label::before { content: 'Show less'; }
+.why__more-chev { transition: transform 0.25s ease; font-size: 0.85rem; }
+.why__more[open] .why__more-chev { transform: rotate(180deg); }
+.why__more-body { margin-top: 1rem; }
+.why__more-body .why__lead:last-child { margin-bottom: 0; }
 
 /* ---- Cards grid (the four verbs) ---- */
 .card-grid {
@@ -937,6 +1026,20 @@ main {
 }
 .tut__steps li { margin-bottom: 0.5rem; }
 .tut__steps li::marker { color: var(--accent); font-weight: 700; }
+
+/* Docs + "See demo" actions row */
+.tut__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+button.btn { font: inherit; font-weight: 550; font-size: 0.97rem; cursor: pointer; }
+.tut__demo-icon { font-size: 0.7rem; line-height: 1; }
+
+/* Demo clip is hidden until "See demo" is clicked (adds .is-demo-open). */
+.tut--has-demo .tut__media { display: none; }
+.tut--has-demo.is-demo-open .tut__media { display: block; }
 
 /* Media column — video embed, or a "coming soon" placeholder */
 .tut__video {
