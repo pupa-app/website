@@ -12,6 +12,8 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+# Demo videos ship via Git LFS (see .gitattributes). Keep clips trimmed/compressed.
+
 # macOS
 .DS_Store
 # editor

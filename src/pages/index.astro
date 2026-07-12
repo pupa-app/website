@@ -5,16 +5,24 @@ import { href } from '../lib/href';
 const GITHUB_ORG = 'https://github.com/pupa-app';
 const MARKETPLACE = 'https://github.com/pupa-app/marketplace';
 
+// Current app version — bump alongside pupa/Pupa/Sources/PupaApp/Version.swift.
+const APP_VERSION = '0.0.175';
+// Top-of-page tags: version + compatibility. `accent` gets the brand-red chip.
+const tags = [
+  { label: `v${APP_VERSION}`, title: 'Pupa iOS / macOS app version', accent: true },
+  { label: 'Works with Claude Code', title: 'Link your own agent harness — Claude Code drives Pupa out of the box' },
+];
+
 const verbs = [
   {
     verb: 'Use',
     title: 'Use a MyApp daily',
-    body: 'Chat drives a typed canvas. Ask, and the surface moulds into a tracker, calendar, checklist, chart, or a room — the agent reads and writes it as first-class tools while you watch and edit the same surface.',
+    body: 'Live in it every day. Your MyApp runs on its own — open it and go, even offline. When you want it to change, just talk: the agent reshapes the blocks in front of you while you watch and edit the same screen.',
   },
   {
     verb: 'Build',
     title: 'Build a MyApp',
-    body: 'Mould the canvas into the shape you need — trackers, calendars, checklists, slack rooms, calculators, charts — cross-linked into one coherent app, backed by a long-lived Memories filesystem that survives sessions.',
+    body: 'Snap together whatever you need — trackers, calendars, checklists, slack rooms, calculators, charts — cross-linked into one coherent app, backed by a long-lived Memories filesystem that survives sessions.',
   },
   {
     verb: 'Share',
@@ -24,7 +32,7 @@ const verbs = [
   {
     verb: 'Contribute',
     title: 'Contribute code',
-    body: 'Add new canvas components to the app or new agent hookups to the backend. Components are just SwiftUI views with a typed model — no agentic knowledge needed to build agent-compatible surfaces.',
+    body: 'Add new blocks — canvas components — to the app, or new agent hookups to the backend. Components are just SwiftUI views with a typed model — no agentic knowledge needed to build agent-compatible surfaces.',
   },
 ];
 
@@ -32,105 +40,179 @@ const repos = [
   {
     name: 'pupa-app/pupa',
     url: `${GITHUB_ORG}/pupa`,
-    desc: 'The native iOS / macOS client — SwiftUI canvas, side-panel chat, Memories filesystem. Bundles AGUIKit, a standalone Swift AG-UI client package with no dependency on Pupa’s UI.',
+    desc: 'The native iOS / macOS application. Ships SwiftUI canvas, it\'s components, Memories filesystem and how those are surfaced to your backend harness.',
   },
   {
     name: 'pupa-app/pupa-backend',
     url: `${GITHUB_ORG}/pupa-backend`,
-    desc: 'The user-owned backend — FastAPI + LangGraph, speaking AG-UI over one SSE stream. Run it locally next to the app or deploy your own in the cloud. Pair-once auth; your keys stay yours.',
+    desc: 'The user-owned backend. Hooks-up on your Agent harness on your laptop (like Claude-Code). Run it locally next to the app or deploy your own in the cloud. Pair-once auth; your keys stay yours.',
   },
   {
     name: 'pupa-app/marketplace',
     url: MARKETPLACE,
-    desc: 'A catalog of .pupa bundles you can browse and install from the app — just an HTTPS index.json anyone can host. App content is CC0; tooling is MIT.',
+    desc: 'A catalog of .pupa bundles you can browse and install from the app. Just an HTTPS index.json anyone can host. App content is CC0; tooling is MIT.',
   },
 ];
 ---
 <BaseLayout title="Pupa">
   <!-- Hero -->
   <section class="hero container">
-    <span class="eyebrow">Open-source · iOS &amp; macOS</span>
-    <h1>Pupa</h1>
+    <ul class="hero-tags" aria-label="Version and compatibility">
+      {tags.map((t) => (
+        <li class={t.accent ? 'tag tag--accent' : 'tag'} title={t.title}>{t.label}</li>
+      ))}
+    </ul>
+    <h1 class="hero-wordmark">
+      <img src={href('/pupa-wordmark.png')} width="1071" height="605" alt="Pupa" />
+    </h1>
     <p class="lead">
-      A pupa is the quiet stage where a caterpillar turns into a butterfly.
-      Pupa is where an idea turns into an app — you say what you want, and it
-      takes shape in front of you.
+      Where agentic experiences are crystallised into real apps.
     </p>
-    <p class="subline">
-      <strong>Brew</strong> a little app for anything — a tracker, a planner, a
-      checklist, a chart. <strong>Use</strong> it every day. <strong>Share</strong>
-      it with anyone. Each app grows and changes as you talk to it, and remembers
-      what matters to you.
-    </p>
+    <ul class="hero-points">
+      <li><strong>Build</strong> apps for anything, from simple daily helpers, to complex automations</li>
+      <li><strong>Use</strong> your apps everday, powered by your usual agent harness</li>
+      <li><strong>Share</strong> it with anyone and enjoy others apps</li>
+      <li><strong>Contribute</strong> easily your ideas to the Pupa Opensource project</li>
+    </ul>
     <div class="cta-row">
-      <a class="btn btn-primary" href={GITHUB_ORG}>View on GitHub</a>
-      <a class="btn" href={MARKETPLACE}>Browse the marketplace</a>
+      <details class="appstore">
+        <summary class="btn btn-primary btn-appstore">
+          <svg viewBox="0 0 384 512" width="16" height="16" fill="currentColor" aria-hidden="true">
+            <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+          </svg>
+          Download on the App Store
+        </summary>
+        <p class="appstore__soon" role="status">
+          <strong>Coming soon.</strong> Pupa isn’t on the App Store just yet —
+          <a href={`${GITHUB_ORG}/pupa`}>apply for a TestFlight build</a> to try it early.
+        </p>
+      </details>
+      <a class="btn" href={GITHUB_ORG}>
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true">
+          <path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0024 12.5C24 5.87 18.63.5 12 .5z"/>
+        </svg>
+        View on GitHub
+      </a>
+      <a class="btn" href={MARKETPLACE}>
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <path d="M3 6h18"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        Browse the marketplace
+      </a>
+    </div>
+  </section>
+
+  <!-- Why Pupa -->
+  <section class="section container">
+    <div class="why">
+      <p class="section-eyebrow">Why Pupa</p>
+      <h2 class="why__title">Your agentic experience, made to last</h2>
+      <p class="why__lead">
+        So much of what you do with an agent is lost the moment the conversation
+        ends — trapped in unstructured text, or scattered across the dozen
+        services you stitch together. We keep pushing agents toward more
+        structure, yet the results stay fragile and fragmented.
+      </p>
+      <p class="why__lead">
+        Pupa changes that. Whatever your setup — a single plain ChatGPT thread or
+        an elaborate custom harness — your same agent now can, by default, use and build a
+        real app alongside you. And that app <strong>stays with you</strong>:
+        Pupa gives it a standard to persist, travel, and stay robust long after
+        the chat is gone.
+      </p>
+      <p class="why__lead">
+        It fits either way: add Pupa on top of the agentic setup you already
+        have, or make it the main app you use — with the agent just helping out.
+      </p>
+      <p class="why__lead">
+        And a Pupa app is just a JSON file that Pupa connects to your backend
+        agent. Nothing is locked in, so it’s <strong>fully portable</strong> and
+        works with any harness.
+      </p>
     </div>
   </section>
 
   <!-- Four verbs -->
   <section class="section container">
-    <p class="section-eyebrow">Four ways in</p>
     <h2>Use, build, share, contribute</h2>
-    <p class="section-lead">
-      Pupa is one product with four doors. Live in a MyApp day-to-day, shape new
-      ones, pass them to other people, or extend the open-source machinery
-      underneath.
-    </p>
     <div class="card-grid">
       {verbs.map((v) => (
-        <article class={v.verb === 'Share' ? 'card card--reveal' : 'card'}>
+        <article class={v.verb === 'Share' || v.verb === 'Use' ? 'card card--reveal' : 'card'}>
           <span class="verb">{v.verb}</span>
           <h3>{v.title}</h3>
           <p>{v.body}</p>
+          {v.verb === 'Use' && (
+            <div class="use-demo__panel">
+              <video
+                class="use-demo__video"
+                src={href('/videos/daily-brief.mp4')}
+                muted
+                loop
+                controls
+                playsinline
+                preload="metadata"
+                title="Using a MyApp daily — a morning brief walkthrough"
+              />
+            </div>
+          )}
           {v.verb === 'Share' && (
-            <figure class="share-flow__panel">
+            <div class="share-flow__panel">
+              <video
+                class="share-flow__video"
+                src={href('/videos/export.mp4')}
+                muted
+                loop
+                controls
+                playsinline
+                preload="metadata"
+                title="Exporting a MyApp as a portable .pupa bundle"
+              />
               <img
+                class="share-flow__img"
                 src={href('/share-flow.png')}
                 width="768"
                 height="720"
                 alt="Publish a MyApp to the marketplace, import one from it, or share directly device-to-device."
               />
-            </figure>
+              <div class="share-flow__standard">
+                <p class="section-eyebrow">The portable standard</p>
+                <h3>The <code>.pupa</code> bundle</h3>
+                <p>
+                  A MyApp — its blocks, its memories, and its agent
+                  config — packs into a single portable file. The bundle ships the
+                  structure and intent, but no runtime: on import it runs on{' '}
+                  <strong>your</strong> host.
+                </p>
+                <ul>
+                  <li>
+                    <strong>Inert JSON.</strong> Header plus the whole MyApp tree
+                    and its memories. No executable content — all rebuild logic
+                    lives in the open client, dispatched by component <code>kind</code>.
+                  </li>
+                  <li>
+                    <strong>Hostile-validated import.</strong> Size caps, magic and
+                    version checks, a settings allow-list, memory-path guards, fresh
+                    IDs, and ref pruning. Tap-to-open shows a confirm sheet naming
+                    the app and its agent prompts before anything installs.
+                  </li>
+                  <li>
+                    <strong>Portable experience, local execution.</strong> What
+                    travels is the app structure, personas, skills, and intent.
+                    What’s re-earned on the new host is tool availability,
+                    credentials, and private data.
+                  </li>
+                  <li>
+                    <strong>No lock-in.</strong> Inspectable JSON, rebuilt by the
+                    open client, forward-compatible across app versions.
+                  </li>
+                </ul>
+              </div>
+            </div>
           )}
         </article>
       ))}
-    </div>
-  </section>
-
-  <!-- The .pupa bundle -->
-  <section class="section container">
-    <div class="panel">
-      <p class="section-eyebrow">The portable standard</p>
-      <h2>The <code>.pupa</code> bundle</h2>
-      <p class="section-lead" style="margin-bottom:1.2rem">
-        A MyApp — its typed components, its memories, and its agent config — packs
-        into a single portable file. The bundle ships the structure and intent,
-        but no runtime: on import it runs on <strong>your</strong> host.
-      </p>
-      <ul>
-        <li>
-          <strong>Inert JSON.</strong> Header plus the whole MyApp tree and its
-          memories. No executable content — all rebuild logic lives in the open
-          client, dispatched by component <code>kind</code>.
-        </li>
-        <li>
-          <strong>Hostile-validated import.</strong> Size caps, magic and version
-          checks, a settings allow-list, memory-path guards, fresh IDs, and ref
-          pruning. Tap-to-open shows a confirm sheet naming the app and its agent
-          prompts before anything installs.
-        </li>
-        <li>
-          <strong>Portable experience, local execution.</strong> What travels is
-          the app structure, personas, skills, and intent. What’s re-earned on the
-          new host is tool availability, credentials, and private data. The bundle
-          can’t act until you grant it your host’s capabilities.
-        </li>
-        <li>
-          <strong>No lock-in.</strong> Inspectable JSON, rebuilt by the open
-          client, forward-compatible across app versions.
-        </li>
-      </ul>
     </div>
   </section>
 
@@ -140,9 +222,7 @@ const repos = [
     <h2>Everything is open, and swappable</h2>
     <p class="section-lead">
       The client, the backend, and the marketplace are all developed in the open.
-      The AG-UI client ships as a standalone Swift package so anyone building an
-      agent client on Apple platforms can reuse it without taking on Pupa’s UI.
-      Licensing is being finalized — see <a href={`${GITHUB_ORG}/pupa/issues`}>the
+      See <a href={`${GITHUB_ORG}/pupa/issues`}>the
       repos</a> for each project’s terms.
     </p>
     <div class="repo-grid">
@@ -154,4 +234,21 @@ const repos = [
       ))}
     </div>
   </section>
+
+  <script>
+    // Play the daily-brief demo only while its card is hovered — no wasted
+    // playback while the reveal panel is collapsed. Falls back gracefully on
+    // touch (the panel shows inline; tap the video to play).
+    for (const video of document.querySelectorAll<HTMLVideoElement>('.use-demo__video, .share-flow__video')) {
+      const card = video.closest('.card--reveal');
+      if (!card) continue;
+      card.addEventListener('mouseenter', () => {
+        video.play().catch(() => {});
+      });
+      card.addEventListener('mouseleave', () => {
+        video.pause();
+        video.currentTime = 0;
+      });
+    }
+  </script>
 </BaseLayout>

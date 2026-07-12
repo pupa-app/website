@@ -30,6 +30,8 @@ tools, that you and it edit together in one surface, and that persists as a
 single coherent thing across projects. So every good workflow gets rebuilt per
 project, and "sharing" means handing over notes, not a working app.
 
+![Usual agentic setup vs. Pupa: a specific harness, scattered docs, plugins, personal app assets, and workflows collapse into a single portable Pupa MyApp.](./agentic-setup.png)
+
 ## What Pupa is
 
 A chat-driven canvas that **moulds into the shape you ask for** — tracker,

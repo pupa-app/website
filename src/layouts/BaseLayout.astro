@@ -11,7 +11,7 @@ interface Props {
 
 const {
   title,
-  description = 'Pupa — an open-source native iOS/macOS agent app. A chat-driven canvas that moulds into typed shapes, backed by a long-lived Memories filesystem, packaged as a portable .pupa bundle.',
+  description = 'Pupa — an open-source native iOS/macOS agent app. Talk, and your agent snaps together apps from Lego-like blocks — trackers, calendars, checklists, and more — backed by a long-lived Memories filesystem, packaged as a portable .pupa bundle.',
 } = Astro.props;
 
 const fullTitle = title === 'Pupa' ? 'Pupa' : `${title} · Pupa`;
@@ -25,7 +25,8 @@ const fullTitle = title === 'Pupa' ? 'Pupa' : `${title} · Pupa`;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="color-scheme" content="dark light" />
-    <link rel="icon" type="image/svg+xml" href={href('/favicon.svg')} />
+    <link rel="icon" type="image/png" href={href('/favicon.png')} />
+    <link rel="apple-touch-icon" href={href('/apple-touch-icon.png')} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
