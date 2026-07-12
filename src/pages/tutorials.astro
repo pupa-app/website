@@ -193,10 +193,15 @@ pupa-backend setup</code></pre>
           </li>
         </ul>
       </div>
-      <p class="tut__soon-note">
-        <span class="tut__soon-note-icon" aria-hidden="true">▶</span>
-        <span>Video walkthrough coming soon — components, memories &amp; the agent, plus history &amp; lock.</span>
-      </p>
+      <div class="tut__video tut__video--file">
+        <video
+          src={href('/videos/explore-myapp.mp4')}
+          controls
+          playsinline
+          preload="metadata"
+          title="Exploring a MyApp — components, memories & the agent"
+        />
+      </div>
     </div>
 
     <!-- Use / Build / Share walkthroughs -->
@@ -498,9 +503,9 @@ DATABASE_URL=$&#123;&#123;Postgres.DATABASE_URL&#125;&#125;      # reference the
       // are in document order (tops increasing), this lands on the deepest
       // heading in view — so a subsection like "Claude Code" is highlighted
       // instead of its tall parent container "Backend setup". Kept just above
-      // the headings' scroll-margin-top (7rem) so a clicked anchor, which rests
+      // the headings' scroll-margin-top (8rem) so a clicked anchor, which rests
       // at that offset, registers as the current section.
-      const OFFSET = 120;
+      const OFFSET = 132;
       let ticking = false;
       const update = () => {
         ticking = false;

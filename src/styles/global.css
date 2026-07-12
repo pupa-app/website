@@ -1262,7 +1262,7 @@ button.btn { font: inherit; font-weight: 550; font-size: 0.97rem; cursor: pointe
      the current section is always visible and the full list is a tap away. */
   .tut-nav {
     position: sticky;
-    top: 3.4rem;
+    top: 4.35rem;
     z-index: 5;
     margin-bottom: 1.25rem;
   }
@@ -1296,7 +1296,7 @@ button.btn { font: inherit; font-weight: 550; font-size: 0.97rem; cursor: pointe
     overflow-y: auto;
   }
   /* Jumped-to sections clear both the header and the sticky TOC bar. */
-  .tut-content [id] { scroll-margin-top: 7rem; }
+  .tut-content [id] { scroll-margin-top: 8rem; }
 }
 
 @media (max-width: 720px) {
