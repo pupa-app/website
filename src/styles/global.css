@@ -703,6 +703,23 @@ main {
   object-fit: contain;
   border-radius: var(--radius);
 }
+/* Small caption above a reveal-panel video (Use / Build). Sits on the panel's
+   dark backing, so it uses the light on-dark text token. */
+.reveal-panel__cap {
+  margin: 0;
+  padding: 0.7rem 0.95rem 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #fff;
+}
+.reveal-panel__note {
+  margin: 0;
+  padding: 0 0.95rem 0.7rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.72);
+}
 
 /* Touch / no-hover: collapse the clip inline and open it on tap (via .is-open). */
 @media (hover: none) {

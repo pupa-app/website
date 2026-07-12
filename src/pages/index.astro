@@ -70,7 +70,7 @@ const repos = [
     </p>
     <ul class="hero-points">
       <li><strong>Build</strong> apps for anything, from simple daily helpers, to complex automations</li>
-      <li><strong>Use</strong> your apps everday, powered by your usual agent harness</li>
+      <li><strong>Use</strong> your apps everywhere, powered by your usual agent harness</li>
       <li><strong>Share</strong> it with anyone and enjoy others apps</li>
       <li><strong>Contribute</strong> easily your ideas to the Pupa Opensource project</li>
     </ul>
@@ -123,13 +123,13 @@ const repos = [
         <div class="why__more-body">
           <p class="why__lead">
             Pupa changes that. Whatever your setup — a single plain ChatGPT thread or
-            an elaborate custom harness — your same agent now can, by default, use and build a
+            an elaborate custom agentic pipeline — your same agent now can, by default, use and build a
             real app alongside you. And that app <strong>stays with you</strong>:
             Pupa gives it a standard to persist, travel, and stay robust long after
-            the chat is gone.
+            the chat is gone and the harness changes.
           </p>
           <p class="why__lead">
-            It fits either way: add Pupa on top of the agentic setup you already
+            It fits either way: add a Pupa app on top of the agentic setup you already
             have, or make it the main app you use — with the agent just helping out.
           </p>
           <p class="why__lead">
@@ -147,11 +147,11 @@ const repos = [
     <h2>Use, build, share, contribute</h2>
     <div class="card-grid">
       {verbs.map((v) => (
-        <article class={v.verb === 'Share' || v.verb === 'Use' || v.verb === 'Contribute' ? 'card card--reveal' : 'card'}>
+        <article class={v.verb === 'Share' || v.verb === 'Use' || v.verb === 'Build' || v.verb === 'Contribute' ? 'card card--reveal' : 'card'}>
           <span class="verb">{v.verb}</span>
           <h3>{v.title}</h3>
           <p>{v.body}</p>
-          {(v.verb === 'Use' || v.verb === 'Share' || v.verb === 'Contribute') && (
+          {(v.verb === 'Use' || v.verb === 'Build' || v.verb === 'Share' || v.verb === 'Contribute') && (
             <span class="reveal-hint" aria-hidden="true">
               <span class="reveal-hint__label">{v.verb === 'Contribute' ? 'Tap for the repos' : 'Tap to preview'}</span>
               <span class="reveal-hint__chev">▾</span>
@@ -180,6 +180,8 @@ const repos = [
           )}
           {v.verb === 'Use' && (
             <div class="use-demo__panel">
+              <p class="reveal-panel__cap">A day with your MyApp</p>
+              <p class="reveal-panel__note">All by chat: explore what’s there, add items, log entries, and query your data — the agent updates the same screen live while you watch.</p>
               <video
                 class="use-demo__video"
                 src={href('/videos/daily-brief.mp4')}
@@ -189,6 +191,22 @@ const repos = [
                 playsinline
                 preload="metadata"
                 title="Using a MyApp daily — a morning brief walkthrough"
+              />
+            </div>
+          )}
+          {v.verb === 'Build' && (
+            <div class="use-demo__panel">
+              <p class="reveal-panel__cap">Snap together components to build</p>
+              <p class="reveal-panel__note">Just describe it in chat: the agent adds and wires the components you ask for — trackers, calendars, charts, checklists — into one coherent app, refining in place as you talk.</p>
+              <video
+                class="use-demo__video"
+                src={href('/videos/flight-tracker.mp4')}
+                muted
+                loop
+                controls
+                playsinline
+                preload="metadata"
+                title="Building a MyApp — a flight tracker walkthrough"
               />
             </div>
           )}
