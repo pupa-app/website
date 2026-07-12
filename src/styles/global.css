@@ -446,6 +446,25 @@ main {
 /* ---- Share card: hover-reveal share-flow diagram ---- */
 .card--reveal { position: relative; }
 
+/* "Tap to preview" affordance — hidden on hover-capable devices (the panel
+   reveals on hover there), shown on touch where the panel opens on tap. */
+.reveal-hint { display: none; }
+@media (hover: none) {
+  .card--reveal { cursor: pointer; }
+  .reveal-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.01em;
+  }
+  .reveal-hint__chev { transition: transform 0.3s ease; }
+  .card--reveal.is-open .reveal-hint__chev { transform: rotate(180deg); }
+}
+
 /* Panel drops below the card as a popover — no reflow on sibling cards.
    Wider than the single card column so the diagram + text stay readable. */
 .share-flow__panel {
@@ -525,17 +544,27 @@ main {
 .share-flow__standard li:last-child { margin-bottom: 0; }
 .share-flow__standard strong { color: var(--text); }
 
-/* Touch / no-hover: show the panel inline, no dead hover-only content */
+/* Touch / no-hover: no hover available, so collapse the panel inline and open
+   it on tap (via .is-open) — saves vertical space vs. always-open. */
 @media (hover: none) {
   .share-flow__panel {
     position: static;
     width: auto;
-    max-height: none;
-    opacity: 1;
+    max-height: 0;
+    opacity: 0;
     transform: none;
+    overflow: hidden;
+    pointer-events: none;
+    border: 0;
+    margin-top: 0;
+  }
+  .card--reveal.is-open .share-flow__panel {
+    max-height: 2200px;
+    opacity: 1;
     overflow: visible;
     pointer-events: auto;
     border: 1px solid var(--border);
+    margin-top: 1rem;
   }
 }
 
@@ -577,14 +606,22 @@ main {
   border-radius: var(--radius);
 }
 
-/* Touch / no-hover: show the clip inline with controls, no dead hover state */
+/* Touch / no-hover: collapse the clip inline and open it on tap (via .is-open). */
 @media (hover: none) {
   .use-demo__panel {
     position: static;
     width: auto;
-    max-height: none;
-    opacity: 1;
+    max-height: 0;
+    opacity: 0;
     transform: none;
+    overflow: hidden;
+    pointer-events: none;
+    border: 0;
+    margin-top: 0;
+  }
+  .card--reveal.is-open .use-demo__panel {
+    max-height: 1600px;
+    opacity: 1;
     overflow: visible;
     pointer-events: auto;
     border: 1px solid var(--border);

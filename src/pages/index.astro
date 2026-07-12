@@ -143,6 +143,12 @@ const repos = [
           <span class="verb">{v.verb}</span>
           <h3>{v.title}</h3>
           <p>{v.body}</p>
+          {(v.verb === 'Use' || v.verb === 'Share') && (
+            <span class="reveal-hint" aria-hidden="true">
+              <span class="reveal-hint__label">Tap to preview</span>
+              <span class="reveal-hint__chev">▾</span>
+            </span>
+          )}
           {v.verb === 'Use' && (
             <div class="use-demo__panel">
               <video
@@ -238,7 +244,7 @@ const repos = [
   <script>
     // Play the daily-brief demo only while its card is hovered — no wasted
     // playback while the reveal panel is collapsed. Falls back gracefully on
-    // touch (the panel shows inline; tap the video to play).
+    // touch (the panel opens on tap; tap the video to play).
     for (const video of document.querySelectorAll<HTMLVideoElement>('.use-demo__video, .share-flow__video')) {
       const card = video.closest('.card--reveal');
       if (!card) continue;
@@ -249,6 +255,19 @@ const repos = [
         video.pause();
         video.currentTime = 0;
       });
+    }
+
+    // Touch / no-hover: tap a reveal card to expand or collapse its panel,
+    // instead of showing it always-open. Taps inside the panel (video
+    // controls, links) don't toggle it shut.
+    if (window.matchMedia('(hover: none)').matches) {
+      for (const card of document.querySelectorAll<HTMLElement>('.card--reveal')) {
+        const panel = card.querySelector('.share-flow__panel, .use-demo__panel');
+        card.addEventListener('click', (e) => {
+          if (panel && e.target instanceof Node && panel.contains(e.target)) return;
+          card.classList.toggle('is-open');
+        });
+      }
     }
   </script>
 </BaseLayout>
