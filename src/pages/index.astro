@@ -5,6 +5,28 @@ import { href } from '../lib/href';
 const GITHUB_ORG = 'https://github.com/pupa-app';
 const MARKETPLACE = 'https://github.com/pupa-app/marketplace';
 
+// Hero carousel — a mix of stills and portrait phone clips, told as a story:
+// have apps → explore/shape → structure → agents → share. All media share the
+// ~9:19.5 phone aspect so the frame never shifts. `flight-tracker.mp4` is
+// landscape, so it stays in the Build card below rather than this frame.
+const heroSlides = [
+  { type: 'image', src: '/screens/myapps.png', w: 520, h: 1125,
+    caption: 'Your MyApps, all in one place',
+    alt: 'A list of MyApps in Pupa — Daily Briefing, Goodnight Stories, Movies, MyFIRE, OKRs and more.' },
+  { type: 'video', src: '/videos/explore-myapp.mp4',
+    caption: 'Explore and shape it by chatting',
+    alt: 'Exploring a MyApp by chat — the agent reshapes the canvas live.' },
+  { type: 'image', src: '/screens/job-search.png', w: 520, h: 1125,
+    caption: 'Components, cross-linked into one app',
+    alt: 'A Job Search MyApp home showing cross-linked components: skills, experience library, questions to ask, interview scheduler.' },
+  { type: 'image', src: '/screens/slack-chat.png', w: 520, h: 1125,
+    caption: 'Agents working alongside you',
+    alt: 'A Pupa slack room where an agent persona (scout) works a task alongside you.' },
+  { type: 'video', src: '/videos/export.mp4',
+    caption: 'Share it as a portable .pupa bundle',
+    alt: 'Exporting a MyApp as a portable .pupa bundle.' },
+];
+
 // Current app version — bump alongside pupa/Pupa/Sources/PupaApp/Version.swift.
 const APP_VERSION = '0.0.175';
 // Top-of-page tags: version + compatibility. `accent` gets the brand-red chip.
@@ -117,19 +139,32 @@ const repos = [
         Browse the marketplace
       </a>
     </div>
-    <div class="hero-shots" aria-label="Pupa running on iPhone">
-      <figure class="hero-shot">
-        <img src={href('/screens/myapps.png')} width="520" height="1125" alt="A list of MyApps in Pupa — Daily Briefing, Goodnight Stories, Movies, MyFIRE, OKRs and more." loading="eager" />
-        <figcaption>Your MyApps, all in one place</figcaption>
-      </figure>
-      <figure class="hero-shot">
-        <img src={href('/screens/job-search.png')} width="520" height="1125" alt="A Job Search MyApp home showing cross-linked components: skills, experience library, questions to ask, interview scheduler." loading="lazy" />
-        <figcaption>Components, cross-linked into one app</figcaption>
-      </figure>
-      <figure class="hero-shot">
-        <img src={href('/screens/slack-chat.png')} width="520" height="1125" alt="A Pupa slack room where an agent persona (scout) works a task alongside you." loading="lazy" />
-        <figcaption>Agents working alongside you</figcaption>
-      </figure>
+    <div class="hero-carousel" data-carousel aria-roledescription="carousel" aria-label="Pupa running on iPhone">
+      <button type="button" class="carousel__arrow carousel__arrow--prev" data-carousel-prev aria-label="Previous">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <ul class="carousel__track" data-carousel-track>
+        {heroSlides.map((s, i) => (
+          <li class="carousel__slide" data-carousel-slide role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${heroSlides.length}`}>
+            <figure class="carousel__figure">
+              {s.type === 'image' ? (
+                <img class="carousel__media" src={href(s.src)} width={s.w} height={s.h} alt={s.alt} loading={i === 0 ? 'eager' : 'lazy'} />
+              ) : (
+                <video class="carousel__media" src={href(s.src)} muted loop playsinline preload="metadata" aria-label={s.alt} title={s.alt}></video>
+              )}
+              <figcaption>{s.caption}</figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+      <button type="button" class="carousel__arrow carousel__arrow--next" data-carousel-next aria-label="Next">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+      <div class="carousel__dots" data-carousel-dots role="tablist" aria-label="Choose slide">
+        {heroSlides.map((s, i) => (
+          <button type="button" class="carousel__dot" data-carousel-dot role="tab" aria-label={s.caption} aria-selected={i === 0 ? 'true' : 'false'}></button>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -300,6 +335,121 @@ const repos = [
           card.classList.toggle('is-open');
         });
       }
+    }
+  </script>
+
+  <script>
+    // Hero carousel — manual-first (arrows / dots / swipe / mouse-drag) with a
+    // gentle autoplay that pauses on any interaction and honours reduced-motion.
+    const root = document.querySelector<HTMLElement>('[data-carousel]');
+    if (root) {
+      const track = root.querySelector<HTMLElement>('[data-carousel-track]')!;
+      const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-carousel-slide]'));
+      const dots = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-carousel-dot]'));
+      const videos = slides.map((s) => s.querySelector<HTMLVideoElement>('video'));
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const INTERVAL = 5000;
+      let current = 0;
+      let timer = 0;
+      let paused = false;
+
+      // Rect-based math so it never depends on offsetParent quirks.
+      const goTo = (i: number, smooth = true) => {
+        const n = slides.length;
+        const idx = ((i % n) + n) % n;
+        const t = track.getBoundingClientRect();
+        const s = slides[idx].getBoundingClientRect();
+        const delta = (s.left + s.width / 2) - (t.left + t.width / 2);
+        track.scrollTo({ left: track.scrollLeft + delta, behavior: smooth && !reduceMotion ? 'smooth' : 'auto' });
+      };
+      const setActive = (i: number) => {
+        if (i === current) return;
+        current = i;
+        dots.forEach((d, di) => d.setAttribute('aria-selected', di === i ? 'true' : 'false'));
+        videos.forEach((v, vi) => {
+          if (!v) return;
+          if (vi === i) v.play().catch(() => {});
+          else { v.pause(); v.currentTime = 0; }
+        });
+      };
+
+      // Derive the active slide from scroll position (covers swipe + drag + snap).
+      let raf = 0;
+      track.addEventListener('scroll', () => {
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          const t = track.getBoundingClientRect();
+          const center = t.left + t.width / 2;
+          let nearest = 0, min = Infinity;
+          slides.forEach((s, i) => {
+            const r = s.getBoundingClientRect();
+            const d = Math.abs((r.left + r.width / 2) - center);
+            if (d < min) { min = d; nearest = i; }
+          });
+          setActive(nearest);
+        });
+      }, { passive: true });
+
+      // Autoplay — instant wrap from last→first to avoid a long reverse sweep.
+      const stop = () => { if (timer) { clearInterval(timer); timer = 0; } };
+      const start = () => {
+        if (reduceMotion || paused || slides.length < 2) return;
+        stop();
+        timer = window.setInterval(() => {
+          if (current === slides.length - 1) goTo(0, false);
+          else goTo(current + 1, true);
+        }, INTERVAL);
+      };
+      const pause = () => { paused = true; stop(); };
+      const resume = () => {
+        paused = false;
+        // Don't fight the user if they're still hovering/focused inside.
+        if (root.matches(':hover') || root.contains(document.activeElement)) return;
+        start();
+      };
+
+      root.addEventListener('mouseenter', pause);
+      root.addEventListener('mouseleave', resume);
+      root.addEventListener('focusin', pause);
+      root.addEventListener('focusout', resume);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stop();
+        else if (!paused) start();
+      });
+
+      // Arrows + dots.
+      root.querySelector('[data-carousel-prev]')?.addEventListener('click', () => goTo(current - 1));
+      root.querySelector('[data-carousel-next]')?.addEventListener('click', () => goTo(current + 1));
+      dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
+
+      // Mouse drag-to-scroll (touch/trackpad already scroll natively).
+      let down = false, startX = 0, startLeft = 0, moved = false;
+      track.addEventListener('pointerdown', (e) => {
+        if (e.pointerType !== 'mouse' || e.button !== 0) return;
+        down = true; moved = false; startX = e.clientX; startLeft = track.scrollLeft;
+        root.classList.add('is-dragging');
+        pause();
+      });
+      window.addEventListener('pointermove', (e) => {
+        if (!down) return;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) > 4) moved = true;
+        track.scrollLeft = startLeft - dx;
+      });
+      window.addEventListener('pointerup', () => {
+        if (!down) return;
+        down = false;
+        root.classList.remove('is-dragging');
+        goTo(current, true); // snap to nearest
+        resume();
+      });
+      // Swallow the click that ends a drag so it doesn't count as a tap.
+      track.addEventListener('click', (e) => {
+        if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+      }, true);
+
+      start();
     }
   </script>
 </BaseLayout>
