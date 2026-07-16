@@ -1,22 +1,22 @@
 /* ---------------------------------------------------------------------------
    Pupa website — global styles
-   Dark-friendly, minimal, modern. Plain CSS, no framework, zero JS.
+   Light by default, dark-mode aware. Plain CSS, no framework, zero JS.
    --------------------------------------------------------------------------- */
 
 :root {
-  /* Palette — dark by default */
-  --bg: #0d0f13;
-  --bg-elev: #14171d;
-  --bg-elev-2: #1b1f27;
-  --border: #262b34;
-  --border-soft: #1e222b;
-  --text: #e7eaf0;
-  --text-dim: #a3abb8;
-  --text-faint: #6b7280;
-  /* Pupa brand red (#EE2A24), brightened slightly for legibility on dark */
-  --accent: #f5453e;
-  --accent-2: #ff7a45;
-  --accent-soft: rgba(238, 42, 36, 0.13);
+  /* Palette — light by default */
+  --bg: #fbfbfd;
+  --bg-elev: #ffffff;
+  --bg-elev-2: #f4f5f8;
+  --border: #e2e5eb;
+  --border-soft: #ececf1;
+  --text: #14171d;
+  --text-dim: #4c5463;
+  --text-faint: #8a92a0;
+  /* Deepened brand red (#EE2A24) for AA contrast on the light background */
+  --accent: #d4231b;
+  --accent-2: #e8551f;
+  --accent-soft: rgba(212, 35, 27, 0.10);
   --danger: #ff7c7c;
 
   /* Typography */
@@ -30,21 +30,21 @@
   --radius-sm: 9px;
 }
 
-/* Respect users who prefer light — soft light theme */
-@media (prefers-color-scheme: light) {
+/* Respect users who prefer dark */
+@media (prefers-color-scheme: dark) {
   :root {
-    --bg: #fbfbfd;
-    --bg-elev: #ffffff;
-    --bg-elev-2: #f4f5f8;
-    --border: #e2e5eb;
-    --border-soft: #ececf1;
-    --text: #14171d;
-    --text-dim: #4c5463;
-    --text-faint: #8a92a0;
-    /* Deepened brand red for AA contrast on the light background */
-    --accent: #d4231b;
-    --accent-2: #e8551f;
-    --accent-soft: rgba(212, 35, 27, 0.10);
+    --bg: #0d0f13;
+    --bg-elev: #14171d;
+    --bg-elev-2: #1b1f27;
+    --border: #262b34;
+    --border-soft: #1e222b;
+    --text: #e7eaf0;
+    --text-dim: #a3abb8;
+    --text-faint: #6b7280;
+    /* Pupa brand red, brightened slightly for legibility on dark */
+    --accent: #f5453e;
+    --accent-2: #ff7a45;
+    --accent-soft: rgba(238, 42, 36, 0.13);
   }
 }
 
@@ -1169,25 +1169,25 @@ main {
 
 /* ---- Lightweight shell/YAML syntax highlighting (applied client-side) ---- */
 :root {
-  --tok-comment: #6b7280;
-  --tok-str: #86c99a;
-  --tok-cmd: #e6c07b;
-  --tok-flag: #d19a66;
-  --tok-var: #56b6c2;
-  --tok-key: #7cb0f0;
-  --tok-bool: #c093e8;
-  --tok-op: #8a92a0;
+  --tok-comment: #8a92a0;
+  --tok-str: #2e7d32;
+  --tok-cmd: #9a6700;
+  --tok-flag: #b45309;
+  --tok-var: #0e7490;
+  --tok-key: #1d4ed8;
+  --tok-bool: #7c3aed;
+  --tok-op: #6b7280;
 }
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
-    --tok-comment: #8a92a0;
-    --tok-str: #2e7d32;
-    --tok-cmd: #9a6700;
-    --tok-flag: #b45309;
-    --tok-var: #0e7490;
-    --tok-key: #1d4ed8;
-    --tok-bool: #7c3aed;
-    --tok-op: #6b7280;
+    --tok-comment: #6b7280;
+    --tok-str: #86c99a;
+    --tok-cmd: #e6c07b;
+    --tok-flag: #d19a66;
+    --tok-var: #56b6c2;
+    --tok-key: #7cb0f0;
+    --tok-bool: #c093e8;
+    --tok-op: #8a92a0;
   }
 }
 .tut-content pre .tok-comment { color: var(--tok-comment); font-style: italic; }
