@@ -435,19 +435,17 @@ main {
   color: var(--text-dim);
 }
 .hero .hero-points li {
-  position: relative;
-  padding-left: 1.5rem;
-  margin-bottom: 0.55rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin-bottom: 0.7rem;
 }
-.hero .hero-points li::before {
-  content: "";
-  position: absolute;
-  left: 0.15rem;
-  top: 0.7em;
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: var(--accent);
+.hero .hero-point__icon {
+  flex: none;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-top: 0.16em;
+  color: var(--accent);
 }
 .hero .hero-points strong { color: var(--text); }
 .cta-row {

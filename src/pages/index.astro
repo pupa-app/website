@@ -27,6 +27,20 @@ const heroSlides = [
     alt: 'Exporting a MyApp as a portable .pupa bundle.' },
 ];
 
+// Hero bullet points + their lucide-style icons (stroke, currentColor).
+const pointIcons = {
+  build: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  use: '<rect x="5" y="2" width="14" height="20" rx="2.5"/><path d="M11 18h2"/>',
+  share: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4"/><path d="m15.4 6.5-6.8 4"/>',
+  contribute: '<line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>',
+};
+const heroPoints = [
+  { icon: 'build', verb: 'Build', body: 'apps for anything, from simple daily helpers, to complex automations' },
+  { icon: 'use', verb: 'Use', body: 'your apps everywhere, powered by your usual agent harness' },
+  { icon: 'share', verb: 'Share', body: 'it with anyone and enjoy others apps' },
+  { icon: 'contribute', verb: 'Contribute', body: 'easily your ideas to the Pupa Opensource project' },
+];
+
 // Current app version — bump alongside pupa/Pupa/Sources/PupaApp/Version.swift.
 const APP_VERSION = '0.0.175';
 // Top-of-page tags: version + compatibility. `accent` gets the brand-red chip.
@@ -98,10 +112,12 @@ const repos = [
       Where agentic experiences are crystallised into real apps.
     </p>
     <ul class="hero-points">
-      <li><strong>Build</strong> apps for anything, from simple daily helpers, to complex automations</li>
-      <li><strong>Use</strong> your apps everywhere, powered by your usual agent harness</li>
-      <li><strong>Share</strong> it with anyone and enjoy others apps</li>
-      <li><strong>Contribute</strong> easily your ideas to the Pupa Opensource project</li>
+      {heroPoints.map((p) => (
+        <li>
+          <svg class="hero-point__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={pointIcons[p.icon]}></svg>
+          <span><strong>{p.verb}</strong> {p.body}</span>
+        </li>
+      ))}
     </ul>
     <div class="cta-row">
       <details class="appstore">
