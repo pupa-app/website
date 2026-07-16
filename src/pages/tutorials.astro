@@ -541,6 +541,78 @@ DATABASE_URL=$&#123;&#123;Postgres.DATABASE_URL&#125;&#125;      # reference the
   </script>
 
   <script>
+    // Progressive enhancement: lightweight shell / YAML syntax colouring.
+    // These code blocks are hand-authored <pre><code>, so Astro's markdown
+    // highlighter never sees them — we tokenise the plain text at runtime and
+    // wrap tokens in <span class="tok-*"> (styled in global.css). innerText is
+    // preserved, so the copy-to-clipboard button below still copies raw code.
+    const KEYWORDS = new Set(['true', 'false', 'null', 'yes', 'no']);
+    const escHtml = (s: string) =>
+      s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const tok = (cls: string, text: string) =>
+      `<span class="tok-${cls}">${escHtml(text)}</span>`;
+
+    const highlightLine = (line: string): string => {
+      const n = line.length;
+      let i = 0;
+      let out = '';
+      let firstWord = true;
+      // Leading indent, verbatim.
+      const indent = line.match(/^\s*/)![0];
+      out += escHtml(indent);
+      i += indent.length;
+      // A YAML key at the head of the line: `key:` / `nested_key: value`.
+      const yamlKey = line.slice(i).match(/^[A-Za-z_][\w.-]*(?=:(?:\s|$))/);
+      if (yamlKey) {
+        out += tok('key', yamlKey[0]);
+        i += yamlKey[0].length;
+        firstWord = false;
+      }
+      while (i < n) {
+        const ch = line[i];
+        const rest = line.slice(i);
+        const prevSpace = i === 0 || /\s/.test(line[i - 1]);
+        let m: RegExpMatchArray | null;
+        if (/\s/.test(ch)) {
+          const w = rest.match(/^\s+/)![0];
+          out += escHtml(w);
+          i += w.length;
+          continue;
+        }
+        // Comment to end of line (# at a token boundary).
+        if (ch === '#' && prevSpace) { out += tok('comment', rest); break; }
+        // Quoted strings (tolerate an unterminated quote on the line).
+        if ((m = rest.match(/^"(?:[^"\\]|\\.)*"?/))) { out += tok('str', m[0]); i += m[0].length; continue; }
+        if ((m = rest.match(/^'(?:[^'\\]|\\.)*'?/))) { out += tok('str', m[0]); i += m[0].length; continue; }
+        // URLs.
+        if ((m = rest.match(/^https?:\/\/[^\s"'|]+/))) { out += tok('url', m[0]); i += m[0].length; firstWord = false; continue; }
+        // Env-style assignment name: NAME=...
+        if (prevSpace && (m = rest.match(/^[A-Za-z_]\w*(?==)/))) { out += tok('var', m[0]); i += m[0].length; firstWord = false; continue; }
+        // Flags: --long / -x
+        if (prevSpace && (m = rest.match(/^--?[A-Za-z][\w-]*/))) { out += tok('flag', m[0]); i += m[0].length; firstWord = false; continue; }
+        // Words / numbers.
+        if ((m = rest.match(/^[A-Za-z_][\w-]*|^\d[\w.]*/))) {
+          const w = m[0];
+          if (firstWord) { out += tok('cmd', w); firstWord = false; }
+          else if (KEYWORDS.has(w)) out += tok('bool', w);
+          else out += escHtml(w);
+          i += w.length;
+          continue;
+        }
+        // Punctuation / operators.
+        if ((m = rest.match(/^[^\sA-Za-z0-9_"'#-]+/))) { out += tok('op', m[0]); i += m[0].length; continue; }
+        out += escHtml(ch);
+        i += 1;
+      }
+      return out;
+    };
+
+    for (const code of document.querySelectorAll<HTMLElement>('.tut-content pre > code')) {
+      code.innerHTML = code.textContent!.split('\n').map(highlightLine).join('\n');
+    }
+  </script>
+
+  <script>
     // Progressive enhancement: add a click-to-copy button to every code block.
     for (const pre of document.querySelectorAll('.tut-content pre')) {
       const btn = document.createElement('button');

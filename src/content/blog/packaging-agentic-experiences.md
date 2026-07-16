@@ -98,6 +98,8 @@ and model-loadable playbooks, memories as the long-term store, crons for cadence
 So Pupa isn't one app — it's a **harness that ships harnesses**, and the `.pupa`
 bundle + setup skill are how one travels and installs.
 
+![A MyApp's chat with the slash-command menu open — skills like /pupa-agents, /pupa-memory and /pupa-sharing surface as model-loadable playbooks and commands.](./slash-commands.png)
+
 ## On-ramp example — "Blog Studio"
 
 A one-component MyApp — a kanban tracker of posts moving through *Research →
@@ -121,6 +123,8 @@ the *same* intake for the *same* typed output.
 - **A standard setup skill** installs the experience on a new host.
 - **Rides your host:** hand it to a friend and they inherit your entire method
   minus your private records.
+
+![The Job Search MyApp home — cross-linked components for skills, experience library, questions to ask, company research and an interview scheduler, with a slack prep room.](./job-search-app.png)
 
 ## Open source & extensible — bring your own component
 
