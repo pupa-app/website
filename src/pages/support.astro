@@ -42,9 +42,7 @@ const repos = [
             Run your own backend (locally with <code>pupa-backend run</code>, or
             deploy your own cloud instance), then mint a pairing code with{' '}
             <code>pupa-backend pair</code>. In the app, go to Settings ▸ Backend ▸
-            Edit and paste or scan the code. The app defaults to{' '}
-            <code>http://localhost:8004/</code>; point it at a hosted instance from
-            the same screen. Full instructions are in the{' '}
+            Edit and paste or scan the code. Full instructions are in the{' '}
             <a href={`${GITHUB_ORG}/pupa-backend`}>pupa-backend</a> README.
           </p>
         </details>
@@ -60,9 +58,8 @@ const repos = [
           <ul>
             <li>
               <strong>Local</strong> — the backend runs on the same machine or
-              LAN as the app, at <code>http://localhost:8004/</code> (or a
-              self-signed HTTPS address with certificate pinning over the local
-              network). Nothing is exposed to the internet. Best when the macOS
+              LAN as the app, at <code>http://localhost:8004/</code>. Nothing is
+              exposed to the internet. Best when the macOS
               app runs on the same laptop as the backend, or your phone is on
               the same Wi-Fi.
             </li>
@@ -101,9 +98,7 @@ const repos = [
             source (macOS 14+); the first run compiles it. It captures your
             screen and publishes the video track to the{' '}
             <code>/screenshare/ws</code> broker on your backend, so the agent
-            can see what you see. The broker is off by default and stays off on
-            the hosted multi-tenant deployment — it only makes sense when you
-            run your own backend.
+            can see what you see. The broker is off by default.
           </p>
         </details>
 
