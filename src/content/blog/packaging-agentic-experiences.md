@@ -20,6 +20,8 @@ time, and handed to someone who runs it on their own host.
 > Pupa turns an agentic experience into a persistent, typed app the agent works
 > in with you — and that app is the portable unit.
 
+![The evolution of information flow between you and your agent. Top: Claude alone on your machine, reading and modifying raw OS data. Middle: a chat-focused app that only reports OS/chat data one way to a generic backend. Bottom: Pupa — a structured MyApp of typed components and memories, read and modified both ways through your own pupa-backend.](./information-flow.png)
+
 ## The problem — you can ship files, not an app the agent uses
 
 Portability of *content* is largely solved: you can already ship a Claude Code

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import EvolutionSlider from '../components/EvolutionSlider.astro';
 import { href } from '../lib/href';
 
 const GITHUB_ORG = 'https://github.com/pupa-app';
@@ -222,6 +223,8 @@ const repos = [
             agent. Nothing is locked in, so it’s <strong>fully portable</strong> and
             works with any harness.
           </p>
+          <p class="why__evo-lead">The app surface has been evolving — step through it:</p>
+          <EvolutionSlider />
         </div>
       </details>
     </div>

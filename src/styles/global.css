@@ -640,6 +640,81 @@ main {
 .why__more[open] .why__more-chev { transform: rotate(180deg); }
 .why__more-body { margin-top: 1rem; }
 .why__more-body .why__lead:last-child { margin-bottom: 0; }
+/* Evolution-of-information-flow slider (components/EvolutionSlider.astro). One
+   stage at a time. The art is white-background, so the viewport is a light card
+   in both themes. */
+.why__evo-lead {
+  text-align: center;
+  color: var(--text-faint);
+  font-size: 0.85rem;
+  margin: 1.6rem 0 0.6rem;
+}
+.evo { max-width: 480px; margin: 0 auto; }
+.evo__viewport {
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.evo__track {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: transform 0.4s ease;
+}
+.evo__slide { flex: 0 0 100%; min-width: 0; }
+.evo__img { display: block; width: 100%; height: auto; }
+.evo__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: #1a1a1a;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.evo__arrow:hover { background: #fff; }
+.evo__arrow:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.evo__arrow--prev { left: 8px; }
+.evo__arrow--next { right: 8px; }
+.evo__caption {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: center;
+  margin: 0.75rem auto 0;
+  max-width: 52ch;
+  min-height: 5.6em;
+}
+.evo__caption strong { color: var(--text); }
+.evo__dots { display: flex; gap: 0.4rem; justify-content: center; margin-top: 0.5rem; }
+.evo__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.evo__dot[aria-selected="true"] { background: var(--accent); }
+.evo__dot:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .evo__track { transition: none; }
+  .evo__arrow { transition: none; }
+}
 
 /* ---- Cards grid (the four verbs) ---- */
 .card-grid {
@@ -898,6 +973,28 @@ main {
 .panel__body ul { color: var(--text-dim); padding-left: 1.2rem; }
 .panel__body li { margin-bottom: 0.5rem; }
 .panel__body li strong { color: var(--text); }
+/* Diagram figure inside a split panel (e.g. the iCloud-sync sketch). The art is
+   a white-background PNG, so it keeps a light card in both themes to stay legible. */
+.panel__figure { margin: 0; text-align: center; }
+.panel__figure img {
+  display: block;
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.6rem;
+}
+.panel__figure figcaption {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0.75rem auto 0;
+  max-width: 52ch;
+}
+.panel__figure figcaption strong { color: var(--text); }
 
 /* ---- Contribute card: hover-reveal open-source repos ----
    Left-anchored like the other reveal panels. On the 960px-max desktop grid
@@ -1001,6 +1098,112 @@ main {
   line-height: 1.4;
   color: var(--text-dim);
   overflow-x: auto;
+}
+
+/* ---- Backend-connection diagram (components/BackendFlow.astro) ----
+   One inline SVG, themed via the accent + surface tokens and driven by a
+   `data-active` channel on the root. Motion is packet dots travelling each
+   wire; everything is disabled under prefers-reduced-motion below. */
+.backend-flow { max-width: 640px; margin: 1.5rem auto 0; }
+.backend-flow--compact { max-width: 420px; margin: 0.9rem 0 0; }
+.backend-flow--teaser { margin: 0.5rem auto 0; }
+
+/* Compact single-line teaser (tutorials Quick setup): centred, with a lead line. */
+.flow-teaser { margin: 1.25rem auto 1.5rem; text-align: center; }
+.flow-teaser__cap {
+  color: var(--text-dim); font-size: 0.95rem;
+  margin: 0 auto 0.3rem; max-width: 52ch;
+}
+.flow-teaser__cap strong { color: var(--text); }
+
+/* Compact solo line (homepage teaser): a single always-on animated link between
+   the app and pupa-backend — no channels, so no `data-active` gating. */
+.flow-wire--solo { stroke: var(--accent); stroke-width: 2.5; opacity: 1; }
+.flow-packet--solo { animation: flow-run 1.6s linear infinite; }
+.backend-flow--compact .flow-node--backend { stroke: var(--accent); }
+
+.flow-stage {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.7rem 0.3rem;
+}
+.backend-flow--compact .flow-stage { padding: 0.4rem 0.5rem 0.2rem; }
+.flow-svg { display: block; width: 100%; height: auto; }
+
+/* Static furniture */
+.flow-frame  { fill: none; stroke: var(--border); stroke-width: 2; }
+.flow-screen { fill: none; stroke: var(--border-soft); stroke-width: 1.5; }
+.flow-base   { fill: var(--bg-elev-2); stroke: var(--border); stroke-width: 2; stroke-linejoin: round; }
+.flow-notch  { fill: var(--text-faint); }
+
+.flow-node        { fill: var(--bg-elev-2); stroke: var(--border); stroke-width: 1.75; transition: stroke .3s; }
+.flow-pupa        { fill: var(--accent); }
+.flow-burst       { stroke: var(--accent); stroke-width: 2.2; stroke-linecap: round; }
+.flow-node-label  { fill: var(--text); font: 600 13px var(--font-sans); }
+
+/* Wires + their channel labels: faint until their channel is active */
+.flow-wire  { fill: none; stroke: var(--text-faint); stroke-width: 2; opacity: 0.4; transition: stroke .3s, opacity .3s; }
+.flow-label { fill: var(--text-dim); font: 500 12px var(--font-sans); transition: fill .3s; }
+.flow-label--node { fill: var(--text-dim); }
+.flow-packet { fill: var(--accent); opacity: 0; filter: drop-shadow(0 0 4px var(--accent)); }
+
+/* Active channel: light the wire, its label, and run its packet */
+.backend-flow[data-active="localhost"]  [data-ch="localhost"].flow-wire,
+.backend-flow[data-active="cloudflare"] [data-ch="cloudflare"].flow-wire,
+.backend-flow[data-active="tailscale"]  [data-ch="tailscale"].flow-wire { stroke: var(--accent); stroke-width: 2.5; opacity: 1; }
+
+.backend-flow[data-active="localhost"]  [data-ch="localhost"].flow-label,
+.backend-flow[data-active="cloudflare"] [data-ch="cloudflare"].flow-label,
+.backend-flow[data-active="tailscale"]  [data-ch="tailscale"].flow-label { fill: var(--accent); }
+
+.backend-flow[data-active="localhost"]  [data-ch="localhost"].flow-packet,
+.backend-flow[data-active="cloudflare"] [data-ch="cloudflare"].flow-packet,
+.backend-flow[data-active="tailscale"]  [data-ch="tailscale"].flow-packet {
+  animation: flow-run 1.5s linear infinite;
+}
+@keyframes flow-run {
+  0%   { offset-distance: 0%;   opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+/* Destination node glows for the active channel (phone routes → backend, localhost → app) */
+.backend-flow[data-active="cloudflare"] .flow-node--backend,
+.backend-flow[data-active="tailscale"]  .flow-node--backend,
+.backend-flow[data-active="localhost"]  .flow-node--app { stroke: var(--accent); }
+
+/* Chips + caption (full variant) */
+.flow-caption {
+  text-align: center; color: var(--text-dim);
+  font-size: 0.95rem; line-height: 1.5;
+  margin: 0.7rem auto 0.4rem; max-width: 48ch; min-height: 2.8em;
+}
+.flow-caption strong { color: var(--text); }
+.flow-caption code { font-size: 0.85em; }
+.flow-chips { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-top: 0.5rem; }
+.flow-chip {
+  font: 600 0.85rem var(--font-sans);
+  color: var(--text-dim);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.3rem 0.85rem;
+  cursor: pointer;
+  transition: color .2s, background .2s, border-color .2s;
+}
+.flow-chip:hover { color: var(--text); border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+.flow-chip[aria-pressed="true"] {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+}
+.flow-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-packet { animation: none !important; }
+  .flow-wire, .flow-label, .flow-node, .flow-chip { transition: none; }
 }
 
 /* ---- Prose (blog posts & legal pages) ---- */

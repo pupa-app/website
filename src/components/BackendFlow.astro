@@ -1,0 +1,194 @@
+---
+// "How your app reaches the backend" diagram, themed with the site's accent +
+// surface tokens (so it flips for dark mode). Two variants:
+//
+//   full    — the tutorials #channels teaching aid: three connection channels
+//             (Localhost / Cloudflare / Tailscale) with chips, a caption, and an
+//             auto-cycle driven by a `data-active` channel on the root.
+//   compact — the homepage teaser: a single animated line between the iPhone app
+//             and pupa-backend. No channels, labels, chips, or captions — just the
+//             live link. The backend box is vertically centred so the line reads
+//             clean.
+//
+// Progressive enhancement: static frame with no JS; all motion is disabled under
+// prefers-reduced-motion (see global.css). The full variant's three channels
+// mirror tutorials.astro (#channels).
+
+interface Props {
+  variant?: 'full' | 'compact';
+  active?: 'localhost' | 'cloudflare' | 'tailscale';
+  class?: string;
+}
+const { variant = 'full', active = 'cloudflare', class: className = '' } = Astro.props;
+const isFull = variant === 'full';
+
+// Where the pupa-backend box sits: top of the laptop screen for the full variant
+// (the localhost app hangs below it), vertically centred for the compact one.
+const bk = isFull
+  ? { y: 74, labelY: 105, cy: 100 }
+  : { y: 110, labelY: 141, cy: 136 };
+
+// data-ch ids are shared between wire / label / packet / caption so one
+// `data-active` value lights the whole channel up in CSS (full variant).
+const channels = [
+  {
+    id: 'localhost',
+    label: 'Localhost',
+    note: '<strong>Localhost</strong> — same machine only. The app talks to <code>localhost:8004</code> and nothing leaves your computer.',
+  },
+  {
+    id: 'cloudflare',
+    label: 'Cloudflare',
+    note: '<strong>Cloudflare tunnel</strong> — a public HTTPS URL to your backend, reachable from anywhere with no ports to open.',
+  },
+  {
+    id: 'tailscale',
+    label: 'Tailscale',
+    note: '<strong>Tailscale</strong> — a private mesh across your own devices: a stable name, with traffic kept off the public internet.',
+  },
+];
+const activeNote = channels.find((c) => c.id === active)!.note;
+
+// Wire geometry, shared by the visible path and its travelling packet (offset-path).
+const wires = {
+  cloudflare: 'M150 116 C 240 116 300 90 356 92',
+  tailscale: 'M150 170 C 250 170 300 112 356 110',
+  localhost: 'M470 126 C 470 142 520 138 552 150',
+};
+// The single compact wire: phone → backend, near-horizontal into the centred box.
+const soloWire = `M148 150 C 240 150 300 ${bk.cy + 2} 356 ${bk.cy}`;
+// The segmented pupa mark (domed head + tapering stacked bars), as themeable rects.
+const pupaGlyph = `<rect x="-8" y="-15" width="16" height="6.5" rx="3.2"/><rect x="-9" y="-6.5" width="18" height="5.5" rx="2.7"/><rect x="-7" y="1" width="14" height="5.5" rx="2.7"/><rect x="-5" y="8.5" width="10" height="5.5" rx="2.7"/>`;
+---
+<div class={`backend-flow backend-flow--${variant} ${className}`.trim()} data-backend-flow data-active={isFull ? active : undefined}>
+  <div class="flow-stage">
+    <svg class="flow-svg" viewBox="0 0 720 300" role="img" aria-label={isFull
+      ? 'How your phone or a same-Mac app reaches the pupa-backend, over Localhost, a Cloudflare tunnel, or Tailscale.'
+      : 'The Pupa iPhone app talking to a pupa-backend you run.'}>
+      <!-- Phone -->
+      <g>
+        <rect class="flow-frame" x="44" y="58" width="104" height="184" rx="20"/>
+        <rect class="flow-screen" x="54" y="74" width="84" height="152" rx="10"/>
+        <rect class="flow-notch" x="86" y="65" width="20" height="5" rx="2.5"/>
+        <g class="flow-pupa" transform="translate(96,150) scale(1.15)" set:html={pupaGlyph}></g>
+        <text class="flow-label flow-label--node" x="96" y="262" text-anchor="middle">Pupa app</text>
+      </g>
+
+      <!-- Laptop shell -->
+      <path class="flow-base" d="M300 228 H720 L732 246 Q733 250 728 250 H292 Q287 250 288 246 Z"/>
+      <rect class="flow-frame" x="330" y="44" width="362" height="184" rx="14"/>
+
+      <!-- Wires (drawn before the node boxes so their ends tuck under the borders) -->
+      {isFull ? (
+        <>
+          <path class="flow-wire" data-ch="cloudflare" d={wires.cloudflare}/>
+          <path class="flow-wire" data-ch="tailscale" d={wires.tailscale}/>
+          <path class="flow-wire" data-ch="localhost" d={wires.localhost}/>
+        </>
+      ) : (
+        <path class="flow-wire flow-wire--solo" d={soloWire}/>
+      )}
+
+      <!-- pupa-backend -->
+      <rect class="flow-node flow-node--backend" x="356" y={bk.y} width="236" height="52" rx="13"/>
+      <text class="flow-node-label" x="384" y={bk.labelY} text-anchor="start">pupa-backend</text>
+      <g class="flow-burst" transform={`translate(566,${bk.cy})`}>
+        <line x1="0" y1="-10" x2="0" y2="10"/>
+        <line x1="-10" y1="0" x2="10" y2="0"/>
+        <line x1="-7" y1="-7" x2="7" y2="7"/>
+        <line x1="-7" y1="7" x2="7" y2="-7"/>
+      </g>
+
+      {isFull && (
+        <>
+          <!-- localhost app (a second Pupa on the same Mac) -->
+          <rect class="flow-node flow-node--app" x="520" y="150" width="64" height="58" rx="12"/>
+          <g class="flow-pupa" transform="translate(552,179) scale(0.92)" set:html={pupaGlyph}></g>
+
+          <!-- Channel labels -->
+          <text class="flow-label" data-ch="cloudflare" x="248" y="84" text-anchor="middle">Cloudflare</text>
+          <text class="flow-label" data-ch="tailscale" x="250" y="152" text-anchor="middle">Tailscale</text>
+          <text class="flow-label" data-ch="localhost" x="502" y="134" text-anchor="middle">Localhost</text>
+        </>
+      )}
+
+      <!-- Travelling packets (on top; offset-path matches each wire's `d`) -->
+      {isFull ? (
+        <>
+          <circle class="flow-packet" data-ch="cloudflare" r="4.5" style={`offset-path: path('${wires.cloudflare}')`}/>
+          <circle class="flow-packet" data-ch="tailscale" r="4.5" style={`offset-path: path('${wires.tailscale}')`}/>
+          <circle class="flow-packet" data-ch="localhost" r="4.5" style={`offset-path: path('${wires.localhost}')`}/>
+        </>
+      ) : (
+        <circle class="flow-packet flow-packet--solo" r="4.5" style={`offset-path: path('${soloWire}')`}/>
+      )}
+    </svg>
+  </div>
+
+  {isFull && (
+    <>
+      <p class="flow-caption" data-flow-caption set:html={activeNote}></p>
+      <div class="flow-chips" role="group" aria-label="Connection channel">
+        {channels.map((c) => (
+          <button
+            type="button"
+            class="flow-chip"
+            data-chip={c.id}
+            data-note={c.note}
+            aria-pressed={c.id === active ? 'true' : 'false'}
+          >{c.label}</button>
+        ))}
+      </div>
+    </>
+  )}
+</div>
+
+<script>
+  // Drive the full-variant diagrams (those with channel chips). Each auto-cycles
+  // its channel; the compact variant animates its single line in pure CSS and
+  // needs no JS, so it's skipped here. Auto-cycle pauses while the pointer/focus
+  // is inside, and never runs under prefers-reduced-motion.
+  const ORDER = ['localhost', 'cloudflare', 'tailscale'] as const;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const CYCLE = 3200;
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-backend-flow]')) {
+    const chips = Array.from(root.querySelectorAll<HTMLButtonElement>('.flow-chip'));
+    if (!chips.length) continue; // compact variant — CSS-only
+    const caption = root.querySelector<HTMLElement>('[data-flow-caption]');
+    let timer = 0;
+    let paused = false;
+
+    const setActive = (id: string) => {
+      root.dataset.active = id;
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.chip === id)));
+      const note = chips.find((c) => c.dataset.chip === id)?.dataset.note;
+      if (caption && note) caption.innerHTML = note;
+    };
+
+    const step = () => {
+      const i = ORDER.indexOf((root.dataset.active as typeof ORDER[number]) ?? 'cloudflare');
+      setActive(ORDER[(i + 1) % ORDER.length]);
+    };
+    const start = () => {
+      if (reduce || paused || timer) return;
+      timer = window.setInterval(step, CYCLE);
+    };
+    const stop = () => { if (timer) { clearInterval(timer); timer = 0; } };
+
+    // Pause auto-cycle while the user is interacting; resume when they leave.
+    root.addEventListener('mouseenter', () => { paused = true; stop(); });
+    root.addEventListener('mouseleave', () => { paused = false; start(); });
+    root.addEventListener('focusin', () => { paused = true; stop(); });
+    root.addEventListener('focusout', () => {
+      if (!root.contains(document.activeElement)) { paused = false; start(); }
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop(); else if (!paused) start();
+    });
+
+    chips.forEach((chip) => chip.addEventListener('click', () => setActive(chip.dataset.chip!)));
+
+    start();
+  }
+</script>

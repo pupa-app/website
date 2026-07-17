@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import BackendFlow from '../components/BackendFlow.astro';
 import { href } from '../lib/href';
 
 const GITHUB_ORG = 'https://github.com/pupa-app';
@@ -124,6 +125,13 @@ const sections = [
         pair, and start chatting. About five minutes. Every step has a fuller
         version in <a href="#backend-setup">Backend setup</a> below.
       </p>
+      <div class="flow-teaser">
+        <p class="flow-teaser__cap">
+          The backend runs on your machine and simply connects your own agent
+          harness — like <strong>Claude Code</strong> — to the Pupa app.
+        </p>
+        <BackendFlow variant="compact" class="backend-flow--teaser" />
+      </div>
       <ol class="setup__steps setup__steps--num">
         <li>
           <strong>Install the backend and run setup.</strong> Make sure the{' '}
@@ -293,6 +301,20 @@ pupa-backend setup</code></pre>
           </li>
         </ul>
       </div>
+      <figure class="panel__figure">
+        <img
+          src={href('/diagrams/icloud-sync.png')}
+          width="519"
+          height="295"
+          alt="A Mac, iPad, and iPhone each showing the same Pupa app, kept in step by iCloud Sync."
+          loading="lazy"
+        />
+        <figcaption>
+          Your MyApps, memories, and settings sync across your iPhone, iPad, and
+          Mac through <strong>your own iCloud</strong> — no Pupa account, no Pupa
+          server in the middle.
+        </figcaption>
+      </figure>
     </div>
 
     <!-- Backend setup -->
@@ -364,6 +386,7 @@ LLM_MODEL=anthropic/claude-sonnet-4.6</code></pre>
       </p>
 
       <h3 id="channels">Connection channels</h3>
+      <BackendFlow />
       <p>
         “How will your iPhone reach the backend?” is the question in{' '}
         <code>pupa-backend setup</code> that picks your <em>connection channel</em>.

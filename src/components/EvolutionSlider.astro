@@ -1,0 +1,124 @@
+---
+// The "evolution of information flow" as a 3-stage slider (used in the Why-Pupa
+// section). One stage at a time is far easier to read than the stacked combined
+// image. Manual-first (arrows / dots / swipe) with a gentle autoplay that pauses
+// on hover/focus, honours prefers-reduced-motion, and only runs while its parent
+// <details> is open. The stage art is a white-background sketch, so the viewport
+// keeps a light card in both themes. Distinct `data-evo-slider` hook so it never
+// collides with the hero carousel's `[data-carousel]` script.
+import { href } from '../lib/href';
+
+const stages = [
+  {
+    src: '/diagrams/information-flow-1.png',
+    title: 'Just your agent',
+    body: 'Claude works straight on your OS — reading and modifying raw files and apps. Nothing persists as an app of its own.',
+    alt: 'A laptop where Claude, with tools/MCP/skills, reads and modifies OS apps and the filesystem directly.',
+  },
+  {
+    src: '/diagrams/information-flow-2.png',
+    title: 'A chat wrapper',
+    body: 'A chat-first app reports data one way to a generic backend. Good for rendering chats, but the agent still only reads and writes raw OS data.',
+    alt: 'A chat app on a phone reporting OS and chat data one way to a generic backend, which runs Claude over raw OS data.',
+  },
+  {
+    src: '/diagrams/information-flow-3.png',
+    title: 'A Pupa MyApp',
+    body: 'A structured app of typed components and memories your agent reads and writes both ways, through your own pupa-backend — the experience becomes a durable thing.',
+    alt: 'A Pupa MyApp of components and memories on a phone, read and modified both ways through pupa-backend, which runs Claude over OS data.',
+  },
+];
+---
+<div class="evo" data-evo-slider aria-roledescription="carousel" aria-label="How the app surface evolves">
+  <div class="evo__viewport">
+    <ul class="evo__track" data-evo-track>
+      {stages.map((s, i) => (
+        <li
+          class="evo__slide"
+          data-evo-slide
+          data-title={s.title}
+          data-body={s.body}
+          role="group"
+          aria-roledescription="slide"
+          aria-label={`Stage ${i + 1} of ${stages.length}`}
+        >
+          <img class="evo__img" src={href(s.src)} width="622" height="308" alt={s.alt} loading="lazy" />
+        </li>
+      ))}
+    </ul>
+    <button type="button" class="evo__arrow evo__arrow--prev" data-evo-prev aria-label="Previous stage">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <button type="button" class="evo__arrow evo__arrow--next" data-evo-next aria-label="Next stage">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+  </div>
+  <p class="evo__caption" data-evo-cap>
+    <strong>1 · {stages[0].title}</strong> — {stages[0].body}
+  </p>
+  <div class="evo__dots" role="tablist" aria-label="Choose stage">
+    {stages.map((s, i) => (
+      <button type="button" class="evo__dot" data-evo-dot role="tab" aria-label={`Stage ${i + 1}: ${s.title}`} aria-selected={i === 0 ? 'true' : 'false'}></button>
+    ))}
+  </div>
+</div>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const CYCLE = 4200;
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-evo-slider]')) {
+    const track = root.querySelector<HTMLElement>('[data-evo-track]')!;
+    const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-evo-slide]'));
+    const dots = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-evo-dot]'));
+    const cap = root.querySelector<HTMLElement>('[data-evo-cap]');
+    const details = root.closest('details');
+    let i = 0, timer = 0, paused = false;
+
+    const render = () => {
+      track.style.transform = `translateX(-${i * 100}%)`;
+      dots.forEach((d, di) => d.setAttribute('aria-selected', String(di === i)));
+      const s = slides[i];
+      if (cap && s) cap.innerHTML = `<strong>${i + 1} · ${s.dataset.title}</strong> — ${s.dataset.body}`;
+    };
+    const go = (n: number) => {
+      const len = slides.length;
+      i = ((n % len) + len) % len;
+      render();
+    };
+
+    const canRun = () => (!details || details.open) && !document.hidden;
+    const stop = () => { if (timer) { clearInterval(timer); timer = 0; } };
+    const start = () => {
+      if (reduce || paused || timer || slides.length < 2 || !canRun()) return;
+      timer = window.setInterval(() => go(i + 1), CYCLE);
+    };
+
+    root.addEventListener('mouseenter', () => { paused = true; stop(); });
+    root.addEventListener('mouseleave', () => { paused = false; start(); });
+    root.addEventListener('focusin', () => { paused = true; stop(); });
+    root.addEventListener('focusout', () => {
+      if (!root.contains(document.activeElement)) { paused = false; start(); }
+    });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); else start(); });
+    // Restart the story from stage 1 whenever the section is expanded.
+    if (details) details.addEventListener('toggle', () => { if (details.open) { go(0); start(); } else { stop(); } });
+
+    root.querySelector('[data-evo-prev]')?.addEventListener('click', () => { go(i - 1); });
+    root.querySelector('[data-evo-next]')?.addEventListener('click', () => { go(i + 1); });
+    dots.forEach((d, di) => d.addEventListener('click', () => go(di)));
+
+    // Lightweight touch/mouse swipe.
+    let downX: number | null = null;
+    track.addEventListener('pointerdown', (e) => { downX = e.clientX; });
+    window.addEventListener('pointerup', (e) => {
+      if (downX === null) return;
+      const dx = e.clientX - downX;
+      downX = null;
+      if (Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1));
+    });
+
+    render();
+    start();
+  }
+</script>
