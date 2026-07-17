@@ -12,7 +12,10 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+// Table of contents from the post's section headings (Astro auto-assigns the
+// matching `id` slugs to the rendered headings, so the anchors resolve).
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
 const fmt = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -27,6 +30,20 @@ const fmt = (d: Date) =>
         {post.data.draft && <span class="badge-draft">Draft</span>}
       </p>
     </div>
+    {toc.length > 1 && (
+      <details class="toc" open>
+        <summary class="toc__title">Contents</summary>
+        <nav aria-label="Table of contents">
+          <ul>
+            {toc.map((h) => (
+              <li class={h.depth === 3 ? 'toc__sub' : undefined}>
+                <a href={`#${h.slug}`}>{h.text}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </details>
+    )}
     <div class="prose">
       <Content />
     </div>

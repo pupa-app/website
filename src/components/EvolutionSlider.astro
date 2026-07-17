@@ -30,25 +30,27 @@ const stages = [
 ];
 ---
 <div class="evo" data-evo-slider aria-roledescription="carousel" aria-label="How the app surface evolves">
-  <div class="evo__viewport">
-    <ul class="evo__track" data-evo-track>
-      {stages.map((s, i) => (
-        <li
-          class="evo__slide"
-          data-evo-slide
-          data-title={s.title}
-          data-body={s.body}
-          role="group"
-          aria-roledescription="slide"
-          aria-label={`Stage ${i + 1} of ${stages.length}`}
-        >
-          <img class="evo__img" src={href(s.src)} width="622" height="308" alt={s.alt} loading="lazy" />
-        </li>
-      ))}
-    </ul>
+  <div class="evo__stage">
     <button type="button" class="evo__arrow evo__arrow--prev" data-evo-prev aria-label="Previous stage">
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
     </button>
+    <div class="evo__viewport">
+      <ul class="evo__track" data-evo-track>
+        {stages.map((s, i) => (
+          <li
+            class="evo__slide"
+            data-evo-slide
+            data-title={s.title}
+            data-body={s.body}
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`Stage ${i + 1} of ${stages.length}`}
+          >
+            <img class="evo__img" src={href(s.src)} width="622" height="308" alt={s.alt} loading="lazy" />
+          </li>
+        ))}
+      </ul>
+    </div>
     <button type="button" class="evo__arrow evo__arrow--next" data-evo-next aria-label="Next stage">
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
     </button>
