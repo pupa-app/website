@@ -163,6 +163,10 @@ main {
 }
 .brand:hover { text-decoration: none; }
 .brand svg { display: block; }
+/* The mark is an app-icon (white rounded-square tile); render it as a round
+   badge. The white backing fills the clipped corners so it reads as a clean
+   circle in both themes. */
+.pupa-mark { display: block; border-radius: 50%; background: #fff; }
 .nav {
   display: flex;
   align-items: center;
@@ -434,12 +438,20 @@ main {
   display: inline-block;
   color: var(--text-dim);
 }
-.hero .hero-points li {
+.hero .hero-points li { margin-bottom: 0.35rem; }
+/* Each bullet is a link into the matching tutorial walkthrough. */
+.hero .hero-point {
   display: flex;
   align-items: flex-start;
   gap: 0.65rem;
-  margin-bottom: 0.7rem;
+  color: inherit;
+  padding: 0.35rem 0.5rem;
+  margin: 0 -0.5rem;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s ease, color 0.15s ease;
 }
+.hero .hero-point:hover { background: var(--accent-soft); color: var(--text); text-decoration: none; }
+.hero .hero-point:hover .hero-point__icon { color: var(--accent); }
 .hero .hero-point__icon {
   flex: none;
   width: 1.2rem;
@@ -716,240 +728,6 @@ main {
   .evo__arrow { transition: none; }
 }
 
-/* ---- Cards grid (the four verbs) ---- */
-.card-grid {
-  display: grid;
-  gap: 1rem;
-  /* Even splits only for the four verb cards: 2×2 on desktop/tablet, a single
-     column when narrow. `auto-fit` would wrap to an ugly 3+1 at mid widths. */
-  grid-template-columns: repeat(2, 1fr);
-}
-@media (max-width: 520px) {
-  .card-grid { grid-template-columns: 1fr; }
-}
-.card {
-  background: var(--bg-elev);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.4rem 1.35rem;
-  transition: border-color 0.15s ease, transform 0.15s ease;
-}
-.card:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); }
-.card .verb {
-  display: inline-block;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 700;
-  color: var(--accent);
-  margin-bottom: 0.6rem;
-}
-.card h3 { margin-bottom: 0.4rem; font-size: 1.15rem; }
-.card p { color: var(--text-dim); font-size: 0.96rem; margin-bottom: 0; }
-
-/* ---- Share card: hover-reveal share-flow diagram ---- */
-.card--reveal { position: relative; }
-
-/* "Tap to preview" affordance — hidden on hover-capable devices (the panel
-   reveals on hover there), shown on touch where the panel opens on tap. */
-.reveal-hint { display: none; }
-@media (hover: none) {
-  .card--reveal { cursor: pointer; }
-  .reveal-hint {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin-top: 0.85rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--accent);
-    letter-spacing: 0.01em;
-  }
-  .reveal-hint__chev { transition: transform 0.3s ease; }
-  .card--reveal.is-open .reveal-hint__chev { transform: rotate(180deg); }
-}
-
-/* Panel drops below the card as a popover — no reflow on sibling cards.
-   Wider than the single card column so the diagram + text stay readable. */
-.share-flow__panel {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: auto;
-  width: min(560px, 92vw);
-  z-index: 5;
-  margin: 0.5rem 0 0;
-  padding: 0;
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transform: translateY(-6px);
-  background: var(--bg-elev);
-  border-radius: var(--radius);
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.4);
-  transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
-  pointer-events: none;
-}
-/* Guarded to hover-capable pointers: on touch, tapping triggers a sticky
-   :hover that would otherwise keep the panel open after .is-open is toggled off. */
-@media (hover: hover) {
-  .card--reveal:hover .share-flow__panel {
-    max-height: 1100px;
-    opacity: 1;
-    transform: translateY(0);
-    border: 1px solid var(--border);
-    overflow-y: auto;
-    pointer-events: auto;
-  }
-}
-
-/* Panel order: the "portable standard" summary leads, then the diagram, then
-   the export walkthrough clip at the bottom. */
-.share-flow__standard {
-  padding: 1.25rem 1.35rem 1.1rem;
-}
-.share-flow__standard .section-eyebrow { margin-bottom: 0.35rem; }
-.share-flow__standard h3 {
-  font-size: 1.15rem;
-  margin: 0 0 0.5rem;
-}
-.share-flow__standard > p {
-  color: var(--text-dim);
-  font-size: 0.92rem;
-  margin-bottom: 0;
-}
-.share-flow__standard strong { color: var(--text); }
-
-/* White frame so the red/black diagram reads on the dark theme */
-.share-flow__img {
-  display: block;
-  width: 100%;
-  height: auto;
-  background: #fff;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  padding: 0.9rem;
-}
-
-/* Export walkthrough clip, hover-played at the bottom of the reveal panel */
-.share-flow__video {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-height: 60vh;
-  object-fit: contain;
-  background: #000;
-  border-radius: 0 0 var(--radius) var(--radius);
-}
-
-/* Touch / no-hover: no hover available, so collapse the panel inline and open
-   it on tap (via .is-open) — saves vertical space vs. always-open. */
-@media (hover: none) {
-  .share-flow__panel {
-    position: static;
-    width: auto;
-    max-height: 0;
-    opacity: 0;
-    transform: none;
-    overflow: hidden;
-    pointer-events: none;
-    border: 0;
-    margin-top: 0;
-  }
-  .card--reveal.is-open .share-flow__panel {
-    max-height: 2200px;
-    opacity: 1;
-    overflow: visible;
-    pointer-events: auto;
-    border: 1px solid var(--border);
-    margin-top: 1rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .share-flow__panel { transition: none; }
-}
-
-/* ---- Use card: hover-reveal daily-brief video ---- */
-.use-demo__panel {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: min(360px, 92vw);
-  z-index: 5;
-  margin: 0.5rem 0 0;
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transform: translateY(-6px);
-  background: #000;
-  border-radius: var(--radius);
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.4);
-  transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
-  pointer-events: none;
-}
-@media (hover: hover) {
-  .card--reveal:hover .use-demo__panel {
-    max-height: 900px;
-    opacity: 1;
-    transform: translateY(0);
-    border: 1px solid var(--border);
-    pointer-events: auto;
-  }
-}
-.use-demo__video {
-  display: block;
-  width: 100%;
-  height: auto;
-  max-height: 70vh;
-  object-fit: contain;
-  border-radius: var(--radius);
-}
-/* Small caption above a reveal-panel video (Use / Build). Sits on the panel's
-   dark backing, so it uses the light on-dark text token. */
-.reveal-panel__cap {
-  margin: 0;
-  padding: 0.7rem 0.95rem 0.35rem;
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: #fff;
-}
-.reveal-panel__note {
-  margin: 0;
-  padding: 0 0.95rem 0.7rem;
-  font-size: 0.78rem;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.72);
-}
-
-/* Touch / no-hover: collapse the clip inline and open it on tap (via .is-open). */
-@media (hover: none) {
-  .use-demo__panel {
-    position: static;
-    width: auto;
-    max-height: 0;
-    opacity: 0;
-    transform: none;
-    overflow: hidden;
-    pointer-events: none;
-    border: 0;
-    margin-top: 0;
-  }
-  .card--reveal.is-open .use-demo__panel {
-    max-height: 1600px;
-    opacity: 1;
-    overflow: visible;
-    pointer-events: auto;
-    border: 1px solid var(--border);
-    margin-top: 1rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .use-demo__panel { transition: none; }
-}
-
 /* ---- Feature panel ---- */
 .panel {
   background: var(--bg-elev);
@@ -995,74 +773,6 @@ main {
   max-width: 52ch;
 }
 .panel__figure figcaption strong { color: var(--text); }
-
-/* ---- Contribute card: hover-reveal open-source repos ----
-   Left-anchored like the other reveal panels. On the 960px-max desktop grid
-   the cards wrap to 3 columns, so Contribute (the 4th) sits at the left of the
-   second row and the popover opens rightward within the container. */
-.repo-panel {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: auto;
-  width: min(680px, 92vw);
-  z-index: 5;
-  margin: 0.5rem 0 0;
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transform: translateY(-6px);
-  background: var(--bg-elev);
-  border-radius: var(--radius);
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.4);
-  transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
-  pointer-events: none;
-}
-@media (hover: hover) {
-  .card--reveal:hover .repo-panel {
-    max-height: 1100px;
-    opacity: 1;
-    transform: translateY(0);
-    border: 1px solid var(--border);
-    overflow-y: auto;
-    pointer-events: auto;
-  }
-}
-.repo-panel__inner { padding: 1.35rem; }
-.repo-panel__inner .section-eyebrow { margin-bottom: 0.35rem; }
-.repo-panel__title { font-size: 1.15rem; margin: 0 0 0.5rem; }
-.repo-panel__lead {
-  color: var(--text-dim);
-  font-size: 0.92rem;
-  margin-bottom: 1rem;
-}
-/* Single column inside the popover so the three repos read as a clean list */
-.repo-panel .repo-grid { grid-template-columns: 1fr; gap: 0.7rem; }
-
-@media (hover: none) {
-  .repo-panel {
-    position: static;
-    width: auto;
-    max-height: 0;
-    opacity: 0;
-    transform: none;
-    overflow: hidden;
-    pointer-events: none;
-    border: 0;
-    margin-top: 0;
-  }
-  .card--reveal.is-open .repo-panel {
-    max-height: 2200px;
-    opacity: 1;
-    overflow: visible;
-    pointer-events: auto;
-    border: 1px solid var(--border);
-    margin-top: 1rem;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .repo-panel { transition: none; }
-}
 
 /* ---- Repo list ---- */
 .repo-grid {

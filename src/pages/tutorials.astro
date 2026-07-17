@@ -7,6 +7,30 @@ const GITHUB_ORG = 'https://github.com/pupa-app';
 const MARKETPLACE = 'https://github.com/pupa-app/marketplace';
 const BACKEND_REPO = `${GITHUB_ORG}/pupa-backend`;
 
+// Open-source repos, shown in the Contribute section below.
+const repos = [
+  {
+    name: 'pupa-app/pupa',
+    url: `${GITHUB_ORG}/pupa`,
+    desc: 'The native iOS / macOS application. Ships SwiftUI canvas, it\'s components, Memories filesystem and how those are surfaced to your backend harness.',
+  },
+  {
+    name: 'pupa-app/pupa-backend',
+    url: BACKEND_REPO,
+    desc: 'The user-owned backend. Hooks-up on your Agent harness on your laptop (like Claude-Code). Run it locally next to the app or deploy your own in the cloud. Pair-once auth; your keys stay yours.',
+    flow: `+---------------+     +--------------+     +-------------+
+|    Pupa app   |     | pupa-backend |     | Claude Code |
+| (iOS / macOS) |<--->| (your laptop |<--->| (your agent |
+|               |     |  or cloud)   |     |   harness)  |
++---------------+     +--------------+     +-------------+`,
+  },
+  {
+    name: 'pupa-app/marketplace',
+    url: MARKETPLACE,
+    desc: 'A catalog of .pupa bundles you can browse and install from the app. Just an HTTPS index.json anyone can host. App content is CC0; tooling is MIT.',
+  },
+];
+
 // Tutorials are data-driven. For a walkthrough, set either `videoSrc` (a
 // self-hosted file under public/, best kept < ~15 MB) or `video` (a YouTube id);
 // otherwise the "coming soon" placeholder shows.
@@ -69,6 +93,7 @@ const sections = [
   { id: 'myapp', label: 'MyApp' },
   { id: 'what-is-a-myapp', label: 'What is a MyApp?', sub: true },
   ...tutorials.map((t) => ({ id: t.id, label: t.title, sub: true })),
+  { id: 'contribute', label: 'Contribute' },
   { id: 'data-privacy', label: 'Where your data lives' },
   { id: 'backend-setup', label: 'Backend setup' },
   { id: 'install', label: 'Install', sub: true },
@@ -216,6 +241,7 @@ pupa-backend setup</code></pre>
 
     <!-- Use / Build / Share walkthroughs -->
     {tutorials.map((t) => (
+      <Fragment>
       <div class={`tut${t.videoSrc || t.video ? ' tut--has-demo' : ''}`} id={t.id}>
         <div class="tut__body">
           <span class="verb">{t.verb}</span>
@@ -263,7 +289,46 @@ pupa-backend setup</code></pre>
           )}
         </div>
       </div>
+      {t.id === 'share' && (
+        <figure class="panel__figure" style="margin-top:1.75rem">
+          <img
+            src={href('/share-flow.png')}
+            width="768"
+            height="720"
+            alt="Three ways to share a MyApp: publish it to a marketplace, import one from a marketplace, or send it directly device-to-device."
+            loading="lazy"
+          />
+          <figcaption>
+            Share directly, device to device — or publish to a marketplace (a plain
+            HTTPS <code>index.json</code> anyone can host) for others to import.
+          </figcaption>
+        </figure>
+      )}
+      </Fragment>
     ))}
+
+    <!-- Contribute -->
+    <div class="setup" id="contribute">
+      <p class="section-eyebrow">Open source</p>
+      <h2 style="margin-top:0">Contribute</h2>
+      <p class="setup__lead">
+        Add new blocks — canvas components — to the app, or new agent hookups to
+        the backend. Components are just SwiftUI views with a typed model, so you
+        can build agent-compatible surfaces without any agentic knowledge. The
+        client, backend, and marketplace are all developed in the open — see{' '}
+        <a href={`${GITHUB_ORG}/pupa/issues`}>the repos</a> for each project’s
+        terms.
+      </p>
+      <div class="repo-grid">
+        {repos.map((r) => (
+          <a class="repo" href={r.url}>
+            <div class="repo-name">{r.name}</div>
+            <p>{r.desc}</p>
+            {r.flow && <pre class="repo-flow">{r.flow}</pre>}
+          </a>
+        ))}
+      </div>
+    </div>
 
     <!-- Data flow & privacy -->
     <div class="panel--split" id="data-privacy">

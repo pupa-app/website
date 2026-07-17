@@ -35,11 +35,13 @@ const pointIcons = {
   share: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4"/><path d="m15.4 6.5-6.8 4"/>',
   contribute: '<line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>',
 };
+// Each hero bullet links to the matching walkthrough in the tutorials (the
+// homepage no longer duplicates those demos in a section of its own).
 const heroPoints = [
-  { icon: 'build', verb: 'Build', body: 'apps for anything, from simple daily helpers, to complex automations' },
-  { icon: 'use', verb: 'Use', body: 'your apps everywhere, powered by your usual agent harness' },
-  { icon: 'share', verb: 'Share', body: 'it with anyone and enjoy others apps' },
-  { icon: 'contribute', verb: 'Contribute', body: ' your ideas to the Pupa Opensource project' },
+  { icon: 'build', verb: 'Build', href: `${href('/tutorials')}#build`, body: 'apps for anything, from simple daily helpers, to complex automations' },
+  { icon: 'use', verb: 'Use', href: `${href('/tutorials')}#use`, body: 'your apps everywhere, powered by your usual agent harness' },
+  { icon: 'share', verb: 'Share', href: `${href('/tutorials')}#share`, body: 'apps with anyone and enjoy others apps' },
+  { icon: 'contribute', verb: 'Contribute', href: `${href('/tutorials')}#contribute`, body: ' your ideas to the Pupa Opensource project' },
 ];
 
 // Current app version — bump alongside pupa/Pupa/Sources/PupaApp/Version.swift.
@@ -50,51 +52,6 @@ const tags = [
   { label: 'Works with Claude Code', title: 'Link your own agent harness — Claude Code drives Pupa out of the box', icon: 'claude' },
 ];
 
-const verbs = [
-  {
-    verb: 'Use',
-    title: 'Use a MyApp daily',
-    body: 'Live in it every day. Your MyApp runs on its own — open it and go, even offline. When you want it to change, just talk: the agent reshapes the blocks in front of you while you watch and edit the same screen.',
-  },
-  {
-    verb: 'Build',
-    title: 'Build a MyApp',
-    body: 'Snap together whatever you need — trackers, calendars, checklists, slack rooms, calculators, charts — cross-linked into one coherent app, backed by a long-lived Memories filesystem that survives sessions.',
-  },
-  {
-    verb: 'Share',
-    title: 'Share a MyApp',
-    body: 'Export any MyApp as an inert-JSON .pupa bundle and hand it to someone who runs it on their own host. Import and distribute through the marketplace — a plain HTTPS index anyone can host.',
-  },
-  {
-    verb: 'Contribute',
-    title: 'Contribute code',
-    body: 'Add new blocks — canvas components — to the app, or new agent hookups to the backend. Components are just SwiftUI views with a typed model — no agentic knowledge needed to build agent-compatible surfaces.',
-  },
-];
-
-const repos = [
-  {
-    name: 'pupa-app/pupa',
-    url: `${GITHUB_ORG}/pupa`,
-    desc: 'The native iOS / macOS application. Ships SwiftUI canvas, it\'s components, Memories filesystem and how those are surfaced to your backend harness.',
-  },
-  {
-    name: 'pupa-app/pupa-backend',
-    url: `${GITHUB_ORG}/pupa-backend`,
-    desc: 'The user-owned backend. Hooks-up on your Agent harness on your laptop (like Claude-Code). Run it locally next to the app or deploy your own in the cloud. Pair-once auth; your keys stay yours.',
-    flow: `+---------------+     +--------------+     +-------------+
-|    Pupa app   |     | pupa-backend |     | Claude Code |
-| (iOS / macOS) |<--->| (your laptop |<--->| (your agent |
-|               |     |  or cloud)   |     |   harness)  |
-+---------------+     +--------------+     +-------------+`,
-  },
-  {
-    name: 'pupa-app/marketplace',
-    url: MARKETPLACE,
-    desc: 'A catalog of .pupa bundles you can browse and install from the app. Just an HTTPS index.json anyone can host. App content is CC0; tooling is MIT.',
-  },
-];
 ---
 <BaseLayout title="Pupa">
   <!-- Hero -->
@@ -120,8 +77,10 @@ const repos = [
     <ul class="hero-points">
       {heroPoints.map((p) => (
         <li>
-          <svg class="hero-point__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={pointIcons[p.icon]}></svg>
-          <span><strong>{p.verb}</strong> {p.body}</span>
+          <a class="hero-point" href={p.href}>
+            <svg class="hero-point__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={pointIcons[p.icon]}></svg>
+            <span><strong>{p.verb}</strong> {p.body}</span>
+          </a>
         </li>
       ))}
     </ul>
@@ -134,7 +93,7 @@ const repos = [
           Download on the App Store
         </summary>
         <p class="appstore__soon" role="status">
-          <strong>Coming soon.</strong> Pupa isn’t on the App Store just yet — email
+          <strong>Coming soon.</strong> Pupa isn’t on the App Store just yet — email{' '}
           <a href="mailto:pupa-app-help@proton.me?subject=TestFlight%20request">pupa-app-help@proton.me</a> to request a TestFlight invite and try it early.
         </p>
       </details>
@@ -229,139 +188,6 @@ const repos = [
       </details>
     </div>
   </section>
-
-  <!-- Four verbs -->
-  <section class="section container">
-    <h2>Use, build, share, contribute</h2>
-    <div class="card-grid">
-      {verbs.map((v) => (
-        <article class={v.verb === 'Share' || v.verb === 'Use' || v.verb === 'Build' || v.verb === 'Contribute' ? 'card card--reveal' : 'card'}>
-          <span class="verb">{v.verb}</span>
-          <h3>{v.title}</h3>
-          <p>{v.body}</p>
-          {(v.verb === 'Use' || v.verb === 'Build' || v.verb === 'Share' || v.verb === 'Contribute') && (
-            <span class="reveal-hint" aria-hidden="true">
-              <span class="reveal-hint__label">{v.verb === 'Contribute' ? 'Tap for the repos' : 'Tap to preview'}</span>
-              <span class="reveal-hint__chev">▾</span>
-            </span>
-          )}
-          {v.verb === 'Contribute' && (
-            <div class="repo-panel">
-              <div class="repo-panel__inner">
-                <p class="section-eyebrow">Open source</p>
-                <h3 class="repo-panel__title">Everything is open, and swappable</h3>
-                <p class="repo-panel__lead">
-                  The client, the backend, and the marketplace are all developed
-                  in the open. See <a href={`${GITHUB_ORG}/pupa/issues`}>the repos</a>
-                  {' '}for each project’s terms.
-                </p>
-                <div class="repo-grid">
-                  {repos.map((r) => (
-                    <a class="repo" href={r.url}>
-                      <div class="repo-name">{r.name}</div>
-                      <p>{r.desc}</p>
-                      {r.flow && <pre class="repo-flow">{r.flow}</pre>}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-          {v.verb === 'Use' && (
-            <div class="use-demo__panel">
-              <p class="reveal-panel__cap">A day with your MyApp</p>
-              <p class="reveal-panel__note">All by chat: explore what’s there, add items, log entries, and query your data — the agent updates the same screen live while you watch.</p>
-              <video
-                class="use-demo__video"
-                src={href('/videos/daily-brief.mp4')}
-                muted
-                loop
-                controls
-                playsinline
-                preload="metadata"
-                title="Using a MyApp daily — a morning brief walkthrough"
-              />
-            </div>
-          )}
-          {v.verb === 'Build' && (
-            <div class="use-demo__panel">
-              <p class="reveal-panel__cap">Snap together components to build</p>
-              <p class="reveal-panel__note">Just describe it in chat: the agent adds and wires the components you ask for — trackers, calendars, charts, checklists — into one coherent app, refining in place as you talk.</p>
-              <video
-                class="use-demo__video"
-                src={href('/videos/flight-tracker.mp4')}
-                muted
-                loop
-                controls
-                playsinline
-                preload="metadata"
-                title="Building a MyApp — a flight tracker walkthrough"
-              />
-            </div>
-          )}
-          {v.verb === 'Share' && (
-            <div class="share-flow__panel">
-              <div class="share-flow__standard">
-                <p class="section-eyebrow">The portable standard</p>
-                <h3>The <code>.pupa</code> bundle</h3>
-                <p>
-                  One portable file holding a MyApp’s blocks, memories, and agent
-                  config — no runtime. On import it runs on <strong>your</strong> host. Share directly or to marketplace to be imported by others.
-                </p>
-              </div>
-              <img
-                class="share-flow__img"
-                src={href('/share-flow.png')}
-                width="768"
-                height="720"
-                alt="Publish a MyApp to the marketplace, import one from it, or share directly device-to-device."
-              />
-              <video
-                class="share-flow__video"
-                src={href('/videos/export.mp4')}
-                muted
-                loop
-                controls
-                playsinline
-                preload="metadata"
-                title="Exporting a MyApp as a portable .pupa bundle"
-              />
-            </div>
-          )}
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <script>
-    // Play the daily-brief demo only while its card is hovered — no wasted
-    // playback while the reveal panel is collapsed. Falls back gracefully on
-    // touch (the panel opens on tap; tap the video to play).
-    for (const video of document.querySelectorAll<HTMLVideoElement>('.use-demo__video, .share-flow__video')) {
-      const card = video.closest('.card--reveal');
-      if (!card) continue;
-      card.addEventListener('mouseenter', () => {
-        video.play().catch(() => {});
-      });
-      card.addEventListener('mouseleave', () => {
-        video.pause();
-        video.currentTime = 0;
-      });
-    }
-
-    // Touch / no-hover: tap a reveal card to expand or collapse its panel,
-    // instead of showing it always-open. Taps inside the panel (video
-    // controls, links) don't toggle it shut.
-    if (window.matchMedia('(hover: none)').matches) {
-      for (const card of document.querySelectorAll<HTMLElement>('.card--reveal')) {
-        const panel = card.querySelector('.share-flow__panel, .use-demo__panel, .repo-panel');
-        card.addEventListener('click', (e) => {
-          if (panel && e.target instanceof Node && panel.contains(e.target)) return;
-          card.classList.toggle('is-open');
-        });
-      }
-    }
-  </script>
 
   <script>
     // Hero carousel — manual-first (arrows / dots / swipe / mouse-drag) with a
