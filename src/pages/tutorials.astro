@@ -85,6 +85,42 @@ const tutorials = [
   },
 ];
 
+// The typed component kinds a MyApp canvas can hold — the "blocks" the agent
+// snaps together and operates as first-class tools. Blurbs mirror each kind's
+// in-app catalog entry (pupa · ComponentKindSpec.catalogBlurb).
+const components = [
+  {
+    name: 'Tracker',
+    icon: '🗂️',
+    blurb: 'Multi-field records in a table or kanban — fields, filters, and cards.',
+  },
+  {
+    name: 'Calendar',
+    icon: '📅',
+    blurb: 'Time-indexed events in a list or month grid.',
+  },
+  {
+    name: 'Checklist',
+    icon: '✅',
+    blurb: 'Simple done / not-done items, with no per-row fields.',
+  },
+  {
+    name: 'Calculator',
+    icon: '🧮',
+    blurb: 'A live numeric model with tunable inputs and formula rows.',
+  },
+  {
+    name: 'Chart',
+    icon: '📊',
+    blurb: 'Pie, bar, or line visualisation of tracker or calculator data.',
+  },
+  {
+    name: 'Slack',
+    icon: '💬',
+    blurb: 'Multi-agent chat rooms — subagent personas, channels, and @-mentions.',
+  },
+];
+
 // Sidebar nav — the tutorial walkthroughs are pulled from the array above so
 // they stay in sync; hand-written sections are listed explicitly. Mark a nested
 // entry with `sub: true` to indent it under its parent.
@@ -93,6 +129,7 @@ const sections = [
   { id: 'myapp', label: 'MyApp' },
   { id: 'what-is-a-myapp', label: 'What is a MyApp?', sub: true },
   ...tutorials.map((t) => ({ id: t.id, label: t.title, sub: true })),
+  { id: 'components', label: 'Components', sub: true },
   { id: 'contribute', label: 'Contribute' },
   { id: 'data-privacy', label: 'Where your data lives' },
   { id: 'backend-setup', label: 'Backend setup' },
@@ -289,6 +326,35 @@ pupa-backend setup</code></pre>
           )}
         </div>
       </div>
+      {t.id === 'build' && (
+        <div class="setup" id="components" style="margin-top:1.75rem">
+          <p class="section-eyebrow">The building blocks</p>
+          <h2 style="margin-top:0">Components</h2>
+          <p class="setup__lead">
+            Every MyApp is assembled from typed <strong>components</strong> — the
+            blocks the agent snaps together and operates as first-class tools while
+            you watch and edit the same surface. Ask for the ones a job needs; they
+            cross-link into one coherent app and persist in the Memories filesystem.
+          </p>
+          <div class="comp-grid">
+            {components.map((c) => (
+              <div class="comp">
+                <span class="comp-icon" aria-hidden="true">{c.icon}</span>
+                <div class="comp-name">{c.name}</div>
+                <p>{c.blurb}</p>
+              </div>
+            ))}
+          </div>
+          <p class="setup__lead" style="margin-top:1.25rem">
+            The set isn’t a fixed menu — it’s an extension point. You can add your own
+            canvas shape with a documented, compiler-enforced recipe, and every kind
+            declares how it travels in a <code>.pupa</code> bundle.{' '}
+            <a href={href('/blog/custom-components-and-portability')}>
+              Read: custom components &amp; the portability policy →
+            </a>
+          </p>
+        </div>
+      )}
       {t.id === 'share' && (
         <figure class="panel__figure" style="margin-top:1.75rem">
           <img

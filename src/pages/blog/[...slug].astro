@@ -25,6 +25,7 @@ const fmt = (d: Date) =>
     <a class="back-link" href={href('/blog')}>← All posts</a>
     <div class="page-head" style="padding-block:0 1.5rem">
       <h1>{post.data.title}</h1>
+      {post.data.subtitle && <p class="post-subtitle">{post.data.subtitle}</p>}
       <p class="page-sub">
         {fmt(post.data.date)} · {post.data.author}
         {post.data.draft && <span class="badge-draft">Draft</span>}

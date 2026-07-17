@@ -32,7 +32,9 @@ const fmt = (d: Date) =>
               <a href={href(`/blog/${post.id}`)}>{post.data.title}</a>
               {post.data.draft && <span class="badge-draft">Draft</span>}
             </h3>
-            {post.data.description && <p>{post.data.description}</p>}
+            {(post.data.subtitle || post.data.description) && (
+              <p>{post.data.subtitle || post.data.description}</p>
+            )}
           </li>
         ))}
       </ul>

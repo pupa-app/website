@@ -812,6 +812,38 @@ main {
   overflow-x: auto;
 }
 
+/* ---- Component catalog (tutorials ▸ Components) ----
+   The typed canvas blocks a MyApp can hold, shown as a simple card grid. */
+.comp-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-top: 1.25rem;
+}
+.comp {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.15rem 1.25rem;
+}
+.comp-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  display: block;
+  margin-bottom: 0.55rem;
+}
+.comp-name {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+.comp p {
+  color: var(--text-dim);
+  font-size: 0.92rem;
+  margin-bottom: 0;
+}
+
 /* ---- Backend-connection diagram (components/BackendFlow.astro) ----
    One inline SVG, themed via the accent + surface tokens and driven by a
    `data-active` channel on the root. Motion is packet dots travelling each
@@ -974,6 +1006,98 @@ main {
 .prose th, .prose td { border: 1px solid var(--border); padding: 0.5rem 0.7rem; text-align: left; }
 .prose th { background: var(--bg-elev); }
 
+/* ---- Blog diagrams (conceptual flows embedded in long-form posts) ----
+   Plain HTML/CSS figures inside .prose markdown — theme-aware, zero JS. */
+.bd-fig { margin: 2rem 0; }
+.bd-fig figcaption {
+  color: var(--text-faint);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  text-align: center;
+  max-width: 46rem;
+  margin: 0.85rem auto 0;
+}
+
+/* Left-to-right step flow; wraps to a stack on narrow screens. */
+.bd-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.bd-flow__step {
+  flex: 1 1 130px;
+  min-width: 120px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.85rem;
+  text-align: center;
+}
+.bd-flow__step b { display: block; color: var(--text); font-size: 0.92rem; margin-bottom: 0.2rem; }
+.bd-flow__step span { display: block; color: var(--text-dim); font-size: 0.8rem; line-height: 1.4; }
+.bd-flow__step.is-accent { border-color: var(--accent); background: var(--accent-soft); }
+.bd-flow__arrow { align-self: center; flex: 0 0 auto; color: var(--text-faint); font-size: 1.1rem; }
+
+/* Guard gate — the checks a bundle clears on import. */
+.bd-guards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  max-width: 44rem;
+  margin: 1rem auto 0;
+}
+.bd-guard {
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.28rem 0.72rem;
+  font-size: 0.79rem;
+  color: var(--text-dim);
+}
+.bd-guard::before { content: "\2713\00a0"; color: var(--accent); }
+
+/* Sandbox isolation — walled apps that can't reach each other. */
+.bd-sandbox {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.4rem;
+}
+.bd-app {
+  position: relative;
+  flex: 1 1 210px;
+  min-width: 190px;
+  max-width: 270px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem 1rem;
+}
+.bd-app.is-flagged { border-color: var(--accent); }
+.bd-app__name { color: var(--text); font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.bd-app__row { color: var(--text-dim); font-size: 0.8rem; padding: 0.25rem 0; border-top: 1px solid var(--border-soft); }
+.bd-app__note { display: block; margin-top: 0.55rem; font-size: 0.76rem; color: var(--accent); }
+.bd-app__note.is-muted { color: var(--text-faint); }
+/* A dividing wall between the two sandboxes. */
+.bd-sandbox .bd-app + .bd-app::before {
+  content: "";
+  position: absolute;
+  left: -0.72rem;
+  top: 8%;
+  bottom: 8%;
+  width: 2px;
+  background: repeating-linear-gradient(var(--border) 0 6px, transparent 6px 12px);
+}
+.bd-cap {
+  text-align: center;
+  color: var(--text-faint);
+  font-size: 0.8rem;
+  margin: 1rem auto 0;
+}
+
 /* ---- Blog index ---- */
 .post-list { list-style: none; padding: 0; margin: 0; }
 .post-item {
@@ -1008,6 +1132,15 @@ main {
 }
 .page-head h1 { margin-bottom: 0.3em; }
 .page-head .page-sub { color: var(--text-dim); }
+/* Blog post subtitle — smaller than the H1, larger than body copy. */
+.page-head .post-subtitle {
+  color: var(--text-dim);
+  font-size: 1.25rem;
+  line-height: 1.4;
+  font-weight: 400;
+  margin: -0.1em 0 0.5em;
+  max-width: 46rem;
+}
 .page-head .effective { color: var(--text-faint); font-size: 0.88rem; }
 
 .back-link {
