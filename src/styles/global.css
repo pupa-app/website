@@ -941,12 +941,11 @@ main {
 .toc__title::after { content: ' ▾'; color: var(--text-faint); }
 .toc[open] .toc__title::after { content: ' ▴'; }
 .toc nav { margin-top: 0.7rem; }
-.toc ul { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 1.75rem; }
-.toc li { margin: 0.28rem 0; break-inside: avoid; }
+.toc ul { list-style: none; margin: 0; padding: 0; }
+.toc li { margin: 0.28rem 0; }
 .toc__sub { padding-left: 0.9rem; }
 .toc a { color: var(--text-dim); font-size: 0.94rem; }
 .toc a:hover { color: var(--accent); }
-@media (max-width: 560px) { .toc ul { columns: 1; } }
 
 .prose {
   max-width: 72ch;
