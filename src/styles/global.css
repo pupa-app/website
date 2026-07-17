@@ -1038,7 +1038,17 @@ main {
 .bd-flow__step b { display: block; color: var(--text); font-size: 0.92rem; margin-bottom: 0.2rem; }
 .bd-flow__step span { display: block; color: var(--text-dim); font-size: 0.8rem; line-height: 1.4; }
 .bd-flow__step.is-accent { border-color: var(--accent); background: var(--accent-soft); }
-.bd-flow__arrow { align-self: center; flex: 0 0 auto; color: var(--text-faint); font-size: 1.1rem; }
+.bd-flow__arrow {
+  align-self: center;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  color: var(--text-faint);
+  font-size: 1.1rem;
+}
+.bd-flow__arrow small { font-size: 0.68rem; line-height: 1.25; max-width: 7.5rem; color: var(--text-faint); }
 
 /* Guard gate — the checks a bundle clears on import. */
 .bd-guards {
@@ -1097,6 +1107,35 @@ main {
   font-size: 0.8rem;
   margin: 1rem auto 0;
 }
+.bd-guards-label { text-align: center; font-size: 0.8rem; color: var(--text-dim); margin: 1rem auto 0.1rem; }
+
+/* A dividing wall placed between two sandbox apps to show links can't cross. */
+.bd-wall {
+  flex: 0 0 auto;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  text-align: center;
+  padding: 0 0.1rem;
+}
+.bd-wall span { font-size: 1.25rem; color: var(--accent); }
+.bd-wall small { font-size: 0.72rem; line-height: 1.3; max-width: 6.5rem; color: var(--text-faint); }
+
+/* An in-app cross-link pill, shown inside a sandbox app. */
+.bd-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.73rem;
+  color: var(--text-dim);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  padding: 0.18rem 0.55rem;
+}
+.bd-link::before { content: "\21b3\00a0"; color: var(--accent); }
 
 /* ---- Blog index ---- */
 .post-list { list-style: none; padding: 0; margin: 0; }
