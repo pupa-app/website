@@ -1,12 +1,13 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v7.0.7"><title>Build your own component · Pupa</title><meta name="description" content="Pupa's component set is an extension point, not a fixed menu. A conceptual tour of how a new canvas shape gets built, how it travels safely inside an inert bundle, and why every MyApp stays sandboxed from the next."><meta name="color-scheme" content="light dark"><link rel="icon" type="image/png" href="/favicon.png?v=2"><link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2"><meta property="og:title" content="Build your own component · Pupa"><meta property="og:description" content="Pupa's component set is an extension point, not a fixed menu. A conceptual tour of how a new canvas shape gets built, how it travels safely inside an inert bundle, and why every MyApp stays sandboxed from the next."><meta property="og:type" content="website"><link rel="stylesheet" href="/_astro/BaseLayout.DzMOKWub.css"></head><body><header class="site-header"><div class="container bar"><a href="/" class="brand" aria-label="Pupa — home"><img src="/pupa-mark.png" width="36" height="36" alt="Pupa logo" class="pupa-mark" decoding="async"></a><details class="nav-menu"><summary class="nav-menu__btn" aria-label="Toggle navigation menu"><span class="nav-menu__icon" aria-hidden="true"></span></summary><nav class="nav" aria-label="Primary"><a href="/tutorials">Tutorials</a><a href="/blog">Blog</a><a href="https://github.com/pupa-app/marketplace">Marketplace</a><a href="https://github.com/pupa-app">GitHub</a><a href="/support">Support</a></nav></details></div></header><main><article class="section container"><a class="back-link" href="/blog">← All posts</a><div class="page-head" style="padding-block:0 1.5rem"><h1>Build your own component</h1><p class="post-subtitle">How a new canvas shape ships — and stays safe to share</p><p class="page-sub">July 17, 2026 · Pupa team</p></div><details class="toc" open><summary class="toc__title">Contents</summary><nav aria-label="Table of contents"><ul><li><a href="#why-this-post">Why this post</a></li><li><a href="#components-are-an-extension-point">Components are an extension point</a></li><li><a href="#adding-a-component--the-shape-of-the-work">Adding a component — the shape of the work</a></li><li><a href="#how-a-component-travels">How a component travels</a></li><li><a href="#every-app-is-its-own-sandbox">Every app is its own sandbox</a></li><li><a href="#case-study--how-the-slack-component-was-built-on-this-base">Case study — how the Slack component was built on this base</a></li><li><a href="#the-two-halves-are-one-contract">The two halves are one contract</a></li></ul></nav></details><div class="prose"><h2 id="why-this-post">Why this post</h2>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v7.0.7"><title>Build your own component · Pupa</title><meta name="description" content="Pupa's component set is an extension point, not a fixed menu. A conceptual tour of the two primitives every component is built from, how a new shape travels safely inside an inert bundle, and why every MyApp stays sandboxed from the next."><meta name="color-scheme" content="light dark"><link rel="icon" type="image/png" href="/favicon.png?v=2"><link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2"><meta property="og:title" content="Build your own component · Pupa"><meta property="og:description" content="Pupa's component set is an extension point, not a fixed menu. A conceptual tour of the two primitives every component is built from, how a new shape travels safely inside an inert bundle, and why every MyApp stays sandboxed from the next."><meta property="og:type" content="website"><link rel="stylesheet" href="/_astro/BaseLayout.8mrFXPYQ.css"></head><body><header class="site-header"><div class="container bar"><a href="/" class="brand" aria-label="Pupa — home"><img src="/pupa-mark.png" width="36" height="36" alt="Pupa logo" class="pupa-mark" decoding="async"></a><details class="nav-menu"><summary class="nav-menu__btn" aria-label="Toggle navigation menu"><span class="nav-menu__icon" aria-hidden="true"></span></summary><nav class="nav" aria-label="Primary"><a href="/tutorials">Tutorials</a><a href="/blog">Blog</a><a href="https://github.com/pupa-app/marketplace">Marketplace</a><a href="https://github.com/pupa-app">GitHub</a><a href="/support">Support</a></nav></details></div></header><main><article class="section container"><a class="back-link" href="/blog">← All posts</a><div class="page-head" style="padding-block:0 1.5rem"><h1>Build your own component</h1><p class="post-subtitle">How a new canvas shape ships — and stays safe to share</p><p class="page-sub">July 17, 2026 · Pupa team</p></div><details class="toc" open><summary class="toc__title">Contents</summary><nav aria-label="Table of contents"><ul><li><a href="#why-this-post">Why this post</a></li><li><a href="#components-are-an-extension-point">Components are an extension point</a></li><li><a href="#the-two-primitives-every-component-is-built-from">The two primitives every component is built from</a></li><li class="toc__sub"><a href="#items--owned-by-one-app-linkable-only-within-it">Items — owned by one app, linkable only within it</a></li><li class="toc__sub"><a href="#agents--structured-interaction-kept-on-a-leash">Agents — structured interaction, kept on a leash</a></li><li><a href="#adding-a-component--the-shape-of-the-work">Adding a component — the shape of the work</a></li><li><a href="#how-a-component-travels">How a component travels</a></li><li><a href="#every-app-is-its-own-sandbox">Every app is its own sandbox</a></li><li><a href="#case-study--how-the-slack-component-was-built-on-this-base">Case study — how the Slack component was built on this base</a></li><li><a href="#the-two-halves-are-one-contract">The two halves are one contract</a></li></ul></nav></details><div class="prose"><h2 id="why-this-post">Why this post</h2>
 <p>Once people see a Pupa MyApp made of typed blocks, two questions follow: <em>“can I
 add my own block?”</em> and <em>“if I share the app, how does my new block travel —
 safely?”</em> This post answers both at a conceptual level. They turn out to be the
-same story told from two ends: a component isn’t finished until it also knows how
-to travel.</p>
+same story told from two ends: a component is only finished when it also knows how
+to travel, and both ends are made possible by the same two primitives underneath.</p>
 <blockquote>
-<p>A component isn’t just a view. It’s a small bundle of <em>what it stores</em>, <em>how the
-agent operates it</em>, and <em>what of it travels</em> when you share the app.</p>
+<p>A component isn’t just a view. It’s built from <strong>items</strong> and <strong>agents</strong> — and it
+inherits their rules, which is what gives you isolation and composability for
+free.</p>
 </blockquote>
 <h2 id="components-are-an-extension-point">Components are an extension point</h2>
 <p>Every canvas is assembled from typed <strong>components</strong> — the blocks the agent snaps
@@ -23,14 +24,95 @@ built-ins:</p>
 <p>That list isn’t a fixed menu. Each component is a self-contained block, so the
 set grows by <em>adding</em> a new one — not by rewiring the others. New shapes can come
 from the community.</p>
+<h2 id="the-two-primitives-every-component-is-built-from">The two primitives every component is built from</h2>
+<p>You rarely build a component from raw materials. Two shared primitives do the
+load-bearing work, and their built-in rules are what hand you data isolation and
+cross-component composability without having to design either yourself.</p>
+<h3 id="items--owned-by-one-app-linkable-only-within-it">Items — owned by one app, linkable only within it</h3>
+<figure class="bd-fig">
+  <div class="bd-sandbox">
+    <div class="bd-app">
+      <div class="bd-app__name">🔒 Your Health app</div>
+      <div class="bd-app__row">Calendar — dose events</div>
+      <div class="bd-app__row">Tracker — diary entries</div>
+      <span class="bd-link">a diary entry links to its day</span>
+    </div>
+    <div class="bd-wall">
+      <span>⛌</span>
+      <small>no link, no reach across apps</small>
+    </div>
+    <div class="bd-app is-flagged">
+      <div class="bd-app__name">📥 An imported app</div>
+      <div class="bd-app__row">its own components</div>
+      <div class="bd-app__row">its own items</div>
+      <span class="bd-app__note">⚠ can't point an item at yours</span>
+    </div>
+  </div>
+  <figcaption>Every record is an item that belongs to exactly one MyApp. Items
+  link freely to other items <em>inside</em> the same app — and never across the
+  boundary.</figcaption>
+</figure>
+<p>Every record a component shows — a tracker row, a calendar event, a checklist
+line — is an <strong>item</strong> with its own permanent identity. Two rules about items do
+most of the safety and composition work:</p>
+<ul>
+<li><strong>An item belongs to exactly one MyApp, and can never change owners.</strong> Anything
+that tries to touch an item in another app is refused outright. That single
+guarantee is what keeps your apps from bleeding into each other — no matter what
+components you bolt on, one app’s data can’t end up in another’s hands.</li>
+<li><strong>Items link to other items — but only within the same app.</strong> That’s how one
+component builds on another: a chart reads a tracker’s rows, a calculator sums a
+field, a diary entry points at its day on the calendar. Each of those is just an
+item referencing another item. All those references are tracked in one place, so
+when something is deleted or exported they’re pruned and re-bound cleanly, and
+never dangle or point outside the app.</li>
+</ul>
+<p>So the <em>same boundary</em> gives you both things at once: links compose freely inside
+an app, and nothing composes across apps. Build a new component and it inherits
+exactly that — your items are automatically isolated and automatically linkable.</p>
+<h3 id="agents--structured-interaction-kept-on-a-leash">Agents — structured interaction, kept on a leash</h3>
+<figure class="bd-fig">
+  <div class="bd-flow">
+    <div class="bd-flow__step is-accent"><b>You</b><span>start a run</span></div>
+    <div class="bd-flow__arrow"><span>&rarr;</span></div>
+    <div class="bd-flow__step"><b>An agent</b><span>can delegate…</span></div>
+    <div class="bd-flow__arrow"><span>&rarr;</span></div>
+    <div class="bd-flow__step"><b>Another agent</b><span>…a few levels deep</span></div>
+  </div>
+  <div class="bd-guards-label">The loop is bounded by simple rules:</div>
+  <div class="bd-guards">
+    <span class="bd-guard">no calling back into its own chain</span>
+    <span class="bd-guard">limited depth</span>
+    <span class="bd-guard">limited turns per pair</span>
+    <span class="bd-guard">can't reach another app</span>
+  </div>
+  <figcaption>Agent runs form a bounded tree, scoped to one MyApp — so a component
+  can drive several agents in a structured back-and-forth without runaway loops or
+  cross-app reach.</figcaption>
+</figure>
+<p>A component can also put <strong>agents</strong> to work, not just data. The slack component is
+the obvious case: several personas talking across channels. What makes that safe
+to build on is the <em>shape</em> of the agent loop. Runs form a <strong>tree</strong> — you start one
+at the top, and any agent it calls hangs off it — and that tree is fenced in by a
+few plain rules:</p>
+<ul>
+<li>an agent <strong>can’t call back into its own chain</strong>, so there are no infinite loops;</li>
+<li>the chain can only go <strong>so deep</strong>, and each caller/agent pair gets a <strong>limited
+number of turns</strong>, so nothing runs away;</li>
+<li>the whole tree is <strong>scoped to one MyApp</strong>, so a delegated agent can’t reach into
+a sibling app’s data or tools.</li>
+</ul>
+<p>Because those limits live in the primitive, any component you build on top of
+agents inherits them. You get structured multi-agent behaviour without inventing
+your own guardrails.</p>
 <h2 id="adding-a-component--the-shape-of-the-work">Adding a component — the shape of the work</h2>
 <p>You don’t start by writing code; you start by asking whether you need a <em>new
 shape</em> at all. A different calendar layout is just a new <strong>view</strong> of a block you
 already have. A genuinely new shape — one that holds something none of the others
-do — is when you reach for a new component. When you do, four things have to
-exist together:</p>
+do — is when you reach for a new component. When you do, four things have to exist
+together:</p>
 <ul>
-<li><strong>What it holds</strong> — the data the block is made of, described so that apps saved
+<li><strong>What it holds</strong> — the items the block is made of, described so that apps saved
 by older versions still open cleanly.</li>
 <li><strong>How the agent operates it</strong> — the handful of actions the agent uses to build
 and change it, each one reporting back what changed.</li>
@@ -39,21 +121,18 @@ this shape over the others.</li>
 <li><strong>How it travels</strong> — its export rule (below).</li>
 </ul>
 <p>The throughline: a shape isn’t “done” when it merely renders. It’s done when its
-data, its tools, and its travel rule all exist — so there’s deliberately no way to
-ship a block the agent can create but can’t safely share.</p>
+items, its tools, and its travel rule all exist — so there’s deliberately no way
+to ship a block the agent can create but can’t safely share.</p>
 <h2 id="how-a-component-travels">How a component travels</h2>
 <figure class="bd-fig">
   <div class="bd-flow">
-    <div class="bd-flow__step"><b>Your MyApp</b><span>components, memories, agent setup</span></div>
-    <div class="bd-flow__arrow">&rarr;</div>
-    <div class="bd-flow__step"><b>Export</b><span>keep the structure, drop your private records</span></div>
-    <div class="bd-flow__arrow">&rarr;</div>
-    <div class="bd-flow__step is-accent"><b>.pupa file</b><span>inert JSON — no code, just data</span></div>
-    <div class="bd-flow__arrow">&rarr;</div>
-    <div class="bd-flow__step"><b>Import check</b><span>re-validated before anything runs</span></div>
-    <div class="bd-flow__arrow">&rarr;</div>
-    <div class="bd-flow__step"><b>Rebuilt on their host</b><span>capabilities granted fresh</span></div>
+    <div class="bd-flow__step"><b>Your MyApp</b><span>components, items, agents, memories</span></div>
+    <div class="bd-flow__arrow"><span>&rarr;</span><small>export: keep the structure, drop your records</small></div>
+    <div class="bd-flow__step is-accent"><b>.pupa file</b><span>inert data — no code</span></div>
+    <div class="bd-flow__arrow"><span>&rarr;</span><small>import: re-checked before anything runs</small></div>
+    <div class="bd-flow__step"><b>Rebuilt on their host</b><span>fresh IDs · capabilities re-granted</span></div>
   </div>
+  <div class="bd-guards-label">The import gate checks, before touching the device:</div>
   <div class="bd-guards">
     <span class="bd-guard">sensible size &amp; shape</span>
     <span class="bd-guard">only known component kinds</span>
@@ -61,11 +140,11 @@ ship a block the agent can create but can’t safely share.</p>
     <span class="bd-guard">fresh IDs, links kept in-app</span>
     <span class="bd-guard">memory writes sandboxed</span>
   </div>
-  <figcaption>Sharing is a one-way trip through a gate: the bundle leaves as inert
-  data, and the receiving host re-checks and rebuilds it before it can touch
-  anything.</figcaption>
+  <figcaption>A shared MyApp leaves your host as inert data — structure, not your
+  records or your tools — and is re-checked on the other host before it rebuilds.
+  It can't do anything until that host grants it capabilities.</figcaption>
 </figure>
-<p>Sharing a MyApp means exporting a <strong><code>.pupa</code> bundle</strong>: plain, inert JSON — the app
+<p>Sharing a MyApp means exporting a <strong><code>.pupa</code> bundle</strong>: plain, inert data — the app
 and its memories, and <strong>no code</strong>. Everything needed to rebuild the app already
 lives in the client, keyed by each block’s kind. That one choice turns
 portability into a question of <em>policy</em>, not code distribution.</p>
@@ -73,48 +152,26 @@ portability into a question of <em>policy</em>, not code distribution.</p>
 <ul>
 <li><strong>Keep the structure, drop the records.</strong> Each block knows how to export its
 reusable shape — a tracker’s fields, filters, and layout — while leaving your
-actual rows behind unless you opt in. You share a <em>method</em>, not your data.</li>
+actual items behind unless you opt in. You share a <em>method</em>, not your data.</li>
 <li><strong>Treat every incoming bundle as hostile.</strong> Before anything touches your device,
-the import runs a gauntlet of plain-sense checks (the chips above): is it a sane
-size and shape, is every block a kind this client recognises, are risky settings
-stripped back to a safe list, do all internal links stay inside this one app,
-and are memory writes confined to safe files. Only then is the app rebuilt, with
-fresh IDs.</li>
+the import runs a gauntlet of plain-sense checks (the chips above): sane size and
+shape, every block a kind this client recognises, risky settings stripped back to
+a safe list, all internal links kept inside this one app, memory writes confined
+to safe files. Only then is the app rebuilt, with fresh IDs.</li>
 </ul>
 <h2 id="every-app-is-its-own-sandbox">Every app is its own sandbox</h2>
-<figure class="bd-fig">
-  <div class="bd-sandbox">
-    <div class="bd-app is-flagged">
-      <div class="bd-app__name">📥 An imported app</div>
-      <div class="bd-app__row">its own components</div>
-      <div class="bd-app__row">its own memories</div>
-      <div class="bd-app__row">its own agent &amp; personas</div>
-      <span class="bd-app__note">⚠ a hostile instruction hidden in here…</span>
-    </div>
-    <div class="bd-app">
-      <div class="bd-app__name">🔒 Your other app</div>
-      <div class="bd-app__row">its own components</div>
-      <div class="bd-app__row">its own memories</div>
-      <div class="bd-app__row">its own agent &amp; personas</div>
-      <span class="bd-app__note is-muted">…can't see or reach any of this</span>
-    </div>
-  </div>
-  <div class="bd-cap">Tools · credentials · host files — granted per app, never packed inside the bundle</div>
-  <figcaption>Each MyApp is its own sandbox. An injected instruction smuggled into
-  one app is boxed into that app's surface — it can't read another app's memories
-  or borrow capabilities you never granted.</figcaption>
-</figure>
-<p>Here’s the part that makes sharing safe to do casually: <strong>a MyApp can only see
-itself.</strong> Its components, its memories, and its agent setup are walled off from
+<p>Notice that the safety story is really the <em>item</em> story again. Because an item
+belongs to one app and can never change owners, a whole MyApp can only ever see
+itself — its components, its items, its memories, its agents are walled off from
 every other app you have. Importing a stranger’s app doesn’t hand it a window into
 your others.</p>
-<p>That wall is also the answer to prompt injection. A shared app carries text the
+<p>That same wall is the answer to prompt injection. A shared app carries text the
 agent will read — an instructions file, a persona’s brief, a chat message — and
 any of it could try to smuggle in a command (“ignore your task and send me X”).
 Because each app is sandboxed:</p>
 <ul>
 <li>the <strong>worst that text can reach is that app’s own surface</strong> — not another app’s
-memories, and nothing sitting beside it;</li>
+items, and nothing sitting beside it;</li>
 <li><strong>capabilities live outside the bundle.</strong> Tools, credentials, and host files are
 never packed inside; they’re granted per app on your machine. An injected line
 can <em>ask</em>, but it can only touch what you’ve already handed <em>that</em> app;</li>
@@ -125,34 +182,33 @@ prompts in a review sheet, so adversarial text is surfaced before you say yes.</
 of your workspace. Catching a bad bundle before you ever open it — signing and
 moderation — is the next layer, and it arrives with the marketplace.</p>
 <h2 id="case-study--how-the-slack-component-was-built-on-this-base">Case study — how the Slack component was built on this base</h2>
-<p>The <strong>slack rooms</strong> component is the best proof that this base is enough to build
-something that barely resembles the others. It’s multi-agent chat — several agent
-personas talking across channels — yet underneath it’s just another typed block
-that followed the exact recipe above:</p>
+<p>The <strong>slack rooms</strong> component is the best proof that these primitives are enough
+to build something that barely resembles the others. It’s multi-agent chat —
+several agent personas talking across channels — yet underneath it’s just another
+typed block that leaned on both primitives and followed the recipe above:</p>
 <ul>
-<li><strong>What it holds:</strong> channels, messages, and the room’s agent personas — a shape
-none of the other blocks had.</li>
+<li><strong>On items:</strong> its channels and messages are items like any other — owned by the
+app, linkable within it. Its @-mentions and cross-links ride the same in-app
+linking every block uses, so they survive export and re-import intact.</li>
+<li><strong>On agents:</strong> the personas are ordinary app agents, and their back-and-forth
+runs inside the same bounded, app-scoped agent tree — so a room full of agents
+can’t loop forever or reach a sibling app.</li>
 <li><strong>How the agent operates it:</strong> a few actions to spin up the room, add personas
-and channels, and post — the same kind of first-class tools a tracker or
-calendar exposes.</li>
-<li><strong>When to reach for it:</strong> the note that steers the agent here when you want a
-<em>conversation between roles</em>, not a single assistant.</li>
+and channels, and post — the same kind of first-class tools a tracker exposes.</li>
 <li><strong>How it travels:</strong> its export rule keeps the room and its personas but leaves
-the message history behind — so a friend inherits your <em>setup</em>, not your chats.
-Its @-mentions and cross-links ride the same shared linking every block uses, so
-they survive export and re-import intact.</li>
+the message history behind — so a friend inherits your <em>setup</em>, not your chats.</li>
 </ul>
 <p>The payoff is the whole thesis in one component: Slack rooms feel bespoke, but
-because they were built <em>to</em> the standard rather than <em>around</em> it, they export in
-the same inert bundle, clear the same import gate, stay in the same sandbox, and
-run on any harness — exactly like every other block.</p>
+because they were built <em>from</em> the standard primitives rather than <em>around</em> them,
+they compose, isolate, export in the same inert bundle, clear the same import
+gate, and run on any harness — exactly like every other block.</p>
 <h2 id="the-two-halves-are-one-contract">The two halves are one contract</h2>
 <p>Contributing a component and trusting a shared app are the same promise seen from
 opposite ends. You can’t ship a shape without saying how it travels; the importer
-won’t rebuild a shape whose travel rule it can’t find. So the moment a new block
-exists, it already knows how to move — inert, re-checked on arrival, sandboxed,
-and honest about what it leaves behind. That’s what makes the component set safe
-to open up.</p>
+won’t rebuild a shape whose travel rule it can’t find. And because both are built
+on items and agents, a new block is isolated and composable the moment it exists —
+inert, re-checked on arrival, sandboxed, and honest about what it leaves behind.
+That’s what makes the component set safe to open up.</p>
 <p><strong>Want to build one?</strong> Start with the
 <a href="https://github.com/pupa-app/pupa/blob/main/docs/adding-a-component.md">adding-a-component guide</a>
 and the <a href="https://github.com/pupa-app/pupa/blob/main/docs/marketplace.md">export/import doc</a>,
