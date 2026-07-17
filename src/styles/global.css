@@ -457,23 +457,25 @@ main {
 
 /* ---- Hero carousel ---- */
 .hero-carousel {
-  --slide-w: min(290px, 74vw);
+  --slide-w: min(320px, 80vw);
+  /* Reserved margin on each side for the arrows, outside the phone frame. */
+  --arrow-space: clamp(2.6rem, 9vw, 3.6rem);
   position: relative;
   margin: clamp(2.6rem, 6vw, 4rem) auto 0;
-  max-width: 720px;
+  max-width: min(calc(var(--slide-w) + 2 * var(--arrow-space)), 100%);
 }
 .carousel__track {
   list-style: none;
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
   display: flex;
   gap: clamp(1rem, 4vw, 2rem);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
-  /* Let the first and last slide reach dead-center. */
-  scroll-padding-inline: 50%;
-  padding-inline: max(0px, calc((100% - var(--slide-w)) / 2));
+  /* Clip the track to exactly one slide's width so neighbouring slides sit
+     fully offscreen instead of peeking in at the edges. */
+  max-width: var(--slide-w);
   scrollbar-width: none;
   -ms-overflow-style: none;
   overscroll-behavior-x: contain;
@@ -531,8 +533,8 @@ main {
 }
 .carousel__arrow:hover { background: var(--bg-elev); }
 .carousel__arrow:active { transform: translateY(-50%) scale(0.94); }
-.carousel__arrow--prev { left: clamp(-0.4rem, -1vw, 0.6rem); }
-.carousel__arrow--next { right: clamp(-0.4rem, -1vw, 0.6rem); }
+.carousel__arrow--prev { left: 0; }
+.carousel__arrow--next { right: 0; }
 .carousel__arrow[disabled] { opacity: 0.35; cursor: default; pointer-events: none; }
 /* Dots */
 .carousel__dots {
@@ -988,6 +990,18 @@ main {
   margin-bottom: 0.35rem;
 }
 .repo p { color: var(--text-dim); font-size: 0.92rem; margin-bottom: 0; }
+.repo-flow {
+  margin: 0.9rem 0 0;
+  padding: 0.7rem 0.8rem;
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--text-dim);
+  overflow-x: auto;
+}
 
 /* ---- Prose (blog posts & legal pages) ---- */
 .prose {
@@ -1460,3 +1474,4 @@ button.btn { font: inherit; font-weight: 550; font-size: 0.97rem; cursor: pointe
 @media (max-width: 720px) {
   .tut { gap: 1.1rem; }
 }
+

@@ -309,23 +309,19 @@ pupa-backend setup</code></pre>
         <a href="https://docs.astral.sh/uv/">uv</a> — it puts the CLI on your PATH
         in an isolated environment and is fast. Pin the version to match your app:
       </p>
-      <pre><code>uv tool install "pupa-backend[setup]"          # latest
-uv tool install "pupa-backend[setup]==0.0.70"  # pinned to a known-good app pairing</code></pre>
+      <pre><code>uv tool install "pupa-backend[setup]"          # latest</code></pre>
       <p>Run the setup wizard once, then start the server:</p>
       <pre><code>pupa-backend setup    # interactive — writes ~/.pupa-backend/config.yml
 pupa-backend run      # serves on http://localhost:8004</code></pre>
       <p>
-        Prefer it always-on? Install it as a background service — a{' '}
-        <code>launchd</code> LaunchAgent on macOS, a <code>systemd</code> user
-        service on Linux. It auto-starts on login and restarts on failure; logs
-        go to <code>~/.pupa-backend/logs/</code>.
+        Prefer it always-on? Install it as a background service (logs
+        go to <code>~/.pupa-backend/logs/</code>).
       </p>
       <pre><code>pupa-backend service-install   # install and start the background service
 pupa-backend status            # is it running?
 pupa-backend logs              # tail the service log
 pupa-backend service-stop      # stop and remove it</code></pre>
       <p class="setup__note">
-        No uv yet? <code>curl -LsSf https://astral.sh/uv/install.sh | sh</code>.
         Credentials live
         in your shell env (see the backend’s <code>.env.example</code>), never in
         the config file.
