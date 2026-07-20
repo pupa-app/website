@@ -75,7 +75,6 @@ const tutorials = [
       'The bundle is inert JSON: it ships structure and intent, never a runtime. It can’t act until the new host grants it capabilities.',
     ],
     videoSrc: href('/videos/export.mp4'),
-    captions: href('/videos/export.vtt'),
     video: null,
     doc: MARKETPLACE,
   },
@@ -307,17 +306,7 @@ pupa-backend setup</code></pre>
                 preload="metadata"
                 poster={t.poster}
                 title={`${t.title} — video walkthrough`}
-              >
-                {t.captions && (
-                  <track
-                    kind="captions"
-                    src={t.captions}
-                    srclang="en"
-                    label="English"
-                    default
-                  />
-                )}
-              </video>
+              />
             </div>
           ) : t.video ? (
             <div class="tut__video">
