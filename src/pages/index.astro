@@ -11,21 +11,15 @@ const MARKETPLACE = 'https://github.com/pupa-app/marketplace';
 // ~9:19.5 phone aspect so the frame never shifts. `flight-tracker.mp4` is
 // landscape, so it stays in the Build card below rather than this frame.
 const heroSlides = [
-  { type: 'image', src: '/screens/myapps.png', w: 520, h: 1125,
+  { type: 'video', src: '/videos/homepage-hero.mp4',
     caption: 'Your MyApps, all in one place',
-    alt: 'A list of MyApps in Pupa — Daily Briefing, Goodnight Stories, Movies, MyFIRE, OKRs and more.' },
-  { type: 'video', src: '/videos/explore-myapp.mp4',
-    caption: 'Explore and shape it by chatting',
-    alt: 'Exploring a MyApp by chat — the agent reshapes the canvas live.' },
-  { type: 'image', src: '/screens/job-search.png', w: 520, h: 1125,
-    caption: 'Components, cross-linked into one app',
-    alt: 'A Job Search MyApp home showing cross-linked components: skills, experience library, questions to ask, interview scheduler.' },
-  { type: 'image', src: '/screens/slack-chat.png', w: 520, h: 1125,
-    caption: 'Agents working alongside you',
-    alt: 'A Pupa slack room where an agent persona (scout) works a task alongside you.' },
-  { type: 'video', src: '/videos/export.mp4',
-    caption: 'Share it as a portable .pupa bundle',
-    alt: 'Exporting a MyApp as a portable .pupa bundle.' },
+    alt: 'A collection of MyApps in Pupa — build and use personal, AI-agent-native apps for any topic.' },
+  { type: 'video', src: '/videos/myfire-promo.mp4',
+    caption: 'Build an app for anything',
+    alt: 'Building a MyApp in Pupa — this example tracks financial-independence progress.' },
+  { type: 'video', src: '/videos/myapp-schedule.mp4',
+    caption: 'Schedule it to run on its own',
+    alt: 'Scheduling a MyApp in Pupa to run on its own — this example creates a schedule.' },
 ];
 
 // Hero bullet points + their lucide-style icons (stroke, currentColor).
@@ -141,6 +135,10 @@ const tags = [
       <button type="button" class="carousel__arrow carousel__arrow--next" data-carousel-next aria-label="Next">
         <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
       </button>
+      <button type="button" class="carousel__sound" data-carousel-sound aria-label="Unmute" aria-pressed="false" hidden>
+        <svg class="ico ico--muted" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+        <svg class="ico ico--on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>
+      </button>
       <div class="carousel__dots" data-carousel-dots role="tablist" aria-label="Choose slide">
         {heroSlides.map((s, i) => (
           <button type="button" class="carousel__dot" data-carousel-dot role="tab" aria-label={s.caption} aria-selected={i === 0 ? 'true' : 'false'}></button>
@@ -198,11 +196,21 @@ const tags = [
       const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-carousel-slide]'));
       const dots = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-carousel-dot]'));
       const videos = slides.map((s) => s.querySelector<HTMLVideoElement>('video'));
+      const soundBtn = root.querySelector<HTMLButtonElement>('[data-carousel-sound]');
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const INTERVAL = 5000;
       let current = 0;
       let timer = 0;
       let paused = false;
+      let soundOn = false; // audio only after a user gesture (autoplay policy)
+
+      // Show the unmute button only on slides that have a video; reflect state.
+      const syncSound = () => {
+        if (!soundBtn) return;
+        soundBtn.hidden = !videos[current];
+        soundBtn.setAttribute('aria-pressed', soundOn ? 'true' : 'false');
+        soundBtn.setAttribute('aria-label', soundOn ? 'Mute' : 'Unmute');
+      };
 
       // Rect-based math so it never depends on offsetParent quirks.
       const goTo = (i: number, smooth = true) => {
@@ -219,9 +227,10 @@ const tags = [
         dots.forEach((d, di) => d.setAttribute('aria-selected', di === i ? 'true' : 'false'));
         videos.forEach((v, vi) => {
           if (!v) return;
-          if (vi === i) v.play().catch(() => {});
-          else { v.pause(); v.currentTime = 0; }
+          if (vi === i) { v.muted = !soundOn; v.play().catch(() => {}); }
+          else { v.pause(); v.currentTime = 0; v.muted = true; }
         });
+        syncSound();
       };
 
       // Derive the active slide from scroll position (covers swipe + drag + snap).
@@ -245,7 +254,7 @@ const tags = [
       // Autoplay — instant wrap from last→first to avoid a long reverse sweep.
       const stop = () => { if (timer) { clearInterval(timer); timer = 0; } };
       const start = () => {
-        if (reduceMotion || paused || slides.length < 2) return;
+        if (reduceMotion || paused || soundOn || slides.length < 2) return;
         stop();
         timer = window.setInterval(() => {
           if (current === slides.length - 1) goTo(0, false);
@@ -274,6 +283,20 @@ const tags = [
       root.querySelector('[data-carousel-next]')?.addEventListener('click', () => goTo(current + 1));
       dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
 
+      // Sound: gesture-gated. On → unmute active clip + stop autoplay; off → mute + resume.
+      soundBtn?.addEventListener('click', () => {
+        soundOn = !soundOn;
+        const v = videos[current];
+        if (soundOn) {
+          stop();
+          if (v) { v.muted = false; v.play().catch(() => {}); }
+        } else {
+          if (v) v.muted = true;
+          start();
+        }
+        syncSound();
+      });
+
       // Mouse drag-to-scroll (touch/trackpad already scroll natively).
       let down = false, startX = 0, startLeft = 0, moved = false;
       track.addEventListener('pointerdown', (e) => {
@@ -300,6 +323,10 @@ const tags = [
         if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
       }, true);
 
+      // Kick off the first slide's video (setActive only fires on change).
+      const first = videos[current];
+      if (first) { first.muted = !soundOn; first.play().catch(() => {}); }
+      syncSound();
       start();
     }
   </script>

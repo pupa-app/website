@@ -548,6 +548,32 @@ main {
 .carousel__arrow--prev { left: 0; }
 .carousel__arrow--next { right: 0; }
 .carousel__arrow[disabled] { opacity: 0.35; cursor: default; pointer-events: none; }
+/* Sound toggle — sits top-right over the active phone frame */
+.carousel__sound {
+  position: absolute;
+  top: 0.9rem;
+  right: calc(var(--arrow-space, 2.6rem) + 0.55rem);
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg-elev) 88%, transparent);
+  backdrop-filter: blur(6px);
+  color: var(--text);
+  cursor: pointer;
+  box-shadow: 0 6px 18px -8px rgba(0, 0, 0, 0.35);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.carousel__sound[hidden] { display: none; }
+.carousel__sound:hover { background: var(--bg-elev); }
+.carousel__sound:active { transform: scale(0.94); }
+.carousel__sound .ico--on { display: none; }
+.carousel__sound[aria-pressed="true"] .ico--muted { display: none; }
+.carousel__sound[aria-pressed="true"] .ico--on { display: block; }
+.carousel__sound[aria-pressed="true"] { color: var(--accent, #e8b400); }
 /* Dots */
 .carousel__dots {
   display: flex;
