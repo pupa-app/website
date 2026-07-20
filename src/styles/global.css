@@ -464,7 +464,17 @@ main {
   display: flex;
   gap: 0.85rem;
   justify-content: center;
-  flex-wrap: wrap;
+  align-items: stretch;
+  /* Never wrap into a ragged 2:1 stack — either one row or fully stacked. */
+  flex-wrap: nowrap;
+}
+@media (max-width: 760px) {
+  .cta-row {
+    flex-direction: column;
+    align-items: center;
+  }
+  .cta-row > * { width: min(320px, 100%); }
+  .cta-row .btn { width: 100%; }
 }
 
 /* ---- Hero carousel ---- */
@@ -1327,6 +1337,31 @@ main {
 
 /* Anchored sections clear the sticky header when jumped to */
 .tut-content [id] { scroll-margin-top: 4.75rem; }
+
+/* Classic "#" heading anchor — hidden until the heading is hovered/focused,
+   click copies the section link instead of just navigating to it. */
+.section-anchor {
+  margin-left: 0.5rem;
+  font-weight: 400;
+  color: var(--text-faint);
+  opacity: 0;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+h2:hover > .section-anchor,
+h3:hover > .section-anchor,
+.section-anchor:focus-visible {
+  opacity: 1;
+}
+.section-anchor:hover { color: var(--accent); }
+.section-anchor.is-copied::after {
+  content: 'Copied!';
+  margin-left: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--accent);
+  vertical-align: middle;
+}
 
 /* Consistent vertical rhythm + dividers between the major content blocks so
    sections read as evenly separated instead of ad-hoc. */

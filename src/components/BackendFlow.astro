@@ -107,8 +107,10 @@ const pupaGlyph = `<rect x="-8" y="-15" width="16" height="6.5" rx="3.2"/><rect 
 
           <!-- Channel labels -->
           <text class="flow-label" data-ch="cloudflare" x="248" y="84" text-anchor="middle">Cloudflare</text>
-          <text class="flow-label" data-ch="tailscale" x="250" y="152" text-anchor="middle">Tailscale</text>
-          <text class="flow-label" data-ch="localhost" x="502" y="134" text-anchor="middle">Localhost</text>
+          <text class="flow-label" data-ch="tailscale" x="262" y="172" text-anchor="middle">Tailscale</text>
+          <!-- Sits left of and below the wire's origin: clear of the backend box
+               above (bottom edge y=126) and the localhost app box to the right. -->
+          <text class="flow-label" data-ch="localhost" x="452" y="156" text-anchor="middle">Localhost</text>
         </>
       )}
 

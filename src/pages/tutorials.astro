@@ -18,11 +18,6 @@ const repos = [
     name: 'pupa-app/pupa-backend',
     url: BACKEND_REPO,
     desc: 'The user-owned backend. Hooks-up on your Agent harness on your laptop (like Claude-Code). Run it locally next to the app or deploy your own in the cloud. Pair-once auth; your keys stay yours.',
-    flow: `+---------------+     +--------------+     +-------------+
-|    Pupa app   |     | pupa-backend |     | Claude Code |
-| (iOS / macOS) |<--->| (your laptop |<--->| (your agent |
-|               |     |  or cloud)   |     |   harness)  |
-+---------------+     +--------------+     +-------------+`,
   },
   {
     name: 'pupa-app/marketplace',
@@ -47,7 +42,7 @@ const tutorials = [
       'The blocks rearrange in front of you. Edit any field by hand too — you and the agent share one screen.',
       'It remembers. The long-lived Memories filesystem keeps what matters across sessions and devices.',
     ],
-    videoSrc: href('/videos/daily-brief.mp4'),
+    videoSrc: href('/videos/myfire-promo.mp4'),
     video: null,
     doc: `${GITHUB_ORG}/pupa#readme`,
   },
@@ -63,7 +58,7 @@ const tutorials = [
       'Iterate by talking. Rename, restructure, add fields; the blocks rearrange live.',
       'Everything persists in the Memories filesystem, so the app grows with you instead of resetting.',
     ],
-    videoSrc: href('/videos/flight-tracker.mp4'),
+    videoSrc: href('/videos/myapp-schedule.mp4'),
     video: null,
     doc: `${GITHUB_ORG}/pupa#readme`,
   },
@@ -130,7 +125,6 @@ const sections = [
   { id: 'what-is-a-myapp', label: 'What is a MyApp?', sub: true },
   ...tutorials.map((t) => ({ id: t.id, label: t.title, sub: true })),
   { id: 'components', label: 'Components', sub: true },
-  { id: 'contribute', label: 'Contribute' },
   { id: 'data-privacy', label: 'Where your data lives' },
   { id: 'backend-setup', label: 'Backend setup' },
   { id: 'install', label: 'Install', sub: true },
@@ -140,6 +134,7 @@ const sections = [
   { id: 'pairing', label: 'Pair the app', sub: true },
   { id: 'screenshare', label: 'Screen-share', sub: true },
   { id: 'railway', label: 'Deploy (Railway)', sub: true },
+  { id: 'contribute', label: 'Contribute' },
 ];
 ---
 <BaseLayout
@@ -150,9 +145,8 @@ const sections = [
     <div class="page-head" style="padding-block:0 1rem">
       <h1>Tutorials</h1>
       <p class="page-sub">
-        Everything you need to get going with Pupa — start with the basics, then
-        learn to use, build, and share a MyApp. Written guides now; video
-        walkthroughs are on the way.
+        Everything you need to get going with Pupa! Start with the basics, then
+        learn to use, build, and share a MyApp.
       </p>
     </div>
 
@@ -183,7 +177,7 @@ const sections = [
       <h2 style="margin-top:0">Quick setup</h2>
       <p class="setup__lead">
         The fastest path to a working Pupa: run the backend on your own machine
-        with Claude Code, reach it over a free Cloudflare tunnel, install the app,
+        with Claude Code, install the app,
         pair, and start chatting. About five minutes. Every step has a fuller
         version in <a href="#backend-setup">Backend setup</a> below.
       </p>
@@ -198,13 +192,13 @@ const sections = [
         <li>
           <strong>Install the backend and run setup.</strong> Make sure the{' '}
           <a href="https://claude.com/claude-code">Claude Code</a> CLI is installed
-          and logged in first — the wizard checks for it — then:
+          and logged in first, the wizard checks for it, then:
           <pre><code>uv tool install "pupa-backend[setup]"
 pupa-backend setup</code></pre>
           In the wizard, enable the <strong>Claude Code</strong> harness, and when
           asked <em>“How will your iPhone reach the backend?”</em> pick{' '}
           <strong>Cloudflare tunnel</strong> and answer <em>no</em> to the domain
-          question — that’s the free quick tunnel, no Cloudflare account needed.
+          question — that’s the free quick tunnel, no Cloudflare account needed. (If Pupa is on the Mac running the backend, select <strong>Localhost</strong>.)
         </li>
         <li>
           <strong>Start the backend.</strong> This serves on <code>:8004</code> and
@@ -212,17 +206,16 @@ pupa-backend setup</code></pre>
           <pre><code>pupa-backend run</code></pre>
         </li>
         <li>
-          <strong>Install the app.</strong> Get Pupa on your iPhone or Mac via
+          <strong>Install the app.</strong> Get Pupa on your iPhone, iPad or Mac via
           TestFlight (email{' '}
           <a href="mailto:pupa-app-help@proton.me?subject=TestFlight%20request">pupa-app-help@proton.me</a>{' '}
-          to request an invite), or build it from source in Xcode — see{' '}
-          <a href={`${GITHUB_ORG}/pupa#readme`}>the pupa repo</a>.
+          to request an invite).
         </li>
         <li>
-          <strong>Pair, then chat.</strong> Mint a code and scan it from the app:
+          <strong>Pair, then chat.</strong> Mint a QR code and scan it from the app:
           <pre><code>pupa-backend pair</code></pre>
-          In <strong>Settings ▸ Backend ▸ Edit</strong>, scan the QR. That’s it —
-          open a MyApp and start talking.
+          In <strong>Settings ▸ Backend ▸ Edit</strong>, scan the QR. That’s it! 
+          Open a MyApp and start talking.
         </li>
       </ol>
     </div>
@@ -238,13 +231,19 @@ pupa-backend setup</code></pre>
         <h3 id="what-is-a-myapp" style="margin-top:0">What is a MyApp?</h3>
         <p class="section-lead" style="margin-bottom:1rem">
           A <strong>MyApp</strong> is an app you and your agent build and use together
-          by talking. Think of it as a box of <strong>Lego blocks</strong> — a field,
-          a list, a date, a button, a chart — that you snap together into whatever
-          you need: a habit tracker, a calendar, a checklist, a calculator, or a
-          room to hang out in.
+          by talking. Think of it as a box of <strong>Lego blocks</strong> — a kanban board,
+          a checklist, a chart — that you snap together into whatever
+          you need: a habit tracker, a financial a calculator, or a
+          debate room.
         </p>
         <p class="section-lead" style="margin-bottom:1rem">
-          You and the agent work on the same footing — anything one of you can do,
+          Also you and your agent share the <strong>Memories</strong>, a folder/workspace 
+          of files to manage the experience, 
+          including the special folder <code>pupa/</code>, which acts as a <code>.claude/</code> folder managing skills, plugins, 
+          automations, etc. for Pupa functionalities. 
+        </p>
+        <p class="section-lead" style="margin-bottom:1rem">
+          You and the agent work on the same footing, anything one of you can do,
           the other can too. Usually you just describe what you want and the agent
           assembles the blocks in front of you, but you can also snap them together
           by hand, and either of you can rearrange them at any time.
@@ -373,29 +372,6 @@ pupa-backend setup</code></pre>
       </Fragment>
     ))}
 
-    <!-- Contribute -->
-    <div class="setup" id="contribute">
-      <p class="section-eyebrow">Open source</p>
-      <h2 style="margin-top:0">Contribute</h2>
-      <p class="setup__lead">
-        Add new blocks — canvas components — to the app, or new agent hookups to
-        the backend. Components are just SwiftUI views with a typed model, so you
-        can build agent-compatible surfaces without any agentic knowledge. The
-        client, backend, and marketplace are all developed in the open — see{' '}
-        <a href={`${GITHUB_ORG}/pupa/issues`}>the repos</a> for each project’s
-        terms.
-      </p>
-      <div class="repo-grid">
-        {repos.map((r) => (
-          <a class="repo" href={r.url}>
-            <div class="repo-name">{r.name}</div>
-            <p>{r.desc}</p>
-            {r.flow && <pre class="repo-flow">{r.flow}</pre>}
-          </a>
-        ))}
-      </div>
-    </div>
-
     <!-- Data flow & privacy -->
     <div class="panel--split" id="data-privacy">
       <div class="panel__body">
@@ -403,15 +379,14 @@ pupa-backend setup</code></pre>
         <p class="section-lead" style="margin-bottom:1rem">
           Pupa has no cloud of its own. Your apps run on your devices, sync
           through <strong>your</strong> iCloud, and talk to a backend{' '}
-           <strong>you</strong> run — so your data stays with you, not with us.
+           <strong>you</strong> run. So your data stays with you, not with us.
         </p>
         <ul>
           <li>
-            <strong>Your MyApps, memories, and settings live on your device</strong>{' '}
+            <strong>Your MyApps and settings live on your device</strong>{' '}
             and sync across your iPhone, iPad, and Mac through <strong>iCloud</strong>,
             under your own Apple ID. There’s no Pupa account and no Pupa server in
-            the middle — the local copy is the source of truth, and iCloud is just
-            the mirror that keeps your devices in step.
+            the middle.
           </li>
           <li>
             <strong>Your agent and model credentials never leave your machine.</strong>{' '}
@@ -420,14 +395,9 @@ pupa-backend setup</code></pre>
             Keychain and is excluded from sync.
           </li>
           <li>
-            <strong>Chat history lives in your backend</strong>, not iCloud — kept
-            in the database you point it at, yours to keep or wipe. Give the backend
-            no database and history simply ends with the process.
-          </li>
-          <li>
             <strong>The one external hop is the model you pick.</strong> What you
             send the agent goes to your LLM provider (Anthropic, OpenRouter, …)
-            under your own key — the same trust you already place in that provider,
+            under your own key. The same trust you already place in that provider,
             and nowhere else.
           </li>
         </ul>
@@ -461,8 +431,7 @@ pupa-backend setup</code></pre>
       <h3 id="install">Install the CLI (PyPI)</h3>
       <p>
         Install <code>pupa-backend</code> from PyPI with{' '}
-        <a href="https://docs.astral.sh/uv/">uv</a> — it puts the CLI on your PATH
-        in an isolated environment and is fast. Pin the version to match your app:
+        <a href="https://docs.astral.sh/uv/">uv</a>:
       </p>
       <pre><code>uv tool install "pupa-backend[setup]"          # latest</code></pre>
       <p>Run the setup wizard once, then start the server:</p>
@@ -624,6 +593,29 @@ DATABASE_URL=$&#123;&#123;Postgres.DATABASE_URL&#125;&#125;      # reference the
         in <a href={`${BACKEND_REPO}/blob/main/docs/deploy.md`}>docs/deploy.md</a>.
       </p>
     </div>
+
+    <!-- Contribute -->
+    <div class="setup" id="contribute">
+      <p class="section-eyebrow">Open source</p>
+      <h2 style="margin-top:0">Contribute</h2>
+      <p class="setup__lead">
+        Add new blocks — canvas components — to the app, or new agent hookups to
+        the backend. Components are just SwiftUI views with a typed model, so you
+        can build agent-compatible surfaces without any agentic knowledge. The
+        client, backend, and marketplace are all developed in the open — see{' '}
+        <a href={`${GITHUB_ORG}/pupa/issues`}>the repos</a> for each project’s
+        terms.
+      </p>
+      <div class="repo-grid">
+        {repos.map((r) => (
+          <a class="repo" href={r.url}>
+            <div class="repo-name">{r.name}</div>
+            <p>{r.desc}</p>
+            {r.flow && <pre class="repo-flow">{r.flow}</pre>}
+          </a>
+        ))}
+      </div>
+    </div>
     </div>
     </div>
   </section>
@@ -672,6 +664,31 @@ DATABASE_URL=$&#123;&#123;Postgres.DATABASE_URL&#125;&#125;      # reference the
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', onScroll);
       update();
+    }
+  </script>
+
+  <script>
+    // Section anchors: a "#" next to each heading, shown on hover, that
+    // copies a deep link to the section instead of just navigating to it.
+    for (const navLink of document.querySelectorAll<HTMLAnchorElement>('.tut-nav a[href^="#"]')) {
+      const id = navLink.getAttribute('href')!.slice(1);
+      const target = document.getElementById(id);
+      if (!target) continue;
+      const heading = /^H[23]$/.test(target.tagName) ? target : target.querySelector('h2, h3');
+      if (!heading || heading.querySelector('.section-anchor')) continue;
+      const a = document.createElement('a');
+      a.className = 'section-anchor';
+      a.href = `#${id}`;
+      a.setAttribute('aria-label', `Copy link to "${heading.textContent?.trim()}"`);
+      a.textContent = '#';
+      heading.appendChild(a);
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        history.replaceState(null, '', `#${id}`);
+        navigator.clipboard.writeText(`${location.origin}${location.pathname}#${id}`).catch(() => {});
+        a.classList.add('is-copied');
+        setTimeout(() => a.classList.remove('is-copied'), 1200);
+      });
     }
   </script>
 
