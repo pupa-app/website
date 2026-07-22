@@ -30,6 +30,14 @@ a checklist, a chart, a chat room — **and by how those pieces relate to each
 other**. Standardise the blocks and the connections between them, and you get
 something you can build once, refine over time, and share as a single thing.
 
+Here's what makes that standard reachable: **agents don't need a pixel-perfect
+UI to work**. A human app lives or dies on visual polish, but an agent operates
+a component through its *structure* — fields, links, state — not its styling.
+That tolerance isn't a compromise, it's leverage: it offsets the fact that
+there's no standard agent UI experience yet. So rather than chase pixel-perfect
+surfaces for humans, we propose **general components** — plain, well-typed blocks
+that aren't fussy to render but are powerful to build agentic experiences on.
+
 The valuable output of an agent session usually isn't the transcript, and it
 isn't a folder of files. It's the **experience you configured** — the shape of
 the workspace, the way the parts connect, the habits baked in. Pupa turns that
