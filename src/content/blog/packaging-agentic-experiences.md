@@ -176,3 +176,23 @@ their app — your secrets.
 The follow-on is a **marketplace**: browse and install bundles from inside the
 app, with signatures and moderation. Agents will keep talking — Pupa is where a
 conversation **turns into an app you can keep, share, and re-run anywhere**.
+
+<!--
+DRAFT NOTES — points to work in later (rewrite):
+
+- Portability & ease of use matter MORE as agents gain autonomy. When agents run
+  more work on their own, the setup that governs them has to travel safely and be
+  simple to hand off. Autonomy raises the bar for both safety and robustness, and
+  portability + ease of use are how you meet it.
+
+- Lower the technical level for many users. Current framing still assumes a
+  fairly technical reader. A large audience needs the barrier dropped — less
+  jargon, more "you took a picture, you got a working app". Make the non-technical
+  on-ramp explicit.
+
+- Simple creative personal use case is underserved. There's open space for
+  lightweight, personal, creative apps (not just job-search / productivity). No
+  one is filling it. Call this out as an opportunity and give a personal-creative
+  example.
+-->
+
