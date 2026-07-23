@@ -3,8 +3,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import EvolutionSlider from '../components/EvolutionSlider.astro';
 import { href } from '../lib/href';
 
-const MARKETPLACE = 'https://github.com/pupa-app/marketplace';
-
 // Hero carousel — a mix of stills and portrait phone clips, told as a story:
 // have apps → explore/shape → structure → agents → share. All media share the
 // ~9:19.5 phone aspect so the frame never shifts.
@@ -111,7 +109,7 @@ const tags = [
         </svg>
         Connect your agent
       </a>
-      <a class="btn btn-primary" href={MARKETPLACE}>
+      <a class="btn btn-primary" href={href('/marketplace')}>
         <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
           <path d="M3 6h18"/>

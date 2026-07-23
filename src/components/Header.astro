@@ -3,7 +3,6 @@ import Logo from './Logo.astro';
 import { href } from '../lib/href';
 
 const GITHUB_ORG = 'https://github.com/pupa-app';
-const MARKETPLACE = 'https://github.com/pupa-app/marketplace';
 ---
 <header class="site-header">
   <div class="container bar">
@@ -16,9 +15,9 @@ const MARKETPLACE = 'https://github.com/pupa-app/marketplace';
       </summary>
       <nav class="nav" aria-label="Primary">
         <a href={href('/tutorials')}>Tutorials</a>
-        <a href={href('/blog')}>Blog</a>
-        <a href={MARKETPLACE}>Marketplace</a>
+        <a href={href('/marketplace')}>Marketplace</a>
         <a href={GITHUB_ORG}>GitHub</a>
+        <a href={href('/blog')}>Blog</a>
         <a href={href('/support')}>Support</a>
       </nav>
     </details>
