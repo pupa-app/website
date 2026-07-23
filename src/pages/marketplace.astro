@@ -1,68 +1,21 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { href } from '../lib/href';
 
 // The marketplace is "just a URL": an index.json manifest that points at .pupa
-// bundle files. We read it at BUILD time from a pinned release tag (clients pin
-// tags too — see the marketplace repo README), so this page tracks exactly what
-// was published, with zero client-side JS. Bump the tag on a marketplace
-// release. A fetch failure fails the build on purpose — better than shipping an
-// empty catalog on a transient blip.
+// bundle files. We fetch it CLIENT-SIDE from the repo's main branch so the page
+// reflects the live catalog on every visit — no website rebuild needed when the
+// marketplace changes. Cards are built in the <script> below; a fetch failure
+// degrades to an inline "unavailable" state.
 const MARKETPLACE_REPO = 'https://github.com/pupa-app/marketplace';
-const MARKETPLACE_TAG = 'v0.0.2';
-const BASE = `https://raw.githubusercontent.com/pupa-app/marketplace/${MARKETPLACE_TAG}/`;
-
-interface Entry {
-  id: string;
-  name: string;
-  icon: string;
-  author: string;
-  summary: string;
-  tags: string[];
-  version: number;
-  appVersion: string;
-  path: string;
-  sizeBytes: number;
-  homepage?: string;
-  includedMemories: boolean;
-  includedRecords: boolean;
-}
-interface Index {
-  name: string;
-  owner: string;
-  description: string;
-  entries: Entry[];
-}
-
-// Read the published catalog at the pinned tag at build time. A failure does
-// NOT crash the build — we render a clean "unavailable" state on the page so a
-// transient outage (or the repo not yet being public) degrades gracefully
-// instead of shipping a 500.
-let index: Index | null = null;
-let loadError: string | null = null;
-try {
-  const res = await fetch(BASE + 'index.json');
-  if (!res.ok) throw new Error(`index.json returned ${res.status}`);
-  index = await res.json();
-} catch (err) {
-  loadError = (err as Error).message;
-  console.warn(`[marketplace] catalog unavailable at ${BASE}: ${loadError}`);
-}
-
-const kb = (bytes: number) => `${Math.max(1, Math.round(bytes / 1024))} KB`;
-// Bundle URL resolved against the pinned base — this is what a button links to.
-const bundleURL = (e: Entry) => BASE + e.path;
-// Monogram stands in for the bundle's SF Symbol icon (not renderable on web).
-const monogram = (name: string) => name.trim()[0]?.toUpperCase() ?? '?';
+const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
 ---
 <BaseLayout
   title="Marketplace"
   description="Browse the official Pupa marketplace — ready-made MyApp bundles you can open straight in Pupa. Each app is inert, portable .pupa data; review its agent prompts on import."
 >
-  <section class="section container mkt">
-    <p class="section-eyebrow">Marketplace</p>
-    <h1 class="mkt__title">{index?.name ?? 'Pupa Marketplace'}</h1>
-    <p class="mkt__lead">{index?.description ?? 'Ready-made MyApp bundles you can open straight in Pupa.'}</p>
+  <section class="section container mkt" data-base={BASE} data-repo={MARKETPLACE_REPO}>
+    <h1 class="mkt__title">Pupa Marketplace</h1>
+    <p class="mkt__lead">Ready-made MyApp bundles you can open straight in Pupa.</p>
 
     <!-- How opening works (honest about the current file-open flow). -->
     <details class="mkt__how">
@@ -86,63 +39,119 @@ const monogram = (name: string) => name.trim()[0]?.toUpperCase() ?? '?';
       </div>
     </details>
 
-    {index === null ? (
-      <div class="mkt__error" role="alert">
-        <h2 class="mkt__error-title">Catalog unavailable</h2>
-        <p>
-          The marketplace catalog couldn’t be reached right now. Try again
-          later, or view the source on the{' '}
-          <a href={MARKETPLACE_REPO}>marketplace repo</a>.
-        </p>
-      </div>
-    ) : (
-    <ul class="mkt__grid" role="list">
-      {index.entries.map((e) => (
-        <li class="app-card">
-          <div class="app-card__head">
-            <span class="app-card__icon" aria-hidden="true">{monogram(e.name)}</span>
-            <div class="app-card__id">
-              <h2 class="app-card__name">{e.name}</h2>
-              <p class="app-card__by">by {e.author}</p>
-            </div>
-          </div>
-
-          <p class="app-card__summary">{e.summary}</p>
-
-          {e.tags.length > 0 && (
-            <ul class="app-card__tags" aria-label="Tags">
-              {e.tags.map((t) => <li class="app-card__tag">{t}</li>)}
-            </ul>
-          )}
-
-          <dl class="app-card__meta">
-            <div><dt>Size</dt><dd>{kb(e.sizeBytes)}</dd></div>
-            <div><dt>Exported by</dt><dd>Pupa {e.appVersion}</dd></div>
-            {e.includedRecords && <div><dt>Includes</dt><dd>sample data</dd></div>}
-            {e.includedMemories && <div><dt>Includes</dt><dd>memories</dd></div>}
-          </dl>
-
-          <div class="app-card__actions">
-            <a class="btn btn-primary" href={bundleURL(e)} download={`${e.id}.pupa`}>
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-              Open in Pupa
-            </a>
-            {e.homepage && (
-              <a class="btn" href={e.homepage}>Details</a>
-            )}
-          </div>
-        </li>
-      ))}
-    </ul>
-    )}
+    <!-- Populated by the client fetch. Loading → grid, or → error. -->
+    <div data-mkt-status>
+      <p class="mkt__loading" role="status">Loading apps…</p>
+    </div>
 
     <p class="mkt__foot">
-      Catalog pinned to <a href={`${MARKETPLACE_REPO}/releases/tag/${MARKETPLACE_TAG}`}>{MARKETPLACE_TAG}</a>.
+      Live from the <a href={MARKETPLACE_REPO}>marketplace repo</a>.
       Want your app here? <a href={`${MARKETPLACE_REPO}#publish-your-app`}>Publish it →</a>
     </p>
   </section>
+
+  <script>
+    interface Entry {
+      id: string; name: string; author: string; summary: string;
+      tags: string[]; appVersion: string; path: string; sizeBytes: number;
+      homepage?: string; includedMemories: boolean; includedRecords: boolean;
+    }
+    interface Index { entries: Entry[] }
+
+    const root = document.querySelector<HTMLElement>('.mkt');
+    const status = root?.querySelector<HTMLElement>('[data-mkt-status]');
+    if (root && status) {
+      const BASE = root.dataset.base!;
+      const REPO = root.dataset.repo!;
+      const kb = (b: number) => `${Math.max(1, Math.round(b / 1024))} KB`;
+      const monogram = (n: string) => n.trim()[0]?.toUpperCase() ?? '?';
+      const DOWNLOAD_ICON =
+        '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+
+      // Build a card with DOM APIs — all catalog text goes through textContent,
+      // so nothing from the manifest is ever interpreted as HTML.
+      const card = (e: Entry): HTMLElement => {
+        const li = document.createElement('li');
+        li.className = 'app-card';
+
+        const head = el('div', 'app-card__head');
+        head.append(el('span', 'app-card__icon', monogram(e.name), { 'aria-hidden': 'true' }));
+        const id = el('div', 'app-card__id');
+        id.append(el('h2', 'app-card__name', e.name), el('p', 'app-card__by', `by ${e.author}`));
+        head.append(id);
+        li.append(head);
+
+        li.append(el('p', 'app-card__summary', e.summary));
+
+        if (e.tags?.length) {
+          const tags = el('ul', 'app-card__tags');
+          tags.setAttribute('aria-label', 'Tags');
+          e.tags.forEach((t) => tags.append(el('li', 'app-card__tag', t)));
+          li.append(tags);
+        }
+
+        const meta = el('dl', 'app-card__meta');
+        meta.append(metaPair('Size', kb(e.sizeBytes)));
+        meta.append(metaPair('Exported by', `Pupa ${e.appVersion}`));
+        if (e.includedRecords) meta.append(metaPair('Includes', 'sample data'));
+        if (e.includedMemories) meta.append(metaPair('Includes', 'memories'));
+        li.append(meta);
+
+        const actions = el('div', 'app-card__actions');
+        const open = document.createElement('a');
+        open.className = 'btn btn-primary';
+        open.href = BASE + e.path;
+        open.setAttribute('download', `${e.id}.pupa`);
+        open.innerHTML = DOWNLOAD_ICON;
+        open.append(' Open in Pupa');
+        actions.append(open);
+        if (e.homepage && /^https:\/\//.test(e.homepage)) {
+          const details = document.createElement('a');
+          details.className = 'btn';
+          details.href = e.homepage;
+          details.textContent = 'Details';
+          actions.append(details);
+        }
+        li.append(actions);
+        return li;
+      };
+
+      const showError = () => {
+        status.innerHTML = '';
+        const box = el('div', 'mkt__error');
+        box.setAttribute('role', 'alert');
+        box.append(el('h2', 'mkt__error-title', 'Catalog unavailable'));
+        const p = el('p', '', 'The marketplace catalog couldn’t be reached right now. Try again later, or view the source on the ');
+        const a = document.createElement('a');
+        a.href = REPO; a.textContent = 'marketplace repo';
+        p.append(a, '.');
+        box.append(p);
+        status.append(box);
+      };
+
+      fetch(BASE + 'index.json', { cache: 'no-cache' })
+        .then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json() as Promise<Index>; })
+        .then((data) => {
+          const ul = document.createElement('ul');
+          ul.className = 'mkt__grid';
+          ul.setAttribute('role', 'list');
+          (data.entries ?? []).forEach((e) => ul.append(card(e)));
+          status.replaceChildren(ul);
+        })
+        .catch((err) => { console.warn(`[marketplace] ${err}`); showError(); });
+
+      function el(tag: string, cls: string, text?: string, attrs?: Record<string, string>) {
+        const node = document.createElement(tag);
+        if (cls) node.className = cls;
+        if (text != null) node.textContent = text;
+        if (attrs) for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+        return node;
+      }
+      function metaPair(term: string, val: string) {
+        const div = document.createElement('div');
+        div.append(el('dt', '', term), el('dd', '', val));
+        return div;
+      }
+    }
+  </script>
 </BaseLayout>

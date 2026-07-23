@@ -1749,6 +1749,7 @@ button.btn { font: inherit; font-weight: 550; font-size: 0.97rem; cursor: pointe
 .app-card__actions .btn:last-child:not(:only-child) { flex: 0 0 auto; }
 
 .mkt__foot { margin-top: 2rem; color: var(--text-dim); font-size: 0.92rem; }
+.mkt__loading { color: var(--text-faint); padding: 2rem 0; }
 
 /* Graceful catalog-unavailable state */
 .mkt__error {
