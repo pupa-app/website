@@ -100,10 +100,38 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
         const actions = el('div', 'app-card__actions');
         const open = document.createElement('a');
         open.className = 'btn btn-primary';
-        open.href = BASE + e.path;
+        open.href = BASE + e.path; // real link: middle-click / no-JS fallback
         open.setAttribute('download', `${e.id}.pupa`);
         open.innerHTML = DOWNLOAD_ICON;
         open.append(' Open in Pupa');
+        // The bundle lives on another origin (raw.githubusercontent), where the
+        // `download` attribute is ignored and the .pupa is served as text/plain
+        // — so a plain link just renders the JSON. Fetch the bytes and download
+        // via a same-origin Blob URL, which forces a real ".pupa" file the OS
+        // can hand to Pupa.
+        open.addEventListener('click', async (ev) => {
+          ev.preventDefault();
+          if (open.classList.contains('is-busy')) return;
+          open.classList.add('is-busy');
+          try {
+            const res = await fetch(BASE + e.path, { cache: 'no-cache' });
+            if (!res.ok) throw new Error(String(res.status));
+            const blob = new Blob([await res.arrayBuffer()], { type: 'application/octet-stream' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${e.id}.pupa`;
+            document.body.append(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 4000);
+          } catch (err) {
+            console.warn(`[marketplace] download failed for ${e.id}: ${err}`);
+            window.location.href = BASE + e.path; // last resort
+          } finally {
+            open.classList.remove('is-busy');
+          }
+        });
         actions.append(open);
         if (e.homepage && /^https:\/\//.test(e.homepage)) {
           const details = document.createElement('a');
