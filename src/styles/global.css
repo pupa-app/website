@@ -1038,6 +1038,14 @@ main {
   border-radius: var(--radius-sm);
   background: #fff;
 }
+.prose video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.6rem auto;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+}
 .prose table { border-collapse: collapse; width: 100%; margin: 1.2rem 0; font-size: 0.95rem; }
 .prose th, .prose td { border: 1px solid var(--border); padding: 0.5rem 0.7rem; text-align: left; }
 .prose th { background: var(--bg-elev); }
