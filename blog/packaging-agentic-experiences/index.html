@@ -1,151 +1,89 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v7.0.7"><title>Keep what you build with your agent · Pupa</title><meta name="description" content="The valuable thing an agent produces isn't a transcript, and it isn't a folder of files — it's the experience you set up together. Pupa turns that into a small typed app you can keep, share, and re-run on any host."><meta name="color-scheme" content="light dark"><link rel="icon" type="image/png" href="/favicon.png?v=2"><link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2"><meta property="og:title" content="Keep what you build with your agent · Pupa"><meta property="og:description" content="The valuable thing an agent produces isn't a transcript, and it isn't a folder of files — it's the experience you set up together. Pupa turns that into a small typed app you can keep, share, and re-run on any host."><meta property="og:type" content="website"><link rel="stylesheet" href="/_astro/BaseLayout.UtHObwly.css"></head><body><header class="site-header"><div class="container bar"><a href="/" class="brand" aria-label="Pupa — home"><img src="/pupa-mark.png" width="36" height="36" alt="Pupa logo" class="pupa-mark" decoding="async"></a><details class="nav-menu"><summary class="nav-menu__btn" aria-label="Toggle navigation menu"><span class="nav-menu__icon" aria-hidden="true"></span></summary><nav class="nav" aria-label="Primary"><a href="/tutorials">Tutorials</a><a href="/marketplace">Marketplace</a><a href="https://github.com/pupa-app">GitHub</a><a href="/blog">Blog</a><a href="/support">Support</a></nav></details></div></header><main><article class="section container"><a class="back-link" href="/blog">← All posts</a><div class="page-head" style="padding-block:0 1.5rem"><h1>Keep what you build with your agent</h1><p class="post-subtitle">Portable little apps that run on your own host</p><p class="page-sub">July 10, 2026 · Pupa team</p></div><details class="toc" open><summary class="toc__title">Contents</summary><nav aria-label="Table of contents"><ul><li><a href="#start-with-a-conversation">Start with a conversation</a></li><li><a href="#what-we-believe">What we believe</a></li><li><a href="#why-files-arent-enough">Why files aren’t enough</a></li><li><a href="#the-ladder--four-examples">The ladder — four examples</a></li><li class="toc__sub"><a href="#l0--one-component-with-a-nudge">L0 — One component, with a nudge</a></li><li class="toc__sub"><a href="#l1--components-that-talk-to-each-other">L1 — Components that talk to each other</a></li><li class="toc__sub"><a href="#l2--your-host-does-the-work-your-myapp-keeps-it-clear">L2 — Your host does the work; your MyApp keeps it clear</a></li><li class="toc__sub"><a href="#l3--contribute-a-component">L3 — Contribute a component</a></li><li><a href="#the-portable-unit--the-pupa-file">The portable unit — the .pupa file</a></li><li><a href="#the-boundary-that-keeps-it-safe">The boundary that keeps it safe</a></li><li><a href="#why-it-matters">Why it matters</a></li><li><a href="#whats-next">What’s next</a></li></ul></nav></details><div class="prose"><h2 id="start-with-a-conversation">Start with a conversation</h2>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v7.0.7"><title>Keep what you build with your agent · Pupa</title><meta name="description" content="The best thing an agent makes for you isn't a transcript. It's the little app you set up together — and Pupa lets you keep it, grow it, and share it as a single file."><meta name="color-scheme" content="light dark"><link rel="icon" type="image/png" href="/favicon.png?v=2"><link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2"><meta property="og:title" content="Keep what you build with your agent · Pupa"><meta property="og:description" content="The best thing an agent makes for you isn't a transcript. It's the little app you set up together — and Pupa lets you keep it, grow it, and share it as a single file."><meta property="og:type" content="website"><link rel="stylesheet" href="/_astro/BaseLayout.CeCD3Ou-.css"></head><body><header class="site-header"><div class="container bar"><a href="/" class="brand" aria-label="Pupa — home"><img src="/pupa-mark.png" width="36" height="36" alt="Pupa logo" class="pupa-mark" decoding="async"></a><details class="nav-menu"><summary class="nav-menu__btn" aria-label="Toggle navigation menu"><span class="nav-menu__icon" aria-hidden="true"></span></summary><nav class="nav" aria-label="Primary"><a href="/tutorials">Tutorials</a><a href="/marketplace">Marketplace</a><a href="https://github.com/pupa-app">GitHub</a><a href="/blog">Blog</a><a href="/support">Support</a></nav></details></div></header><main><article class="section container"><a class="back-link" href="/blog">← All posts</a><div class="page-head" style="padding-block:0 1.5rem"><h1>Keep what you build with your agent</h1><p class="post-subtitle">Little apps you can keep, grow, and hand to a friend</p><p class="page-sub">July 24, 2026 · Pupa team</p></div><details class="toc" open><summary class="toc__title">Contents</summary><nav aria-label="Table of contents"><ul><li><a href="#start-with-a-conversation">Start with a conversation</a></li><li><a href="#a-photo-becomes-an-app">A photo becomes an app</a></li><li><a href="#it-grows">It grows</a></li><li><a href="#make-something-just-for-you">Make something just for you</a></li><li><a href="#it-scales-when-you-need-it-to">It scales when you need it to</a></li><li><a href="#hand-it-to-a-friend">Hand it to a friend</a></li><li><a href="#why-this-matters-more-now">Why this matters more now</a></li><li><a href="#where-this-goes">Where this goes</a></li></ul></nav></details><div class="prose"><h2 id="start-with-a-conversation">Start with a conversation</h2>
 <p>You’re chatting with your agent, and halfway through you realise you need
-somewhere to <em>see</em> things. Not another wall of text — a place. A little
-dashboard: a few rows you can sort, a calendar, a checklist you and the agent
-both keep up to date.</p>
-<p>So you ask for one, and it appears next to the chat. From then on the agent
-doesn’t just <em>tell</em> you things — it <em>works in</em> that dashboard with you, adding
-rows and moving items as real actions while you watch and edit the same surface.</p>
-<p>That small moment — “I need a place for this” — is the whole idea. This post is
-about what happens when you keep those places, connect them, and hand them to
-someone else.</p>
-<h2 id="what-we-believe">What we believe</h2>
-<p>At Pupa we think a surprising amount of what people want from agents can be
-covered by a handful of <strong>basic, well-made components</strong> — a tracker, a calendar,
-a checklist, a chart, a chat room — <strong>and by how those pieces relate to each
-other</strong>. Standardise the blocks and the connections between them, and you get
-something you can build once, refine over time, and share as a single thing.</p>
-<p>Here’s what makes that standard reachable: <strong>agents don’t need a pixel-perfect
-UI to work</strong>. A human app lives or dies on visual polish, but an agent operates
-a component through its <em>structure</em> — fields, links, state — not its styling.
-That tolerance isn’t a compromise, it’s leverage: it offsets the fact that
-there’s no standard agent UI experience yet. So rather than chase pixel-perfect
-surfaces for humans, we propose <strong>general components</strong> — plain, well-typed blocks
-that aren’t fussy to render but are powerful to build agentic experiences on.</p>
-<p>The valuable output of an agent session usually isn’t the transcript, and it
-isn’t a folder of files. It’s the <strong>experience you configured</strong> — the shape of
-the workspace, the way the parts connect, the habits baked in. Pupa turns that
-into an app: a <strong>MyApp</strong> that the agent operates natively, that persists across
-projects, and that you can package up and give to a friend.</p>
-<p><img alt="The evolution of information flow between you and your agent. Top: Claude alone on your machine, reading and modifying raw OS data. Middle: a chat-focused app that only reports OS/chat data one way to a generic backend. Bottom: Pupa — a structured MyApp of typed components and memories, read and modified both ways through your own pupa-backend." loading="lazy" decoding="async" width="622" height="829" src="/_astro/information-flow.DrusbYqc_Cb6Sm.webp" srcset=""></p>
-<h2 id="why-files-arent-enough">Why files aren’t enough</h2>
-<p>You can already ship a lot: a plugin, a bundle of prompts, a folder of notes.
-But those are <strong>things the agent reads</strong> — not <strong>an app the agent uses</strong>. None of
-them give you a live workspace you and the agent edit together, that remembers
-itself across projects. So every good setup gets rebuilt from scratch each time,
-and “sharing” means handing over notes and hoping.</p>
-<p>A MyApp closes that gap. It’s typed components that reference each other, plus a
-long-lived <strong>Memories</strong> store and the agent’s own configuration. That bundle —
-not a chat log — is the thing worth keeping and passing on.</p>
-<p><img alt="Usual agentic setup vs. Pupa: a specific harness, scattered docs, plugins, personal app assets, and workflows collapse into a single portable Pupa MyApp." loading="lazy" decoding="async" width="608" height="709" src="/_astro/agentic-setup.BXxX84Qn_ix00.webp" srcset=""></p>
-<h2 id="the-ladder--four-examples">The ladder — four examples</h2>
-<p>The simplest useful thing is a single component. From there you climb: connect
-components, split work between your host and your app, and eventually add new
-components of your own. Here’s each rung with a real example.</p>
-<h3 id="l0--one-component-with-a-nudge">L0 — One component, with a nudge</h3>
-<p>Snap a photo of a prescription. The agent reads the schedule off it and builds a
-small MyApp for you: a <strong>calendar</strong> of every dose, plus a <strong>notification</strong> each
-time it’s time to take one. That’s it — one component doing one honest job, with
-reminders that actually fire on your device.</p>
-<p>No pipeline, no config. You took a picture; you got a working little app that
-keeps you on schedule.</p>
-<h3 id="l1--components-that-talk-to-each-other">L1 — Components that talk to each other</h3>
-<p>Now make it richer. Add a <strong>tracker</strong> for a short daily diary: how you’re
-feeling, any side effects, whether the medicine seems to be helping. Then <strong>link</strong>
-each diary entry to its day on the calendar.</p>
-<p>Suddenly the two pieces reference each other. Looking at a rough day on the
-calendar, you can jump straight to what you wrote; reviewing the diary, you can
-see exactly which doses it lines up with. This is the standardisation paying off:
-the value isn’t in either component alone, it’s in the <strong>connection</strong> between
-them.</p>
-<h3 id="l2--your-host-does-the-work-your-myapp-keeps-it-clear">L2 — Your host does the work; your MyApp keeps it clear</h3>
-<p>Bigger example: a <strong>job search</strong>.</p>
-<p>Some of this is open-ended, one-off work that belongs on <strong>your host</strong> (your
-laptop, your agent, your tools): searching the web for roles, reading company
-pages, drafting and tailoring a CV or cover letter. It’s fast, messy, and mostly
-disposable.</p>
-<p>The rest is durable and worth keeping tidy, so it lives in the <strong>MyApp</strong>: a
-tracker of applications and their stages, a calendar of interviews, and your own
-material — the experiences you draw on, the persona you present, the questions
-you like to ask. The app is where information stays <em>organised</em>; the host is
-where it gets <em>fetched and produced</em>.</p>
-<p>That split is the point:</p>
-<ul>
-<li><strong>What stays in the app:</strong> your CV and preferences, your method, the structured
-record of where you’ve applied. Portable, and yours.</li>
-<li><strong>What’s re-earned on each host:</strong> live web access, credentials, and any
-private files. These don’t travel — they’re granted fresh wherever the app
-runs.</li>
-</ul>
-<p>To make this repeatable, you can add a small <strong>Pupa skill</strong> — a short playbook,
-available as a <code>/command</code> — on <strong>how to manage your information</strong>: what belongs in
-Memories versus what the host should look up fresh each time, and how to keep the
-two from drifting. Hand the whole thing to a friend and they inherit your entire
-method — minus your private records.</p>
-<p><img alt="The Job Search MyApp home — cross-linked components for skills, experience library, questions to ask, company research and an interview scheduler, with a slack prep room." loading="lazy" decoding="async" width="520" height="1125" src="/_astro/job-search-app.wpb1pqa1_2rQ6mV.webp" srcset=""></p>
-<p><img alt="A MyApp’s chat with the slash-command menu open — skills like /pupa-agents, /pupa-memory and /pupa-sharing surface as model-loadable playbooks and commands." loading="lazy" decoding="async" width="520" height="1125" src="/_astro/slash-commands.aBcxZgZN_26Qbmv.webp" srcset=""></p>
-<h3 id="l3--contribute-a-component">L3 — Contribute a component</h3>
-<p>The set of components isn’t a fixed menu — it’s an <strong>extension point</strong>. If the
-five or six built-ins don’t cover your idea, you can add a new one against the
-same standard, and from then on <em>anyone’s</em> MyApp can use it.</p>
-<p>Take the <strong>slack rooms</strong> component: multi-agent chat built on top of the standard
-Pupa gives you. It lets you assemble a fairly custom experience — several agent
-personas talking in channels — while still being a plain component that runs on
-<strong>any harness</strong>, exports in the same bundle, and links to other components like
-everything else. That’s the deal: build to the standard, and your new block is
-portable by default.</p>
-<p>If you want to add your own, start here:
-<a href="/blog/custom-components-and-portability">custom components &amp; the portability policy →</a>,
-which covers Pupa’s design and how to contribute a component.</p>
-<h2 id="the-portable-unit--the-pupa-file">The portable unit — the <code>.pupa</code> file</h2>
-<p>When you share a MyApp, it travels as a single <code>.pupa</code> file. A few things worth
-knowing, without the fine print:</p>
-<ul>
-<li><strong>It’s just data.</strong> The file is inert JSON — the app tree plus its memories.
-There’s no code inside; the client rebuilds everything from the description, so
-a bundle from an old version still opens.</li>
-<li><strong>Importing is careful.</strong> Opening one shows a confirm sheet naming the app and
-any agent prompts, and the import is checked before anything runs.</li>
-<li><strong>Sharing is one tap.</strong> Export uses the normal system share sheet; you can even
-pack every MyApp into one library file.</li>
-</ul>
-<h2 id="the-boundary-that-keeps-it-safe">The boundary that keeps it safe</h2>
-<p>The same split from the job-search example is also the safety story. What travels
-is <strong>structure and intent</strong>: the components, the personas, the skills, the way it
-all fits together. What’s <strong>re-earned</strong> on the new host is <strong>capability</strong>: tool
-access, credentials, private data.</p>
-<p>Because the bundle is inert, it can’t <em>do</em> anything until you run it and grant it
-your host’s abilities. You get someone’s whole method without handing them — or
-their app — your secrets.</p>
-<h2 id="why-it-matters">Why it matters</h2>
-<ul>
-<li><strong>A real unit to share</strong> — a typed app the agent operates, not a pile of notes.</li>
-<li><strong>A standard to build on</strong> — a few good components and clear connections you can
-refine over time.</li>
-<li><strong>Open and extensible</strong> — new component kinds come from the community.</li>
-<li><strong>No lock-in</strong> — inert, inspectable data, rebuilt by an open client.</li>
-<li><strong>Safe by design</strong> — the app travels; the keys stay home.</li>
-</ul>
-<h2 id="whats-next">What’s next</h2>
-<p>The follow-on is a <strong>marketplace</strong>: browse and install bundles from inside the
-app, with signatures and moderation. Agents will keep talking — Pupa is where a
-conversation <strong>turns into an app you can keep, share, and re-run anywhere</strong>.</p>
-<!--
-DRAFT NOTES — points to work in later (rewrite):
-
-- Portability & ease of use matter MORE as agents gain autonomy. When agents run
-  more work on their own, the setup that governs them has to travel safely and be
-  simple to hand off. Autonomy raises the bar for both safety and robustness, and
-  portability + ease of use are how you meet it.
-
-- Lower the technical level for many users. Current framing still assumes a
-  fairly technical reader. A large audience needs the barrier dropped — less
-  jargon, more "you took a picture, you got a working app". Make the non-technical
-  on-ramp explicit.
-
-- Simple creative personal use case is underserved. There's open space for
-  lightweight, personal, creative apps (not just job-search / productivity). No
-  one is filling it. Call this out as an opportunity and give a personal-creative
-  example.
--->
+somewhere to <em>see</em> things. Not another wall of text — a place. A few rows you
+can sort, a calendar, a checklist the two of you keep up to date.</p>
+<p>So you ask, and it appears next to the chat. From then on the agent doesn’t
+just tell you things. It works in that little dashboard with you, adding rows
+and ticking items while you watch, and you can edit the same screen by hand
+whenever you like.</p>
+<p>That moment, “I need a place for this”, is the whole idea behind Pupa. This
+post is about what happens when you keep those places, let them grow, and hand
+them to someone else.</p>
+<h2 id="a-photo-becomes-an-app">A photo becomes an app</h2>
+<p>Say you’ve just been handed a prescription. Two medicines, one twice a day
+with food, the other every second morning. You photograph the label and ask
+your agent to keep you on schedule.</p>
+<p>It reads the schedule off the photo and builds you a small app: a calendar
+with every dose on it, and a reminder that fires on your phone when it’s time.
+That’s the entire setup. You took a picture; you got a working app.</p>
+<p><video src="/videos/myapp-schedule.mp4" controls playsinline preload="metadata" title="Building a MyApp — from a request to a working schedule"></video></p>
+<p>We call these little apps <strong>MyApps</strong>. They’re built from a handful of plain,
+well-made parts: a calendar, a tracker, a checklist, a chart, a chat room. An
+agent doesn’t need a beautiful interface to work with you — it needs a few
+honest parts it can read and update. So the parts stay simple, and the agent
+handles them well.</p>
+<h2 id="it-grows">It grows</h2>
+<p>A week in, you want to keep notes. How you’re feeling, any side effects,
+whether the medicine seems to help. Ask for a small diary next to the
+calendar, and have each entry linked to its day.</p>
+<p>Now a rough entry in the diary points at the doses it lines up with, and from
+the calendar you can jump back to what you wrote. Neither piece is clever on
+its own; the link between them is where the value shows up. And a link is
+something the agent can make from one sentence.</p>
+<p>Everything the app learns lives in its own long-term memory, which we call
+<strong>Memories</strong> — so it’s all still there next week, and on your other devices
+too.</p>
+<h2 id="make-something-just-for-you">Make something just for you</h2>
+<p>Not everything worth building is practical. One of our favourite MyApps is a
+bedtime-story studio for a small child: a cast of characters the child
+invented, each with a name and a portrait and a temper; a shelf of finished
+stories; and an agent that writes tonight’s episode with that cast, at the
+right length for that bedtime. Every new story goes on the shelf. Every new
+character joins the cast.</p>
+<p>Nobody sells an app like that. It’s too particular — one child, one cast, one
+family’s in-jokes. Which is exactly the point. When an app takes an afternoon
+of chatting to make, rather than a team of engineers, it becomes worth
+building things with an audience of one. We think this space is wide open,
+and it’s where MyApps feel most like themselves.</p>
+<h2 id="it-scales-when-you-need-it-to">It scales when you need it to</h2>
+<p>The same shape carries real work too. Take a job search. The messy parts —
+reading company pages, tailoring a CV, drafting cover letters — happen in
+conversation, on your own computer, with your own files and logins. The parts
+worth keeping tidy live in the MyApp: a tracker of where you’ve applied, a
+calendar of interviews, your experience and the questions you like to ask.</p>
+<p><img alt="The Job Search MyApp home — linked parts for skills, an experience library, questions to ask, company research and an interview scheduler, with a prep chat room." loading="lazy" decoding="async" width="520" height="1125" src="/_astro/job-search-app.wpb1pqa1_2rQ6mV.webp" srcset=""></p>
+<p>Notice what the app holds and what it doesn’t. Your record and your method
+stay in the app. Your logins, your private files and your web access belong
+to whatever computer it runs on, granted fresh each time. Your keys stay
+home.</p>
+<h2 id="hand-it-to-a-friend">Hand it to a friend</h2>
+<p>A MyApp travels as a single file, a <strong><code>.pupa</code></strong>. There’s no code inside —
+just a description of the app and the memories you chose to include. When a
+friend opens it, their own Pupa rebuilds the app from that description and
+shows them exactly what’s inside before anything runs.</p>
+<p>So sharing your medication tracker, your story studio, or your whole
+job-search method is one tap on the share sheet. What your friend receives is
+the shape of what you built and the habits baked into it. Never your data,
+never your logins.</p>
+<p><video src="/videos/export.mp4" controls playsinline preload="metadata" title="Sharing a MyApp — export it as a single .pupa file"></video></p>
+<p>The parts apps are made of are an open set, too. If the built-ins don’t cover
+your idea, new kinds can be added and shared the same way. How that works,
+and how it stays safe, has its own post:
+<a href="/blog/custom-components-and-portability">Build your own component</a>.</p>
+<h2 id="why-this-matters-more-now">Why this matters more now</h2>
+<p>Agents are starting to do real work while you’re not watching: checking
+things overnight, keeping records current, sending the reminder before you
+knew you needed it. The more they do alone, the more it matters what’s
+steering them.</p>
+<p>With a MyApp, that steering isn’t scattered across prompts and config files.
+It’s one thing you can open, read, carry to another machine, and hand to
+someone you trust. An app you can see is an app you can trust with more.</p>
+<h2 id="where-this-goes">Where this goes</h2>
+<p>There’s an early <a href="/marketplace">marketplace</a> where MyApps people have made
+can be browsed and opened in your own Pupa. The agents will keep talking
+either way. Pupa is for the moment a conversation turns into something you
+want to keep.</p>
+<p>If you’d rather see the machinery — what the agent actually reads and
+writes — there’s a technical companion:
+<a href="/blog/from-machine-to-myapp">From Claude on your machine to Claude in your app</a>.</p>
 </div></article></main><footer class="site-footer"><div class="container bar"><div class="foot-links"><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/support">Support</a><a href="https://github.com/pupa-app">GitHub</a></div><div>© 2026 Pupa</div></div></footer></body></html>
