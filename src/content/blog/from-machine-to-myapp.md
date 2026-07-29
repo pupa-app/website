@@ -18,9 +18,9 @@ Everything below is a walk through one diagram, top to bottom. Each panel is
 a different answer to the same question: *where does the agent meet its
 user, and what flows across that boundary?*
 
-![Three stages of information flow. Top: Claude with tools, MCP and skills running directly on a laptop, reading and modifying OS apps and the filesystem. Middle: the same agent moved behind a generic backend, reporting OS and chat data one way to a chat-focused phone app. Bottom: Pupa — the agent runs behind your own pupa-backend and reads and modifies a structured MyApp of components and Memories, both ways.](./information-flow.png)
-
 ## Stage 1 — an agent on your machine
+
+![Stage 1: Claude with tools, MCP and skills running directly on a laptop, reading and modifying OS apps and the filesystem.](./information-flow-1.png)
 
 The top panel is the setup most developers live in today: Claude on the
 laptop, armed with tools, MCP servers and skills, reading and modifying OS
@@ -34,6 +34,8 @@ tangled with your credentials and paths, and was never designed to be handed
 to anyone. When the laptop goes, the experience goes with it.
 
 ## Stage 2 — a chat app in front of a backend
+
+![Stage 2: the same agent moved behind a generic backend, reporting OS and chat data one way to a chat-focused phone app.](./information-flow-2.png)
 
 The middle panel is where most agent products stop. The agent moves behind a
 backend; a phone app goes in front. The app renders chats, clusters them
@@ -50,6 +52,8 @@ You gained reach — the agent is on your phone now — and lost the thing that
 made stage 1 interesting: a shared surface both sides can work on.
 
 ## Stage 3 — an app the agent operates
+
+![Stage 3: Pupa — the agent runs behind your own pupa-backend and reads and modifies a structured MyApp of components and Memories, both ways.](./information-flow-3.png)
 
 The bottom panel is Pupa. The laptop half is unchanged: Claude still runs
 with its tools against the OS, now behind your own pupa-backend. What's new

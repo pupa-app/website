@@ -474,7 +474,7 @@ main {
     align-items: center;
   }
   .cta-row > * { width: min(320px, 100%); }
-  .cta-row .btn { width: 100%; }
+  .cta-row .appstore .btn { width: 100%; }
 }
 
 /* ---- Hero carousel ---- */
