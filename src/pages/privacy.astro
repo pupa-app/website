@@ -6,7 +6,7 @@ const GITHUB_ORG = 'https://github.com/pupa-app';
   <section class="section container">
     <div class="page-head" style="padding-block:0 1rem">
       <h1>Privacy Policy</h1>
-      <p class="effective">Effective date: July 10, 2026</p>
+      <p class="effective">Effective date: July 31, 2026</p>
     </div>
 
     <div class="prose">
@@ -42,10 +42,19 @@ const GITHUB_ORG = 'https://github.com/pupa-app';
           your device, in the app's own storage.
         </li>
         <li>
+          <strong>In your own iCloud.</strong> If iCloud is enabled on your device,
+          your MyApps and Memories mirror through <strong>your</strong> iCloud
+          account so your devices stay in sync. That uses Apple's iCloud Drive,
+          governed by your iCloud settings and Apple's privacy policy — it does
+          not pass through us, and you can turn it off in system settings.
+        </li>
+        <li>
           <strong>On your own backend.</strong> When you pair the app to a backend,
           that backend is one you run — locally or in a cloud account you control.
           Conversation state and any persistence it keeps live there, under your
-          control, not ours.
+          control, not ours. Pairing sends your device's name (the one your device
+          already advertises, e.g. "Sam's iPhone") to that backend, so you can tell
+          your paired devices apart in settings.
         </li>
       </ul>
 
@@ -60,14 +69,36 @@ const GITHUB_ORG = 'https://github.com/pupa-app';
         your backend's environment, never in the app or with us.
       </p>
 
-      <h2>Marketplace downloads</h2>
+      <h2>MyApp bundles</h2>
       <p>
-        When you browse or install a MyApp bundle (a <code>.pupa</code> file) from
-        a marketplace, the bundle is fetched over HTTPS from a public host — the
-        official marketplace is served from GitHub. Fetching a public file is a
-        standard web request to that host; we do not track which bundles you view
-        or install. Bundles are inert JSON and are validated as untrusted input on
-        import.
+        A MyApp bundle is a <code>.pupa</code> file. Today you install one from a
+        file you already have — received over AirDrop, Messages, or picked from
+        Files — which involves no network request and tells us nothing. Where a
+        bundle is downloaded from a public catalog, it is fetched over HTTPS from
+        that host (the official marketplace is served from GitHub); that is an
+        ordinary web request to that host, and we do not track which bundles you
+        view or install. Bundles are inert JSON, validated as untrusted input on
+        import, and shown to you for confirmation before anything is added.
+      </p>
+
+      <h2>Images on cards</h2>
+      <p>
+        A tracker card can show an image from a web address you or the agent put
+        in an image field. The app loads that image straight from whichever host
+        the address points at, exactly like opening the link in a browser — so
+        that host sees the request. Only addresses present in your own data are
+        ever fetched.
+      </p>
+
+      <h2>Live screen share</h2>
+      <p>
+        Screen share is off unless you enable it on your backend and run the
+        capture helper. When you start a session, the connection is negotiated
+        peer-to-peer, which needs a public <abbr title="Session Traversal Utilities for NAT">STUN</abbr>{' '}
+        server to discover how your network is reachable — Pupa uses Google's
+        public one (<code>stun.l.google.com</code>). It receives connection
+        candidates such as your IP addresses; it never sees your screen or any
+        other content. If you never turn screen share on, it is never contacted.
       </p>
 
       <h2>Children's privacy</h2>
