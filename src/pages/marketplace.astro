@@ -133,10 +133,16 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
           }
         });
         actions.append(open);
-        if (e.homepage && /^https:\/\//.test(e.homepage)) {
+        // Details → the app's directory in the marketplace repo, where GitHub
+        // renders its README. Derived from the id rather than the catalog's
+        // `homepage`, which the spec defines as an optional *author* URL — every
+        // entry currently sets it to the Pupa source repo, which says nothing
+        // about the app. Guarded by the spec's slug pattern so a malformed
+        // entry drops the button instead of linking somewhere unintended.
+        if (/^[a-z0-9][a-z0-9-]{1,63}$/.test(e.id)) {
           const details = document.createElement('a');
           details.className = 'btn';
-          details.href = e.homepage;
+          details.href = `${REPO}/tree/main/apps/${e.id}`;
           details.textContent = 'Details';
           actions.append(details);
         }
