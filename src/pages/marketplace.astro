@@ -23,13 +23,17 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
       <div class="mkt__how-body">
         <p>
           A <code>.pupa</code> bundle is inert, portable data — no code runs on
-          import. Tapping <strong>Open in Pupa</strong> downloads the bundle;
-          your device then offers to open it in Pupa, which shows a confirm
-          preview so you can <strong>review the app’s agent prompts before
+          import. However it reaches Pupa, the app shows a confirm preview so
+          you can <strong>review the app’s agent prompts before
           installing</strong>.
         </p>
         <ul class="mkt__how-steps">
-          <li><strong>iOS:</strong> tap → “Open in Pupa” from the download.</li>
+          <li>
+            <strong>iPhone &amp; iPad:</strong> tap → Pupa opens and fetches the
+            app, then shows the confirm preview. Nothing is saved to your device
+            first. Don’t have Pupa yet? Use the download button beside it to save
+            the <code>.pupa</code> file for later.
+          </li>
           <li><strong>macOS:</strong> the file downloads — open it to launch Pupa.</li>
         </ul>
         <p class="mkt__how-note">
@@ -54,7 +58,8 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
     interface Entry {
       id: string; name: string; author: string; summary: string;
       tags: string[]; appVersion: string; path: string; sizeBytes: number;
-      homepage?: string; includedMemories: boolean; includedRecords: boolean;
+      sha256: string; homepage?: string;
+      includedMemories: boolean; includedRecords: boolean;
     }
     interface Index { entries: Entry[] }
 
@@ -67,6 +72,50 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
       const monogram = (n: string) => n.trim()[0]?.toUpperCase() ?? '?';
       const DOWNLOAD_ICON =
         '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+
+      // iPhone/iPad get a `pupa-install://` link instead of a download: Safari
+      // can't hand a .pupa to Pupa directly, so the file would land in Downloads
+      // and need a manual "Open in". The link names the bundle and Pupa fetches
+      // it. The maxTouchPoints clause is required — iPadOS defaults to "Request
+      // Desktop Site" and reports itself as a Mac.
+      const isApplePortable = /iPad|iPhone|iPod/.test(navigator.userAgent)
+        || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      // Pupa verifies these bytes against the digest, so a link without a
+      // well-formed one would only fail on the device — fall back to the
+      // download instead.
+      const installable = (e: Entry) =>
+        isApplePortable && /^[0-9a-f]{64}$/i.test(e.sha256 ?? '');
+      const installLink = (e: Entry) =>
+        `pupa-install://import?url=${encodeURIComponent(BASE + e.path)}`
+        + `&sha256=${encodeURIComponent(e.sha256)}`;
+
+      // The bundle lives on another origin (raw.githubusercontent), where the
+      // `download` attribute is ignored and the .pupa is served as text/plain
+      // — so a plain link just renders the JSON. Fetch the bytes and download
+      // via a same-origin Blob URL, which forces a real ".pupa" file the OS
+      // can hand to Pupa.
+      const downloadBundle = async (e: Entry, btn: HTMLElement) => {
+        if (btn.classList.contains('is-busy')) return;
+        btn.classList.add('is-busy');
+        try {
+          const res = await fetch(BASE + e.path, { cache: 'no-cache' });
+          if (!res.ok) throw new Error(String(res.status));
+          const blob = new Blob([await res.arrayBuffer()], { type: 'application/octet-stream' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${e.id}.pupa`;
+          document.body.append(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 4000);
+        } catch (err) {
+          console.warn(`[marketplace] download failed for ${e.id}: ${err}`);
+          window.location.href = BASE + e.path; // last resort
+        } finally {
+          btn.classList.remove('is-busy');
+        }
+      };
 
       // Build a card with DOM APIs — all catalog text goes through textContent,
       // so nothing from the manifest is ever interpreted as HTML.
@@ -100,38 +149,21 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
         const actions = el('div', 'app-card__actions');
         const open = document.createElement('a');
         open.className = 'btn btn-primary';
-        open.href = BASE + e.path; // real link: middle-click / no-JS fallback
-        open.setAttribute('download', `${e.id}.pupa`);
-        open.innerHTML = DOWNLOAD_ICON;
-        open.append(' Open in Pupa');
-        // The bundle lives on another origin (raw.githubusercontent), where the
-        // `download` attribute is ignored and the .pupa is served as text/plain
-        // — so a plain link just renders the JSON. Fetch the bytes and download
-        // via a same-origin Blob URL, which forces a real ".pupa" file the OS
-        // can hand to Pupa.
-        open.addEventListener('click', async (ev) => {
-          ev.preventDefault();
-          if (open.classList.contains('is-busy')) return;
-          open.classList.add('is-busy');
-          try {
-            const res = await fetch(BASE + e.path, { cache: 'no-cache' });
-            if (!res.ok) throw new Error(String(res.status));
-            const blob = new Blob([await res.arrayBuffer()], { type: 'application/octet-stream' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${e.id}.pupa`;
-            document.body.append(a);
-            a.click();
-            a.remove();
-            setTimeout(() => URL.revokeObjectURL(url), 4000);
-          } catch (err) {
-            console.warn(`[marketplace] download failed for ${e.id}: ${err}`);
-            window.location.href = BASE + e.path; // last resort
-          } finally {
-            open.classList.remove('is-busy');
-          }
-        });
+        if (installable(e)) {
+          // A plain href following a real tap is what launches the scheme —
+          // preventDefault, or a synthetic click, does not.
+          open.href = installLink(e);
+          open.append('Open in Pupa');
+        } else {
+          open.href = BASE + e.path; // real link: middle-click / no-JS fallback
+          open.setAttribute('download', `${e.id}.pupa`);
+          open.innerHTML = DOWNLOAD_ICON;
+          open.append(' Open in Pupa');
+          open.addEventListener('click', (ev) => {
+            ev.preventDefault();
+            downloadBundle(e, open);
+          });
+        }
         actions.append(open);
         // Details → the app's directory in the marketplace repo, where GitHub
         // renders its README. Derived from the id rather than the catalog's
@@ -145,6 +177,23 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
           details.href = `${REPO}/tree/main/apps/${e.id}`;
           details.textContent = 'Details';
           actions.append(details);
+        }
+        // Kept alongside the install link for anyone who doesn't have Pupa yet:
+        // tapping the primary button on a device without the app does nothing
+        // useful. Appended last so the existing `.btn:last-child` rule keeps it
+        // compact next to the full-width primary.
+        if (installable(e)) {
+          const save = document.createElement('a');
+          save.className = 'btn';
+          save.href = BASE + e.path;
+          save.setAttribute('download', `${e.id}.pupa`);
+          save.setAttribute('aria-label', `Download the ${e.name} .pupa file`);
+          save.innerHTML = DOWNLOAD_ICON;
+          save.addEventListener('click', (ev) => {
+            ev.preventDefault();
+            downloadBundle(e, save);
+          });
+          actions.append(save);
         }
         li.append(actions);
         return li;
