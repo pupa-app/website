@@ -2,11 +2,11 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 const GITHUB_ORG = 'https://github.com/pupa-app';
 ---
-<BaseLayout title="Terms of Use" description="Terms of use for Pupa — MIT-licensed software, provided as-is, with you responsible for your own backend and API keys.">
+<BaseLayout title="Terms of Use" description="Terms of use for Pupa — open-source software, provided as-is, with you responsible for your own backend and API keys.">
   <section class="section container">
     <div class="page-head" style="padding-block:0 1rem">
       <h1>Terms of Use</h1>
-      <p class="effective">Effective date: July 10, 2026</p>
+      <p class="effective">Effective date: August 16, 2026</p>
     </div>
 
     <div class="prose">
@@ -18,13 +18,30 @@ const GITHUB_ORG = 'https://github.com/pupa-app';
       <h2>The software</h2>
       <p>
         Pupa is developed in the open, with source published across the{' '}
-        <a href={GITHUB_ORG}>pupa-app</a> organization. <strong>Licensing is being
-        finalized.</strong> The backend is intended to be released under the MIT
-        License; the app will carry its own license, to be announced. Until a{' '}
-        <code>LICENSE</code> file is published in a given repository, no
-        open-source license is granted for that code and all rights are reserved
-        by the authors. The marketplace repository states its own terms (tooling
-        MIT; contributed app content CC0).
+        <a href={GITHUB_ORG}>pupa-app</a> organization. Each repository carries
+        its own <code>LICENSE</code> file, which is the authoritative statement
+        of your rights in that code:
+      </p>
+      <ul>
+        <li>
+          <strong>The iOS / macOS app</strong> (<a href={`${GITHUB_ORG}/pupa`}>pupa</a>)
+          — Mozilla Public License 2.0, except the bundled{' '}
+          <code>AGUIKit</code> Swift package, which is MIT.
+        </li>
+        <li>
+          <strong>The backend</strong> (<a href={`${GITHUB_ORG}/pupa-backend`}>pupa-backend</a>)
+          — MIT License.
+        </li>
+        <li>
+          <strong>The marketplace</strong> (<a href={`${GITHUB_ORG}/marketplace`}>marketplace</a>)
+          — tooling, scripts, and docs MIT; contributed app content CC0.
+        </li>
+      </ul>
+      <p>
+        This website's own content and code are © 2026 Pupa and are not
+        covered by those licenses. Where a repository publishes no{' '}
+        <code>LICENSE</code> file, no open-source license is granted for that
+        code and all rights are reserved by the authors.
       </p>
 
       <h2>Provided "as is"</h2>

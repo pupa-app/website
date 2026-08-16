@@ -69,6 +69,15 @@ website/
 
 ## License
 
-Site content and code © 2026 Pupa. The Pupa projects themselves are MIT-licensed;
-marketplace app content is CC0. See the
-[pupa-app organization](https://github.com/pupa-app) for details.
+Site content and code © 2026 Pupa — this repo is not open-source licensed.
+
+The Pupa projects each carry their own license:
+
+| Repo | License |
+|---|---|
+| [pupa](https://github.com/pupa-app/pupa) (iOS / macOS app) | MPL-2.0, except `AGUIKit/` which is MIT |
+| [pupa-backend](https://github.com/pupa-app/pupa-backend) | MIT |
+| [marketplace](https://github.com/pupa-app/marketplace) | MIT tooling; app content CC0 |
+
+Keep [`src/pages/terms.astro`](src/pages/terms.astro) in sync with this table —
+it is the user-facing statement of the same thing.
