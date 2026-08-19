@@ -495,8 +495,7 @@ main {
 }
 .showcase__row.is-visible { opacity: 1; transform: none; }
 /* Every second row swaps the columns so the phone alternates left/right.
-   Source order stays copy-then-video so the stacked mobile layout can put the
-   video first with a single grid-row override. */
+   Source order is copy-then-video, which is also the stacked mobile order. */
 .showcase__row--flip .showcase__copy { grid-column: 2; }
 .showcase__row--flip .showcase__media { grid-column: 1; grid-row: 1; }
 .showcase__title {
@@ -576,11 +575,12 @@ main {
     grid-template-columns: minmax(0, 1fr);
     text-align: center;
   }
-  .showcase__row--flip .showcase__copy,
-  .showcase__row--flip .showcase__media { grid-column: 1; }
-  /* Video first, copy under it, on every row. */
-  .showcase__media { grid-row: 1; }
-  .showcase__copy { grid-row: 2; }
+  /* One column, and copy above the video on every row — including the
+     flipped ones, whose desktop grid-row/column placement is undone here. */
+  .showcase__row .showcase__copy,
+  .showcase__row--flip .showcase__copy { grid-column: 1; grid-row: 1; }
+  .showcase__row .showcase__media,
+  .showcase__row--flip .showcase__media { grid-column: 1; grid-row: 2; }
   .showcase__body { margin-inline: auto; }
 }
 @media (prefers-reduced-motion: reduce) {
