@@ -1,24 +1,45 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EvolutionSlider from '../components/EvolutionSlider.astro';
+import FeatureShowcase from '../components/FeatureShowcase.astro';
 import { href } from '../lib/href';
 
-// Hero carousel — a mix of stills and portrait phone clips, told as a story:
-// have apps → explore/shape → structure → agents → share. All media share the
-// ~9:19.5 phone aspect so the frame never shifts.
-const heroSlides = [
-  { type: 'video', src: '/videos/homepage-hero.mp4',
-    caption: 'Your MyApps, all in one place',
-    alt: 'A collection of MyApps in Pupa — build and use personal, AI-agent-native apps for any topic.' },
-  { type: 'video', src: '/videos/myapp-schedule.mp4',
-    caption: 'Build an app for anything',
-    alt: 'Scheduling a MyApp in Pupa to run on its own — this example creates a schedule.' },
-  { type: 'video', src: '/videos/myfire-promo.mp4',
-    caption: 'Use creative apps that shape around you',
-    alt: 'Building a MyApp in Pupa — this example tracks financial-independence progress.' },
-  { type: 'video', src: '/videos/automations-explainer.mp4',
-    caption: 'Automate a whole pipeline, hands-off',
-    alt: 'An automations MyApp in Pupa taking a video from idea to published — stage automations drive script, footage, voiceover, assembly and publishing.' },
+// Capability showcase — the same four phone clips the hero carousel used to
+// cycle, now told as alternating scroll-down sections (video one side, summary
+// the other). All clips share the ~9:19.5 phone aspect.
+const showcase = [
+  {
+    src: '/videos/homepage-hero.mp4',
+    eyebrow: 'Your apps',
+    title: 'All your MyApps, in one place',
+    body: 'Every agentic experience you build becomes a real app with its own home screen — personal, AI-agent-native apps for any topic, ready the moment you open Pupa.',
+    alt: 'A collection of MyApps in Pupa — build and use personal, AI-agent-native apps for any topic.',
+    link: { label: 'See how apps are built', href: `${href('/tutorials')}#build` },
+  },
+  {
+    src: '/videos/myapp-schedule.mp4',
+    eyebrow: 'Build',
+    title: 'Build an app for anything',
+    body: 'Describe what you want and your agent shapes the app around it — screens, data, and behaviour. Here it gives the app a schedule so it runs on its own.',
+    alt: 'Scheduling a MyApp in Pupa to run on its own — this example creates a schedule.',
+    link: { label: 'Build your first app', href: `${href('/tutorials')}#build` },
+  },
+  {
+    src: '/videos/myfire-promo.mp4',
+    eyebrow: 'Use',
+    title: 'Apps that shape around you',
+    body: 'A MyApp keeps its structure between sessions, so the work compounds instead of scrolling away. This one tracks financial-independence progress.',
+    alt: 'Building a MyApp in Pupa — this example tracks financial-independence progress.',
+    link: { label: 'Use your apps everywhere', href: `${href('/tutorials')}#use` },
+  },
+  {
+    src: '/videos/automations-explainer.mp4',
+    eyebrow: 'Automate',
+    title: 'Automate a whole pipeline, hands-off',
+    body: 'Chain stage automations and the app runs the pipeline end to end — this one takes a video from idea to published: script, footage, voiceover, assembly, publishing.',
+    alt: 'An automations MyApp in Pupa taking a video from idea to published — stage automations drive script, footage, voiceover, assembly and publishing.',
+    link: { label: 'Browse the marketplace', href: href('/marketplace') },
+  },
 ];
 
 // Hero bullet points + their lucide-style icons (stroke, currentColor).
@@ -118,38 +139,10 @@ const tags = [
         Browse the marketplace
       </a>
     </div>
-    <div class="hero-carousel" data-carousel aria-roledescription="carousel" aria-label="Pupa running on iPhone">
-      <button type="button" class="carousel__arrow carousel__arrow--prev" data-carousel-prev aria-label="Previous">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-      </button>
-      <ul class="carousel__track" data-carousel-track>
-        {heroSlides.map((s, i) => (
-          <li class="carousel__slide" data-carousel-slide role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${heroSlides.length}`}>
-            <figure class="carousel__figure">
-              {s.type === 'image' ? (
-                <img class="carousel__media" src={href(s.src)} width={s.w} height={s.h} alt={s.alt} loading={i === 0 ? 'eager' : 'lazy'} />
-              ) : (
-                <video class="carousel__media" src={href(s.src)} muted loop playsinline preload="metadata" aria-label={s.alt} title={s.alt}></video>
-              )}
-              <figcaption>{s.caption}</figcaption>
-            </figure>
-          </li>
-        ))}
-      </ul>
-      <button type="button" class="carousel__arrow carousel__arrow--next" data-carousel-next aria-label="Next">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-      </button>
-      <button type="button" class="carousel__sound" data-carousel-sound aria-label="Unmute" aria-pressed="false" hidden>
-        <svg class="ico ico--muted" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-        <svg class="ico ico--on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>
-      </button>
-      <div class="carousel__dots" data-carousel-dots role="tablist" aria-label="Choose slide">
-        {heroSlides.map((s, i) => (
-          <button type="button" class="carousel__dot" data-carousel-dot role="tab" aria-label={s.caption} aria-selected={i === 0 ? 'true' : 'false'}></button>
-        ))}
-      </div>
-    </div>
   </section>
+
+  <!-- Capability showcase -->
+  <FeatureShowcase items={showcase} />
 
   <!-- Why Pupa -->
   <section class="section container">
@@ -191,147 +184,4 @@ const tags = [
     </div>
   </section>
 
-  <script>
-    // Hero carousel — manual-first (arrows / dots / swipe / mouse-drag) with a
-    // gentle autoplay that pauses on any interaction and honours reduced-motion.
-    const root = document.querySelector<HTMLElement>('[data-carousel]');
-    if (root) {
-      const track = root.querySelector<HTMLElement>('[data-carousel-track]')!;
-      const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-carousel-slide]'));
-      const dots = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-carousel-dot]'));
-      const videos = slides.map((s) => s.querySelector<HTMLVideoElement>('video'));
-      const soundBtn = root.querySelector<HTMLButtonElement>('[data-carousel-sound]');
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const INTERVAL = 5000;
-      let current = 0;
-      let timer = 0;
-      let paused = false;
-      let soundOn = false; // audio only after a user gesture (autoplay policy)
-
-      // Show the unmute button only on slides that have a video; reflect state.
-      const syncSound = () => {
-        if (!soundBtn) return;
-        soundBtn.hidden = !videos[current];
-        soundBtn.setAttribute('aria-pressed', soundOn ? 'true' : 'false');
-        soundBtn.setAttribute('aria-label', soundOn ? 'Mute' : 'Unmute');
-      };
-
-      // Rect-based math so it never depends on offsetParent quirks.
-      const goTo = (i: number, smooth = true) => {
-        const n = slides.length;
-        const idx = ((i % n) + n) % n;
-        const t = track.getBoundingClientRect();
-        const s = slides[idx].getBoundingClientRect();
-        const delta = (s.left + s.width / 2) - (t.left + t.width / 2);
-        track.scrollTo({ left: track.scrollLeft + delta, behavior: smooth && !reduceMotion ? 'smooth' : 'auto' });
-      };
-      const setActive = (i: number) => {
-        if (i === current) return;
-        current = i;
-        dots.forEach((d, di) => d.setAttribute('aria-selected', di === i ? 'true' : 'false'));
-        videos.forEach((v, vi) => {
-          if (!v) return;
-          if (vi === i) { v.muted = !soundOn; v.play().catch(() => {}); }
-          else { v.pause(); v.currentTime = 0; v.muted = true; }
-        });
-        syncSound();
-      };
-
-      // Derive the active slide from scroll position (covers swipe + drag + snap).
-      let raf = 0;
-      track.addEventListener('scroll', () => {
-        if (raf) return;
-        raf = requestAnimationFrame(() => {
-          raf = 0;
-          const t = track.getBoundingClientRect();
-          const center = t.left + t.width / 2;
-          let nearest = 0, min = Infinity;
-          slides.forEach((s, i) => {
-            const r = s.getBoundingClientRect();
-            const d = Math.abs((r.left + r.width / 2) - center);
-            if (d < min) { min = d; nearest = i; }
-          });
-          setActive(nearest);
-        });
-      }, { passive: true });
-
-      // Autoplay — instant wrap from last→first to avoid a long reverse sweep.
-      const stop = () => { if (timer) { clearInterval(timer); timer = 0; } };
-      const start = () => {
-        if (reduceMotion || paused || soundOn || slides.length < 2) return;
-        stop();
-        timer = window.setInterval(() => {
-          if (current === slides.length - 1) goTo(0, false);
-          else goTo(current + 1, true);
-        }, INTERVAL);
-      };
-      const pause = () => { paused = true; stop(); };
-      const resume = () => {
-        paused = false;
-        // Don't fight the user if they're still hovering/focused inside.
-        if (root.matches(':hover') || root.contains(document.activeElement)) return;
-        start();
-      };
-
-      root.addEventListener('mouseenter', pause);
-      root.addEventListener('mouseleave', resume);
-      root.addEventListener('focusin', pause);
-      root.addEventListener('focusout', resume);
-      document.addEventListener('visibilitychange', () => {
-        if (document.hidden) stop();
-        else if (!paused) start();
-      });
-
-      // Arrows + dots.
-      root.querySelector('[data-carousel-prev]')?.addEventListener('click', () => goTo(current - 1));
-      root.querySelector('[data-carousel-next]')?.addEventListener('click', () => goTo(current + 1));
-      dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
-
-      // Sound: gesture-gated. On → unmute active clip + stop autoplay; off → mute + resume.
-      soundBtn?.addEventListener('click', () => {
-        soundOn = !soundOn;
-        const v = videos[current];
-        if (soundOn) {
-          stop();
-          if (v) { v.muted = false; v.play().catch(() => {}); }
-        } else {
-          if (v) v.muted = true;
-          start();
-        }
-        syncSound();
-      });
-
-      // Mouse drag-to-scroll (touch/trackpad already scroll natively).
-      let down = false, startX = 0, startLeft = 0, moved = false;
-      track.addEventListener('pointerdown', (e) => {
-        if (e.pointerType !== 'mouse' || e.button !== 0) return;
-        down = true; moved = false; startX = e.clientX; startLeft = track.scrollLeft;
-        root.classList.add('is-dragging');
-        pause();
-      });
-      window.addEventListener('pointermove', (e) => {
-        if (!down) return;
-        const dx = e.clientX - startX;
-        if (Math.abs(dx) > 4) moved = true;
-        track.scrollLeft = startLeft - dx;
-      });
-      window.addEventListener('pointerup', () => {
-        if (!down) return;
-        down = false;
-        root.classList.remove('is-dragging');
-        goTo(current, true); // snap to nearest
-        resume();
-      });
-      // Swallow the click that ends a drag so it doesn't count as a tap.
-      track.addEventListener('click', (e) => {
-        if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
-      }, true);
-
-      // Kick off the first slide's video (setActive only fires on change).
-      const first = videos[current];
-      if (first) { first.muted = !soundOn; first.play().catch(() => {}); }
-      syncSound();
-      start();
-    }
-  </script>
 </BaseLayout>
