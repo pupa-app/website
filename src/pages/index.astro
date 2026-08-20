@@ -14,7 +14,7 @@ const showcase = [
     title: 'All your MyApps, in one place',
     body: 'Pupa contains all you agentic experience as real AI-native apps, each called MyApp. Any topic, interest, curiosity, workflow or creative burst can be turned into a MyApp.',
     alt: 'A collection of MyApps in Pupa — build and use personal, AI-agent-native apps for any topic.',
-    link: { label: 'See how apps are built', href: `${href('/tutorials')}#build` },
+    link: { label: 'See what is a MyApp', href: `${href('/tutorials')}#myapp` },
   },
   {
     src: '/videos/myapp-schedule.mp4',
@@ -53,7 +53,7 @@ const pointIcons = {
 // homepage no longer duplicates those demos in a section of its own).
 const heroPoints = [
   { icon: 'build', verb: 'Build', href: `${href('/tutorials')}#build`, body: 'apps for anything, from simple daily helpers, to complex automations' },
-  { icon: 'use', verb: 'Use', href: `${href('/tutorials')}#use`, body: 'your apps everywhere, powered by your agent' },
+  { icon: 'use', verb: 'Use', href: `${href('/tutorials')}#use`, body: 'your apps on you Apple devices, powered by your laptop agent' },
   { icon: 'share', verb: 'Share', href: `${href('/tutorials')}#share`, body: 'apps with anyone and enjoy others apps' },
   { icon: 'contribute', verb: 'Contribute', href: `${href('/tutorials')}#contribute`, body: ' your ideas to the Pupa Opensource project' },
 ];
@@ -144,7 +144,7 @@ const tags = [
   <!-- Capability showcase -->
   <FeatureShowcase items={showcase} />
 
-  <!-- Why Pupa -->
+  {/* Why Pupa — hidden
   <section class="section container">
     <div class="why">
       <p class="section-eyebrow">Why Pupa</p>
@@ -183,5 +183,6 @@ const tags = [
       </details>
     </div>
   </section>
+  */}
 
 </BaseLayout>
