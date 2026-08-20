@@ -25,7 +25,7 @@
   --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono",
     Menlo, Consolas, monospace;
 
-  --maxw: 960px;
+  --maxw: 1360px;
   --radius: 14px;
   --radius-sm: 9px;
 }
@@ -460,6 +460,16 @@ main {
   color: var(--accent);
 }
 .hero .hero-points strong { color: var(--text); }
+
+/* Hero content self-caps its measure (typography-driven) regardless of
+   container width, so it reads lost on very wide monitors. Scale the caps
+   up past 1200px only — mobile/tablet sizing above is untouched. */
+@media (min-width: 1200px) {
+  .hero-wordmark img { width: min(460px, 34%); }
+  .hero .hero-tags { max-width: 50rem; }
+  .hero .lead { font-size: clamp(1.3rem, 1.6vw, 1.7rem); max-width: 52ch; }
+  .hero .hero-points { max-width: 58ch; }
+}
 .cta-row {
   display: flex;
   gap: 0.85rem;
@@ -477,43 +487,63 @@ main {
   .cta-row .appstore .btn { width: 100%; }
 }
 
-/* ---- Hero carousel ---- */
-.hero-carousel {
-  --slide-w: min(320px, 80vw);
-  /* Reserved margin on each side for the arrows, outside the phone frame. */
-  --arrow-space: clamp(2.6rem, 9vw, 3.6rem);
-  position: relative;
-  margin: clamp(2.6rem, 6vw, 4rem) auto 0;
-  max-width: min(calc(var(--slide-w) + 2 * var(--arrow-space)), 100%);
-}
-.carousel__track {
-  list-style: none;
-  margin: 0 auto;
-  padding: 0;
-  display: flex;
-  gap: clamp(1rem, 4vw, 2rem);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  /* Clip the track to exactly one slide's width so neighbouring slides sit
-     fully offscreen instead of peeking in at the edges. */
-  max-width: var(--slide-w);
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  overscroll-behavior-x: contain;
-}
-.carousel__track::-webkit-scrollbar { display: none; }
-.carousel__slide {
-  flex: 0 0 var(--slide-w);
-  scroll-snap-align: center;
-}
-.carousel__figure {
-  margin: 0;
+/* ---- Capability showcase (alternating video / copy rows) ---- */
+.showcase {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: clamp(3.5rem, 9vw, 6rem);
+  padding-block: clamp(3rem, 8vw, 5rem);
 }
-.carousel__media {
+.showcase__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1.75rem, 6vw, 4rem);
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.showcase__row.is-visible { opacity: 1; transform: none; }
+/* Every second row swaps the columns so the phone alternates left/right.
+   Source order is copy-then-video, which is also the stacked mobile order. */
+.showcase__row--flip .showcase__copy { grid-column: 2; }
+.showcase__row--flip .showcase__media { grid-column: 1; grid-row: 1; }
+.showcase__title {
+  margin: 0.35rem 0 0.75rem;
+  font-size: clamp(1.45rem, 3.4vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+.showcase__body {
+  margin: 0;
+  color: var(--text-dim);
+  max-width: 46ch;
+  line-height: 1.6;
+}
+.showcase__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1.1rem;
+  font-weight: 600;
+  font-size: 0.94rem;
+  color: var(--accent);
+}
+.showcase__link:hover { text-decoration: none; }
+.showcase__link svg { transition: transform 0.15s ease; }
+.showcase__link:hover svg { transform: translateX(3px); }
+.showcase__media {
+  position: relative;
+  justify-self: center;
+  width: min(300px, 78vw);
+}
+/* Percentage here resolves against the grid column, not the viewport, so the
+   phone mockup grows with its column on wide screens instead of vw-scaling
+   against the full monitor width (which blew it up on ultrawide). */
+@media (min-width: 1200px) {
+  .showcase__media { width: min(420px, 60%); }
+}
+.showcase__video {
   display: block;
   width: 100%;
   height: auto;
@@ -525,45 +555,12 @@ main {
   box-shadow: 0 20px 44px -20px rgba(0, 0, 0, 0.4),
               0 4px 12px -6px rgba(0, 0, 0, 0.28);
 }
-.carousel__figure figcaption {
-  margin-top: 0.85rem;
-  font-size: 0.86rem;
-  line-height: 1.3;
-  color: var(--text-dim);
-  text-align: center;
-  max-width: 22ch;
-  min-height: 2.4em; /* reserve space so dots don't jump between 1- and 2-line captions */
-}
-/* Arrows */
-.carousel__arrow {
+/* Sound toggle — top-right over the phone frame */
+.showcase__sound {
   position: absolute;
-  top: calc((100% - 2.8rem) / 2); /* vertically center on the phone frame, above the caption row */
-  transform: translateY(-50%);
+  top: 0.7rem;
+  right: 0.7rem;
   z-index: 2;
-  display: grid;
-  place-items: center;
-  width: 2.6rem;
-  height: 2.6rem;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: color-mix(in srgb, var(--bg-elev) 88%, transparent);
-  backdrop-filter: blur(6px);
-  color: var(--text);
-  cursor: pointer;
-  box-shadow: 0 6px 18px -8px rgba(0, 0, 0, 0.35);
-  transition: background 0.15s ease, opacity 0.15s ease, transform 0.15s ease;
-}
-.carousel__arrow:hover { background: var(--bg-elev); }
-.carousel__arrow:active { transform: translateY(-50%) scale(0.94); }
-.carousel__arrow--prev { left: 0; }
-.carousel__arrow--next { right: 0; }
-.carousel__arrow[disabled] { opacity: 0.35; cursor: default; pointer-events: none; }
-/* Sound toggle — sits top-right over the active phone frame */
-.carousel__sound {
-  position: absolute;
-  top: 0.9rem;
-  right: calc(var(--arrow-space, 2.6rem) + 0.55rem);
-  z-index: 3;
   display: grid;
   place-items: center;
   width: 2.2rem;
@@ -577,53 +574,33 @@ main {
   box-shadow: 0 6px 18px -8px rgba(0, 0, 0, 0.35);
   transition: background 0.15s ease, transform 0.15s ease;
 }
-.carousel__sound[hidden] { display: none; }
-.carousel__sound:hover { background: var(--bg-elev); }
-.carousel__sound:active { transform: scale(0.94); }
-.carousel__sound .ico--on { display: none; }
-.carousel__sound[aria-pressed="true"] .ico--muted { display: none; }
-.carousel__sound[aria-pressed="true"] .ico--on { display: block; }
-.carousel__sound[aria-pressed="true"] { color: var(--accent, #e8b400); }
-/* Dots */
-.carousel__dots {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 1.1rem;
-}
-.carousel__dot {
-  width: 8px;
-  height: 8px;
-  padding: 0;
-  border: none;
-  border-radius: 999px;
-  background: var(--border);
-  cursor: pointer;
-  transition: background 0.15s ease, transform 0.15s ease;
-}
-.carousel__dot:hover { background: var(--text-faint); }
-.carousel__dot[aria-selected="true"] {
-  background: var(--accent);
-  transform: scale(1.3);
-}
-/* Keyboard focus visibility */
-.carousel__arrow:focus-visible,
-.carousel__dot:focus-visible {
+.showcase__sound:hover { background: var(--bg-elev); }
+.showcase__sound:active { transform: scale(0.94); }
+.showcase__sound .ico--on { display: none; }
+.showcase__sound[aria-pressed="true"] .ico--muted { display: none; }
+.showcase__sound[aria-pressed="true"] .ico--on { display: block; }
+.showcase__sound[aria-pressed="true"] { color: var(--accent); }
+.showcase__sound:focus-visible,
+.showcase__link:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
-/* Grab cursor while pointer-dragging */
-.hero-carousel.is-dragging .carousel__track { scroll-behavior: auto; scroll-snap-type: none; cursor: grabbing; }
-.hero-carousel.is-dragging .carousel__media { pointer-events: none; }
-@media (hover: hover) {
-  .carousel__media { cursor: grab; }
-}
-@media (max-width: 560px) {
-  .carousel__arrow { width: 2.3rem; height: 2.3rem; }
-  .carousel__figure figcaption { font-size: 0.78rem; }
+@media (max-width: 760px) {
+  .showcase__row,
+  .showcase__row--flip {
+    grid-template-columns: minmax(0, 1fr);
+    text-align: center;
+  }
+  /* One column, and copy above the video on every row — including the
+     flipped ones, whose desktop grid-row/column placement is undone here. */
+  .showcase__row .showcase__copy,
+  .showcase__row--flip .showcase__copy { grid-column: 1; grid-row: 1; }
+  .showcase__row .showcase__media,
+  .showcase__row--flip .showcase__media { grid-column: 1; grid-row: 2; }
+  .showcase__body { margin-inline: auto; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .carousel__track { scroll-behavior: auto; }
+  .showcase__row { opacity: 1; transform: none; transition: none; }
 }
 
 /* ---- Sections ---- */
@@ -665,6 +642,9 @@ main {
 }
 .why__lead:last-child { margin-bottom: 0; }
 .why__lead strong { color: var(--text); }
+@media (min-width: 1200px) {
+  .why { max-width: 900px; }
+}
 
 /* Collapse the deeper "why" paragraphs behind a Read more toggle so the
    section leads with a teaser instead of a wall of text. */

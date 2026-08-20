@@ -1,0 +1,111 @@
+---
+// Alternating capability sections: phone clip on one side, summary on the
+// other, flipping side row by row. Replaces the hero carousel — the same four
+// clips, told as a scroll-down story instead of a swipe.
+import { href } from '../lib/href';
+
+interface Item {
+  src: string;
+  eyebrow: string;
+  title: string;
+  body: string;
+  alt: string;
+  link?: { label: string; href: string };
+}
+interface Props { items: Item[] }
+const { items } = Astro.props as Props;
+---
+<section class="showcase container" data-showcase aria-label="What Pupa does">
+  {items.map((it, i) => (
+    <article class:list={['showcase__row', i % 2 === 1 && 'showcase__row--flip']} data-showcase-row>
+      <div class="showcase__copy">
+        <p class="section-eyebrow">{it.eyebrow}</p>
+        <h2 class="showcase__title">{it.title}</h2>
+        <p class="showcase__body">{it.body}</p>
+        {it.link && (
+          <a class="showcase__link" href={it.link.href}>
+            {it.link.label}
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        )}
+      </div>
+      <div class="showcase__media">
+        <video
+          class="showcase__video"
+          src={href(it.src)}
+          muted loop playsinline preload="metadata"
+          aria-label={it.alt} title={it.alt}
+          data-showcase-video
+        ></video>
+        <button type="button" class="showcase__sound" data-showcase-sound aria-label="Unmute" aria-pressed="false">
+          <svg class="ico ico--muted" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          <svg class="ico ico--on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>
+        </button>
+      </div>
+    </article>
+  ))}
+</section>
+
+<script>
+  // Each clip plays only while its row is on screen, and only one carries
+  // sound at a time (unmuting is gesture-gated by autoplay policy).
+  const rows = Array.from(document.querySelectorAll<HTMLElement>('[data-showcase-row]'));
+  if (rows.length) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const videos = rows
+      .map((r) => r.querySelector<HTMLVideoElement>('[data-showcase-video]'))
+      .filter((v): v is HTMLVideoElement => !!v);
+
+    const soundBtnFor = (v: HTMLVideoElement) =>
+      v.parentElement?.querySelector<HTMLButtonElement>('[data-showcase-sound]') ?? null;
+    const syncSound = (v: HTMLVideoElement) => {
+      const btn = soundBtnFor(v);
+      if (!btn) return;
+      const on = !v.muted;
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.setAttribute('aria-label', on ? 'Mute' : 'Unmute');
+    };
+
+    // Reveal-on-scroll: rows fade/slide in once, then stay put.
+    const reveal = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('is-visible');
+        reveal.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.15 });
+    rows.forEach((r) => (reduceMotion ? r.classList.add('is-visible') : reveal.observe(r)));
+
+    // Play in view, pause (and rewind) out of view.
+    const playback = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        const v = e.target as HTMLVideoElement;
+        if (e.isIntersecting) {
+          v.play().catch(() => {});
+        } else {
+          v.pause();
+          v.currentTime = 0;
+          if (!v.muted) { v.muted = true; syncSound(v); }
+        }
+      });
+    }, { threshold: 0.45 });
+    videos.forEach((v) => playback.observe(v));
+
+    videos.forEach((v) => {
+      soundBtnFor(v)?.addEventListener('click', () => {
+        const turningOn = v.muted;
+        // Solo the audio: mute every other clip first.
+        videos.forEach((other) => {
+          if (other !== v && !other.muted) { other.muted = true; syncSound(other); }
+        });
+        v.muted = !turningOn;
+        if (turningOn) v.play().catch(() => {});
+        syncSound(v);
+      });
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) videos.forEach((v) => v.pause());
+    });
+  }
+</script>
