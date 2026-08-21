@@ -1,7 +1,7 @@
 ---
 title: "Keep what you build with your agent"
 subtitle: "Little apps you can keep, grow, and hand to a friend"
-description: "The best thing an agent makes for you isn't a transcript. It's the little app you set up together — and Pupa lets you keep it, grow it, and share it as a single file."
+description: "The best thing an agent makes for you isn’t a transcript. It’s the little app you set up together — and Pupa lets you keep it, grow it, and share it as a single file."
 author: "Pupa team"
 date: 2026-07-24
 draft: false
