@@ -779,6 +779,10 @@ a.icon-point:hover .icon-point__icon { color: var(--accent); }
 /* .icon-list is a flex icon-bullet list, not a bulleted ul: it must keep its
    flush left edge even inside .panel__body, whose ul rule indents lists. */
 .panel__body .icon-list { padding-left: 0; }
+/* .section-lead caps itself at a 62ch reading measure, but the lists beside it
+   in a panel run the full column. That left the lead wrapping ~400px short of
+   the bullets under it, reading as an arbitrary break. Share the column here. */
+.panel__body .section-lead { max-width: none; }
 /* Diagram figure inside a split panel (e.g. the iCloud-sync sketch). The art is
    a white-background PNG, so it keeps a light card in both themes to stay legible. */
 .panel__figure { margin: 0; text-align: center; }
