@@ -355,10 +355,9 @@ pupa-backend setup</code></pre>
           <p class="section-eyebrow">The building blocks</p>
           <h2 style="margin-top:0">Components</h2>
           <p class="setup__lead">
-            Every MyApp is assembled from typed <strong>components</strong> — the
-            blocks the agent snaps together and operates as first-class tools while
-            you watch and edit the same surface. Ask for the ones a job needs; they
-            cross-link into one coherent app and persist in the Memories filesystem.
+            Every MyApp is built from these blocks. Ask for the ones you need and
+            they link up into one app. The agent works them like tools, and you
+            edit the same screen by hand.
           </p>
           <div class="comp-grid">
             {components.map((c) => (
@@ -408,22 +407,21 @@ pupa-backend setup</code></pre>
         </p>
         <ul>
           <li>
-            <strong>Your MyApps and settings live on your device</strong>{' '}
-            and sync across your iPhone, iPad, and Mac through <strong>iCloud</strong>,
-            under your own Apple ID. There’s no Pupa account and no Pupa server in
+            <strong>Everything stays on your devices.</strong> Your apps and
+            settings sync between your iPhone, iPad, and Mac through your own{' '}
+            <strong>iCloud</strong>. There’s no Pupa account and no Pupa server in
             the middle.
           </li>
           <li>
-            <strong>Your agent and model credentials never leave your machine.</strong>{' '}
-            The app pairs to a backend you run, so your API keys and logins sit in
-            that backend’s environment; the paired-device token stays in the iOS
-            Keychain and is excluded from sync.
+            <strong>Your keys never leave your machine.</strong> The app connects
+            to a backend you run, so your API keys and logins stay there. The
+            pairing token is kept in the iOS Keychain and is never synced.
           </li>
           <li>
-            <strong>The one external hop is the model you pick.</strong> What you
-            send the agent goes to your LLM provider (Anthropic, OpenRouter, …)
-            under your own key. The same trust you already place in that provider,
-            and nowhere else.
+            <strong>The only thing that leaves is your chat with the model.</strong>{' '}
+            What you send the agent goes to your provider (Anthropic, OpenRouter
+            and so on) under your own key. That’s the same trust you already place
+            in that provider, and nowhere else.
           </li>
         </ul>
       </div>
