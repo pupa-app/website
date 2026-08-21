@@ -12,12 +12,12 @@ const repos = [
   {
     name: 'pupa-app/pupa',
     url: `${GITHUB_ORG}/pupa`,
-    desc: 'The native iOS / macOS application. Ships SwiftUI canvas, it\'s components, Memories filesystem and how those are surfaced to your backend harness.',
+    desc: 'The native iOS / macOS application. Ships the SwiftUI canvas, its components, the Memories filesystem, and how those are surfaced to your backend harness.',
   },
   {
     name: 'pupa-app/pupa-backend',
     url: BACKEND_REPO,
-    desc: 'The user-owned backend. Hooks-up on your Agent harness on your laptop (like Claude-Code). Run it locally next to the app or deploy your own in the cloud. Pair-once auth; your keys stay yours.',
+    desc: 'The user-owned backend. Hooks into the agent harness running on your laptop (like Claude Code). Run it locally next to the app or deploy your own in the cloud. Pair-once auth; your keys stay yours.',
   },
   {
     name: 'pupa-app/marketplace',
@@ -233,14 +233,14 @@ pupa-backend setup</code></pre>
           A <strong>MyApp</strong> is an app you and your agent build and use together
           by talking. Think of it as a box of <strong>Lego blocks</strong> — a kanban board,
           a checklist, a chart — that you snap together into whatever
-          you need: a habit tracker, a financial a calculator, or a
+          you need: a habit tracker, a financial calculator, or a
           debate room.
         </p>
         <p class="section-lead" style="margin-bottom:1rem">
-          Also you and your agent share the <strong>Memories</strong>, a folder/workspace 
-          of files to manage the experience, 
-          including the special folder <code>pupa/</code>, which acts as a <code>.claude/</code> folder managing skills, plugins, 
-          automations, etc. for Pupa functionalities. 
+          You and your agent also share <strong>Memories</strong>, a workspace of
+          files that holds the app’s state. Its special <code>pupa/</code> folder
+          works like a <code>.claude/</code> folder, managing the skills, plugins,
+          and automations Pupa uses.
         </p>
         <p class="section-lead" style="margin-bottom:1rem">
           You and the agent work on the same footing, anything one of you can do,

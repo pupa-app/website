@@ -1,7 +1,7 @@
 ---
 title: "Build your own component"
 subtitle: "How a new canvas shape ships — and stays safe to share"
-description: "Pupa's component set is an extension point, not a fixed menu. A conceptual tour of the two primitives every component is built from, how a new shape travels safely inside an inert bundle, and why every MyApp stays sandboxed from the next."
+description: "Pupa’s component set is an extension point, not a fixed menu. A conceptual tour of the two primitives every component is built from, how a new shape travels safely inside an inert bundle, and why every MyApp stays sandboxed from the next."
 author: "Pupa team"
 date: 2026-07-17
 draft: false
@@ -60,7 +60,7 @@ cross-component composability without having to design either yourself.
       <div class="bd-app__name">📥 An imported app</div>
       <div class="bd-app__row">its own components</div>
       <div class="bd-app__row">its own items</div>
-      <span class="bd-app__note">⚠ can't point an item at yours</span>
+      <span class="bd-app__note">⚠ can’t point an item at yours</span>
     </div>
   </div>
   <figcaption>Every record is an item that belongs to exactly one MyApp. Items
@@ -102,7 +102,7 @@ exactly that — your items are automatically isolated and automatically linkabl
     <span class="bd-guard">no calling back into its own chain</span>
     <span class="bd-guard">limited depth</span>
     <span class="bd-guard">limited turns per pair</span>
-    <span class="bd-guard">can't reach another app</span>
+    <span class="bd-guard">can’t reach another app</span>
   </div>
   <figcaption>Agent runs form a bounded tree, scoped to one MyApp — so a component
   can drive several agents in a structured back-and-forth without runaway loops or
@@ -165,7 +165,7 @@ to ship a block the agent can create but can't safely share.
   </div>
   <figcaption>A shared MyApp leaves your host as inert data — structure, not your
   records or your tools — and is re-checked on the other host before it rebuilds.
-  It can't do anything until that host grants it capabilities.</figcaption>
+  It can’t do anything until that host grants it capabilities.</figcaption>
 </figure>
 
 Sharing a MyApp means exporting a **`.pupa` bundle**: plain, inert data — the app

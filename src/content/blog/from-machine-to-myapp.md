@@ -1,7 +1,7 @@
 ---
 title: "From Claude on your machine to Claude in your app"
 subtitle: "The architecture behind MyApps — and why the arrows point both ways"
-description: "A developer's tour of the three ways an agent can meet its user — on the machine, behind a chat app, and inside a MyApp — and what changes when the arrows point both ways."
+description: "A developer’s tour of the three ways an agent can meet its user — on the machine, behind a chat app, and inside a MyApp — and what changes when the arrows point both ways."
 author: "Pupa team"
 date: 2026-07-24
 draft: false
