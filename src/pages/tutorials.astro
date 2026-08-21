@@ -17,12 +17,12 @@ const repos = [
   {
     name: 'pupa-backend',
     url: BACKEND_REPO,
-    desc: 'The user-owned backend. Hooks into the agent harness running on your laptop (like Claude Code). Run it locally next to the app or deploy your own in the cloud. Pair-once auth; your keys stay yours.',
+    desc: 'The user-owned backend. Hooks into the agent harness running on your laptop (like Claude Code). Run it locally  or deploy your own in the cloud.',
   },
   {
     name: 'marketplace',
     url: MARKETPLACE,
-    desc: 'A catalog of .pupa bundles you can browse and install from the app. Just an HTTPS index.json anyone can host. App content is CC0; tooling is MIT.',
+    desc: 'A catalog of .pupa bundles you can browse and install from the app. Just an HTTPS index.json anyone can host.',
   },
 ];
 
@@ -634,10 +634,8 @@ DATABASE_URL=$&#123;&#123;Postgres.DATABASE_URL&#125;&#125;      # reference the
       <p class="setup__lead">
         Add new blocks (canvas components) to the app, or new agent hookups to
         the backend. Components are just SwiftUI views with a typed model, so you
-        can build agent-compatible surfaces without any agentic knowledge. The
-        client, backend, and marketplace are all developed in the open: see{' '}
-        <a href={`${GITHUB_ORG}/pupa/issues`}>the repos</a> for each project’s
-        terms.
+        can build agent-compatible surfaces without any agentic knowledge. 
+        {' '}<a href={`${GITHUB_ORG}/`}>The repos</a>, client, backend, and marketplace, are all open-source.
       </p>
       <div class="repo-grid">
         {repos.map((r) => (
