@@ -8,7 +8,7 @@ const repos = [
   { name: 'marketplace', label: 'the marketplace', url: `${GITHUB_ORG}/marketplace/issues` },
 ];
 ---
-<BaseLayout title="Support" description="Get help with Pupa — GitHub issues and answers to common questions.">
+<BaseLayout title="Support" description="Get help with Pupa: GitHub issues and answers to common questions.">
   <section class="section container">
     <div class="page-head" style="padding-block:0 1rem">
       <h1>Support</h1>
@@ -24,7 +24,7 @@ const repos = [
       <ul>
         {repos.map((r) => (
           <li>
-            <a href={r.url}><code>{r.name}</code></a> — issues for {r.label}.
+            <a href={r.url}><code>{r.name}</code></a>: issues for {r.label}.
           </li>
         ))}
       </ul>
@@ -40,11 +40,11 @@ const repos = [
           <summary>Why the name “Pupa”?</summary>
           <p>
             A pupa is the quiet in-between stage where an insect reorganises a
-            simple body into something far more intricate — a caterpillar sealed
+            simple body into something far more intricate: a caterpillar sealed
             in its chrysalis emerging as a butterfly. It brews wonderful, complex
             things out of a basic structure. That’s the idea here: Pupa is a
-            framework of simple building blocks — components and agent
-            organisation — that combine into something rich and capable, yet stay
+            framework of simple building blocks (components and agent
+            organisation) that combine into something rich and capable, yet stay
             portable enough to carry anywhere.
           </p>
         </details>
@@ -70,13 +70,13 @@ const repos = [
           </p>
           <ul>
             <li>
-              <strong>Localhost</strong> — the backend runs on the same machine
+              <strong>Localhost.</strong> The backend runs on the same machine
               or LAN as the app, at <code>http://localhost:8004/</code>. Nothing
               is exposed to the internet. Best when the macOS app runs on the
               same laptop as the backend, or your phone is on the same Wi-Fi.
             </li>
             <li>
-              <strong>Cloudflare tunnel</strong> — <code>cloudflared</code>{' '}
+              <strong>Cloudflare tunnel.</strong> <code>cloudflared</code>{' '}
               publishes your local backend at a public HTTPS URL through
               Cloudflare’s edge, with no port-forwarding. Use a quick tunnel
               (a throwaway <code>*.trycloudflare.com</code> address) to get
@@ -84,7 +84,7 @@ const repos = [
               Reach your backend from anywhere.
             </li>
             <li>
-              <strong>Tailscale</strong> — your backend joins your private
+              <strong>Tailscale.</strong> Your backend joins your private
               Tailscale (WireGuard) network and the app connects to its
               Tailscale hostname or IP. You reach a home backend from your
               phone anywhere, but it stays private to your tailnet and is never
@@ -119,7 +119,7 @@ const repos = [
           <p>
             Open a <code>.pupa</code> file with Pupa (for example, tap one you
             downloaded), or use Settings ▸ Import &amp; Export. On import the app
-            shows a confirm sheet naming the MyApp and its agent prompts — review
+            shows a confirm sheet naming the MyApp and its agent prompts. Review
             them, then install. Bundles are inert JSON and are validated as
             untrusted input, so nothing runs until you grant it your host’s
             capabilities.
@@ -131,8 +131,8 @@ const repos = [
           <p>
             In the app, open Settings ▸ Marketplace, pick an app, review its agent
             prompts in the install preview, and install. A marketplace is just an
-            HTTPS <code>index.json</code> pointing at <code>.pupa</code> files —
-            the official one is on{' '}
+            HTTPS <code>index.json</code> pointing at <code>.pupa</code> files.
+            The official one is on{' '}
             <a href={`${GITHUB_ORG}/marketplace`}>GitHub</a>, and anyone can host
             their own.
           </p>
@@ -154,7 +154,7 @@ const repos = [
           <summary>Which model providers does Pupa support?</summary>
           <p>
             Your backend does the talking to the model, so it supports whatever
-            your backend is configured with — Anthropic, Amazon Bedrock, or any
+            your backend is configured with: Anthropic, Amazon Bedrock, or any
             OpenAI-compatible endpoint. Credentials live in your backend’s
             environment; they never reach the app.
           </p>
@@ -166,7 +166,7 @@ const repos = [
             No. A canvas component is a self-contained SwiftUI view with a typed
             data model plus render and mutator tools. The{' '}
             <a href={`${GITHUB_ORG}/pupa`}>pupa</a> repo ships an “adding a
-            component” recipe, and the compiler enforces completeness — no agentic
+            component” recipe, and the compiler enforces completeness: no agentic
             knowledge required to build an agent-compatible surface.
           </p>
         </details>

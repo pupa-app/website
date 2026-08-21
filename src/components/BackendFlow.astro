@@ -34,17 +34,17 @@ const channels = [
   {
     id: 'localhost',
     label: 'Localhost',
-    note: '<strong>Localhost</strong> — same machine only. The app talks to <code>localhost:8004</code> and nothing leaves your computer.',
+    note: '<strong>Localhost:</strong> same machine only. The app talks to <code>localhost:8004</code> and nothing leaves your computer.',
   },
   {
     id: 'cloudflare',
     label: 'Cloudflare',
-    note: '<strong>Cloudflare tunnel</strong> — a public HTTPS URL to your backend, reachable from anywhere with no ports to open.',
+    note: '<strong>Cloudflare tunnel:</strong> a public HTTPS URL to your backend, reachable from anywhere with no ports to open.',
   },
   {
     id: 'tailscale',
     label: 'Tailscale',
-    note: '<strong>Tailscale</strong> — a private mesh across your own devices: a stable name, with traffic kept off the public internet.',
+    note: '<strong>Tailscale.</strong> A private mesh across your own devices: a stable name, with traffic kept off the public internet.',
   },
 ];
 const activeNote = channels.find((c) => c.id === active)!.note;

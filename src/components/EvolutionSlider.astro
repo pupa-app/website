@@ -12,7 +12,7 @@ const stages = [
   {
     src: '/diagrams/information-flow-1.png',
     title: 'Just your agent',
-    body: 'Claude works straight on your OS — reading and modifying raw files and apps. Nothing persists as an app of its own.',
+    body: 'Claude works straight on your OS, reading and modifying raw files and apps. Nothing persists as an app of its own.',
     alt: 'A laptop where Claude, with tools/MCP/skills, reads and modifies OS apps and the filesystem directly.',
   },
   {
@@ -24,7 +24,7 @@ const stages = [
   {
     src: '/diagrams/information-flow-3.png',
     title: 'A Pupa MyApp',
-    body: 'A structured app of typed components and memories your agent reads and writes both ways, through your own pupa-backend — the experience becomes a durable thing.',
+    body: 'A structured app of typed components and memories your agent reads and writes both ways, through your own pupa-backend: the experience becomes a durable thing.',
     alt: 'A Pupa MyApp of components and memories on a phone, read and modified both ways through pupa-backend, which runs Claude over OS data.',
   },
 ];
@@ -56,7 +56,7 @@ const stages = [
     </button>
   </div>
   <p class="evo__caption" data-evo-cap>
-    <strong>1 · {stages[0].title}</strong> — {stages[0].body}
+    <strong>1 · {stages[0].title}.</strong> {stages[0].body}
   </p>
   <div class="evo__dots" role="tablist" aria-label="Choose stage">
     {stages.map((s, i) => (
@@ -81,7 +81,7 @@ const stages = [
       track.style.transform = `translateX(-${i * 100}%)`;
       dots.forEach((d, di) => d.setAttribute('aria-selected', String(di === i)));
       const s = slides[i];
-      if (cap && s) cap.innerHTML = `<strong>${i + 1} · ${s.dataset.title}</strong> — ${s.dataset.body}`;
+      if (cap && s) cap.innerHTML = `<strong>${i + 1} · ${s.dataset.title}.</strong> ${s.dataset.body}`;
     };
     const go = (n: number) => {
       const len = slides.length;
