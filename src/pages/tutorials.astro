@@ -146,15 +146,17 @@ const myappIcons = {
   travels: '<path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
 };
 
-// Each bullet is one idea: what a MyApp is made of, how it gets built, who
-// drives it, what it keeps, and how it travels.
-const myappPoints = [
-  { icon: 'blocks', lead: 'Built from blocks.', body: 'A board, a calendar, a chart. Snap them into whatever you need: a habit tracker, a money planner, a debate room.' },
+// "What is a MyApp?" splits in two: what the thing is made of, then how you
+// and the agent work inside it. Portability closes the section on its own.
+const myappIs = [
+  { icon: 'blocks', lead: 'Blocks.', body: 'A board, a calendar, a chart. Snap them into whatever you need: a habit tracker, a money planner, a debate room.' },
+  { icon: 'memory', lead: 'Memories.', body: 'The app’s own notes, files and settings. Still there next week, and on your other devices.' },
+];
+const myappWith = [
   { icon: 'chat', lead: 'You talk, it builds.', body: 'Say what you want and the agent assembles it while you watch. You can move things by hand too.' },
   { icon: 'equal', lead: 'Equal footing.', body: 'Anything you can do, the agent can do, and the other way round.' },
-  { icon: 'memory', lead: 'It remembers.', body: 'Notes, files and settings live in the app’s own Memories, so they are still there next week and on your other devices.' },
-  { icon: 'travels', lead: 'It travels.', body: 'The whole app packs into one file you can hand to anyone. It runs on their machine, with their keys.' },
 ];
+const myappTravels = { icon: 'travels', lead: 'It travels.', body: 'The whole app packs into one file you can hand to anyone. It runs on their machine, with their keys.' };
 ---
 <BaseLayout
   title="Tutorials"
@@ -251,8 +253,9 @@ pupa-backend setup</code></pre>
           <strong>A MyApp is an app you and your agent build together, just by
           talking.</strong>
         </p>
+        <p class="section-eyebrow">What it is made of</p>
         <ul class="icon-list">
-          {myappPoints.map((p) => (
+          {myappIs.map((p) => (
             <li>
               <span class="icon-point">
                 <svg class="icon-point__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={myappIcons[p.icon]}></svg>
@@ -260,6 +263,25 @@ pupa-backend setup</code></pre>
               </span>
             </li>
           ))}
+        </ul>
+        <p class="section-eyebrow" style="margin-top:1.5rem">Working with your agent</p>
+        <ul class="icon-list">
+          {myappWith.map((p) => (
+            <li>
+              <span class="icon-point">
+                <svg class="icon-point__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={myappIcons[p.icon]}></svg>
+                <span><strong>{p.lead}</strong> {p.body}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+        <ul class="icon-list" style="margin-top:1.5rem">
+          <li>
+            <span class="icon-point">
+              <svg class="icon-point__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={myappIcons[myappTravels.icon]}></svg>
+              <span><strong>{myappTravels.lead}</strong> {myappTravels.body}</span>
+            </span>
+          </li>
         </ul>
         <p class="setup__note" style="margin-top:1.25rem">
           You and your agent share the app’s Memories, a workspace of files. Its{' '}
