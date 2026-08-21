@@ -439,8 +439,15 @@ main {
   color: var(--text-dim);
 }
 .hero .hero-points li { margin-bottom: 0.35rem; }
-/* Each bullet is a link into the matching tutorial walkthrough. */
-.hero .hero-point {
+/* Icon bullet list. Shared by the homepage hero and the tutorials page, so
+   these stay unscoped. The hero's own centring lives on .hero .hero-points. */
+.icon-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.icon-list li { margin-bottom: 0.35rem; }
+.icon-point {
   display: flex;
   align-items: flex-start;
   gap: 0.65rem;
@@ -450,16 +457,16 @@ main {
   border-radius: var(--radius-sm);
   transition: background 0.15s ease, color 0.15s ease;
 }
-.hero .hero-point:hover { background: var(--accent-soft); color: var(--text); text-decoration: none; }
-.hero .hero-point:hover .hero-point__icon { color: var(--accent); }
-.hero .hero-point__icon {
+a.icon-point:hover { background: var(--accent-soft); color: var(--text); text-decoration: none; }
+a.icon-point:hover .icon-point__icon { color: var(--accent); }
+.icon-point__icon {
   flex: none;
   width: 1.2rem;
   height: 1.2rem;
   margin-top: 0.16em;
   color: var(--accent);
 }
-.hero .hero-points strong { color: var(--text); }
+.icon-point strong { color: var(--text); }
 
 /* Hero content self-caps its measure (typography-driven) regardless of
    container width, so it reads lost on very wide monitors. Scale the caps
@@ -769,6 +776,13 @@ main {
 .panel__body ul { color: var(--text-dim); padding-left: 1.2rem; }
 .panel__body li { margin-bottom: 0.5rem; }
 .panel__body li strong { color: var(--text); }
+/* .icon-list is a flex icon-bullet list, not a bulleted ul: it must keep its
+   flush left edge even inside .panel__body, whose ul rule indents lists. */
+.panel__body .icon-list { padding-left: 0; }
+/* .section-lead caps itself at a 62ch reading measure, but the lists beside it
+   in a panel run the full column. That left the lead wrapping ~400px short of
+   the bullets under it, reading as an arbitrary break. Share the column here. */
+.panel__body .section-lead { max-width: none; }
 /* Diagram figure inside a split panel (e.g. the iCloud-sync sketch). The art is
    a white-background PNG, so it keeps a light card in both themes to stay legible. */
 .panel__figure { margin: 0; text-align: center; }
@@ -864,7 +878,10 @@ main {
    One inline SVG, themed via the accent + surface tokens and driven by a
    `data-active` channel on the root. Motion is packet dots travelling each
    wire; everything is disabled under prefers-reduced-motion below. */
-.backend-flow { max-width: 640px; margin: 1.5rem auto 0; }
+/* Bottom margin clears the caption and channel chips inside the diagram, which
+   would otherwise butt straight up against the paragraph that follows. The
+   --compact and --teaser variants below reset it via their own shorthand. */
+.backend-flow { max-width: 640px; margin: 1.5rem auto 2rem; }
 .backend-flow--compact { max-width: 420px; margin: 0.9rem 0 0; }
 .backend-flow--teaser { margin: 0.5rem auto 0; }
 

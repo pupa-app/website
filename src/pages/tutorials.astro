@@ -10,17 +10,17 @@ const BACKEND_REPO = `${GITHUB_ORG}/pupa-backend`;
 // Open-source repos, shown in the Contribute section below.
 const repos = [
   {
-    name: 'pupa-app/pupa',
+    name: 'pupa',
     url: `${GITHUB_ORG}/pupa`,
     desc: 'The native iOS / macOS application. Ships the SwiftUI canvas, its components, the Memories filesystem, and how those are surfaced to your backend harness.',
   },
   {
-    name: 'pupa-app/pupa-backend',
+    name: 'pupa-backend',
     url: BACKEND_REPO,
     desc: 'The user-owned backend. Hooks into the agent harness running on your laptop (like Claude Code). Run it locally next to the app or deploy your own in the cloud. Pair-once auth; your keys stay yours.',
   },
   {
-    name: 'pupa-app/marketplace',
+    name: 'marketplace',
     url: MARKETPLACE,
     desc: 'A catalog of .pupa bundles you can browse and install from the app. Just an HTTPS index.json anyone can host. App content is CC0; tooling is MIT.',
   },
@@ -35,12 +35,12 @@ const tutorials = [
     verb: 'Use',
     title: 'Use a MyApp',
     blurb:
-      'A MyApp is something you live in. You just talk to it, and the agent snaps the blocks into place while you watch and edit the same view.',
+      'Open one and start talking. The agent moves things around while you watch, and you can edit the same screen by hand.',
     steps: [
-      'Open a MyApp from your library — each one blends whatever blocks it needs (trackers, calendars, checklists, charts, rooms) with its own Memories and agent setup.',
+      'Open a MyApp from your library.',
       'Type what you want in the side-panel chat: “log today’s run”, “add milk to the list”, “show me this month”.',
-      'The blocks rearrange in front of you. Edit any field by hand too — you and the agent share one screen.',
-      'It remembers. The long-lived Memories filesystem keeps what matters across sessions and devices.',
+      'Watch the blocks rearrange. Edit any field by hand too.',
+      'Come back tomorrow. Everything is still there, on all your devices.',
     ],
     videoSrc: href('/videos/myfire-promo.mp4'),
     video: null,
@@ -51,12 +51,12 @@ const tutorials = [
     verb: 'Build',
     title: 'Build a MyApp',
     blurb:
-      'Mould the canvas into the shape you need — no template to pick, just describe it and refine it in place.',
+      'No templates to pick from. Describe what you want and shape it as you go.',
     steps: [
-      'Start a new MyApp and tell the agent what it’s for.',
-      'Ask for the pieces you need: trackers, calendars, checklists, calculators, charts, rooms — cross-linked into one coherent app.',
-      'Iterate by talking. Rename, restructure, add fields; the blocks rearrange live.',
-      'Everything persists in the Memories filesystem, so the app grows with you instead of resetting.',
+      'Start a new MyApp and tell the agent what it is for.',
+      'Ask for the pieces you need: a tracker, a calendar, a checklist, a chart. They link up to each other.',
+      'Keep talking to change it. Rename things, add fields, move blocks around.',
+      'Nothing resets. The app keeps growing with you.',
     ],
     videoSrc: href('/videos/myapp-schedule.mp4'),
     video: null,
@@ -67,12 +67,12 @@ const tutorials = [
     verb: 'Share',
     title: 'Share a MyApp',
     blurb:
-      'Export any MyApp as a portable .pupa bundle and hand it to anyone — they run it on their own host, with their own keys.',
+      'Pack any MyApp into one file and hand it to anyone. They run it with their own keys.',
     steps: [
       'From Settings ▸ Import & Export, export your MyApp as a .pupa file.',
-      'Send it directly to someone, or publish it to a marketplace — a plain HTTPS index.json anyone can host.',
-      'On import, Pupa shows a confirm sheet naming the app and its agent prompts before anything installs.',
-      'The bundle is inert JSON: it ships structure and intent, never a runtime. It can’t act until the new host grants it capabilities.',
+      'Send it straight to someone, or publish it to a marketplace.',
+      'When they open it, Pupa names the app and its agent prompts before anything installs.',
+      'The file holds no code. It cannot do anything until they give it permission.',
     ],
     videoSrc: href('/videos/export.mp4'),
     video: null,
@@ -136,6 +136,27 @@ const sections = [
   { id: 'railway', label: 'Deploy (Railway)', sub: true },
   { id: 'contribute', label: 'Contribute' },
 ];
+
+// Lucide-style icons for the "What is a MyApp?" bullets (stroke, currentColor).
+const myappIcons = {
+  blocks: '<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>',
+  chat: '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
+  equal: '<path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>',
+  memory: '<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>',
+  travels: '<path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+};
+
+// "What is a MyApp?" splits in two: what the thing is made of, then how you
+// and the agent work inside it. Portability closes the section on its own.
+const myappIs = [
+  { icon: 'blocks', lead: 'Blocks.', body: 'A board, a calendar, a chart and so on. Snap them into whatever you need: a habit tracker, a money planner, a debate room.' },
+  { icon: 'memory', lead: 'Memories.', body: 'The app’s own notes, files and settings. Still there next week, and on your other devices.' },
+];
+const myappWith = [
+  { icon: 'chat', lead: 'You talk, it builds.', body: 'Say what you want and the agent assembles it while you watch. You can move things by hand too.' },
+  { icon: 'equal', lead: 'Equal footing.', body: 'Anything you can do, the agent can do, and the other way round.' },
+];
+const myappTravels = { icon: 'travels', lead: 'It travels.', body: 'The whole app packs into one file you can hand to anyone. It runs on their machine, with their keys.' };
 ---
 <BaseLayout
   title="Tutorials"
@@ -188,7 +209,7 @@ const sections = [
         </p>
         <BackendFlow variant="compact" class="backend-flow--teaser" />
       </div>
-      <ol class="setup__steps setup__steps--num">
+      <ol class="setup__steps">
         <li>
           <strong>Install the backend and run setup.</strong> Make sure the{' '}
           <a href="https://claude.com/claude-code">Claude Code</a> CLI is installed
@@ -225,44 +246,48 @@ pupa-backend setup</code></pre>
       <div class="panel__body">
         <h2 style="margin-top:0">MyApp</h2>
         <p class="section-lead" style="margin-bottom:1.5rem">
-          A MyApp is the thing you make in Pupa. Here’s what one is, and how to
-          use, build, and share it.
+          What a MyApp is, and how to use, build, and share one.
         </p>
         <h3 id="what-is-a-myapp" style="margin-top:0">What is a MyApp?</h3>
-        <p class="section-lead" style="margin-bottom:1rem">
-          A <strong>MyApp</strong> is an app you and your agent build and use together
-          by talking. Think of it as a box of <strong>Lego blocks</strong> — a kanban board,
-          a checklist, a chart — that you snap together into whatever
-          you need: a habit tracker, a financial calculator, or a
-          debate room.
+        <p class="section-lead" style="margin-bottom:1.25rem">
+          <strong>A MyApp is an app you and your agent build together, just by
+          talking.</strong>
         </p>
-        <p class="section-lead" style="margin-bottom:1rem">
-          You and your agent also share <strong>Memories</strong>, a workspace of
-          files that holds the app’s state. Its special <code>pupa/</code> folder
-          works like a <code>.claude/</code> folder, managing the skills, plugins,
-          and automations Pupa uses.
-        </p>
-        <p class="section-lead" style="margin-bottom:1rem">
-          You and the agent work on the same footing, anything one of you can do,
-          the other can too. Usually you just describe what you want and the agent
-          assembles the blocks in front of you, but you can also snap them together
-          by hand, and either of you can rearrange them at any time.
-        </p>
-        <ul>
+        <p class="section-eyebrow">What it is made of</p>
+        <ul class="icon-list">
+          {myappIs.map((p) => (
+            <li>
+              <span class="icon-point">
+                <svg class="icon-point__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={myappIcons[p.icon]}></svg>
+                <span><strong>{p.lead}</strong> {p.body}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p class="section-eyebrow" style="margin-top:1.5rem">Working with your agent</p>
+        <ul class="icon-list">
+          {myappWith.map((p) => (
+            <li>
+              <span class="icon-point">
+                <svg class="icon-point__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={myappIcons[p.icon]}></svg>
+                <span><strong>{p.lead}</strong> {p.body}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+        <ul class="icon-list" style="margin-top:1.5rem">
           <li>
-            <strong>Chat-driven.</strong> You say what you want; the agent snaps the
-            blocks together while you watch and edit the same view.
-          </li>
-          <li>
-            <strong>It remembers.</strong> A long-lived Memories filesystem keeps
-            what matters to you across sessions and devices.
-          </li>
-          <li>
-            <strong>It’s portable.</strong> Any MyApp packs into a single{' '}
-            <code>.pupa</code> bundle you can hand to anyone — it runs on their host,
-            with their backend.
+            <span class="icon-point">
+              <svg class="icon-point__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={myappIcons[myappTravels.icon]}></svg>
+              <span><strong>{myappTravels.lead}</strong> {myappTravels.body}</span>
+            </span>
           </li>
         </ul>
+        <p class="setup__note" style="margin-top:1.25rem">
+          You and your agent share the app’s Memories, a workspace of files. Its{' '}
+          <code>pupa/</code> folder works like a <code>.claude/</code> folder,
+          holding the skills, plugins and automations the app uses.
+        </p>
       </div>
       <div class="tut__video tut__video--file">
         <video
@@ -330,10 +355,9 @@ pupa-backend setup</code></pre>
           <p class="section-eyebrow">The building blocks</p>
           <h2 style="margin-top:0">Components</h2>
           <p class="setup__lead">
-            Every MyApp is assembled from typed <strong>components</strong> — the
-            blocks the agent snaps together and operates as first-class tools while
-            you watch and edit the same surface. Ask for the ones a job needs; they
-            cross-link into one coherent app and persist in the Memories filesystem.
+            Every MyApp is built from these blocks. Ask for the ones you need and
+            they link up into one app. The agent works them like tools, and you
+            edit the same screen by hand.
           </p>
           <div class="comp-grid">
             {components.map((c) => (
@@ -383,22 +407,21 @@ pupa-backend setup</code></pre>
         </p>
         <ul>
           <li>
-            <strong>Your MyApps and settings live on your device</strong>{' '}
-            and sync across your iPhone, iPad, and Mac through <strong>iCloud</strong>,
-            under your own Apple ID. There’s no Pupa account and no Pupa server in
-            the middle.
+            <strong>Your MyApps and settings live on your devices.</strong> They sync between
+            your iPhone, iPad, and Mac through your own{' '}
+            <strong>iCloud</strong>, under your own Apple ID. There’s no Pupa
+            account and no Pupa server in the middle.
           </li>
           <li>
-            <strong>Your agent and model credentials never leave your machine.</strong>{' '}
-            The app pairs to a backend you run, so your API keys and logins sit in
-            that backend’s environment; the paired-device token stays in the iOS
-            Keychain and is excluded from sync.
+            <strong>Your keys never leave your machine.</strong> The app connects
+            to a backend you run, so your API keys and logins stay there. The
+            pairing token is kept in the iOS Keychain and is never synced.
           </li>
           <li>
-            <strong>The one external hop is the model you pick.</strong> What you
-            send the agent goes to your LLM provider (Anthropic, OpenRouter, …)
-            under your own key. The same trust you already place in that provider,
-            and nowhere else.
+            <strong>The only thing that leaves is your chat with the model.</strong>{' '}
+            What you send the agent goes to your LLM provider (Anthropic, OpenRouter
+            and so on) under your own key. That’s the same trust you already place
+            in that provider, and nowhere else.
           </li>
         </ul>
       </div>
@@ -486,12 +509,16 @@ LLM_MODEL=anthropic/claude-sonnet-4.6</code></pre>
       </p>
 
       <h3 id="channels">Connection channels</h3>
+      <p class="setup__lead">
+        How does your phone find the backend running on your laptop? Three ways,
+        from quietest to most reachable.
+      </p>
       <BackendFlow />
       <p>
         “How will your iPhone reach the backend?” is the question in{' '}
         <code>pupa-backend setup</code> that picks your <em>connection channel</em>.
         It’s saved as <code>connectivity</code> in <code>config.yml</code>; re-run
-        setup any time to change it. Three options, quietest to most reachable:
+        setup any time to change it. Three options:
       </p>
       <ul>
         <li>
@@ -534,11 +561,14 @@ LLM_MODEL=anthropic/claude-sonnet-4.6</code></pre>
       </p>
 
       <h3 id="screenshare">Screen-share</h3>
+      <p class="setup__lead">
+        Optional, and macOS only. Lets the agent see your screen. You build this
+        one from source.
+      </p>
       <p>
-        Screen-share lets the agent see your screen as live WebRTC video. It’s
-        optional and macOS-only, and the sidecar is <strong>built from
-        source</strong> — so use the one-line source installer instead of the PyPI
-        package (it clones the repo and compiles the sidecar):
+        The sidecar is <strong>built from source</strong>, so use the one-line
+        source installer instead of the PyPI package (it clones the repo and
+        compiles the sidecar):
       </p>
       <pre><code>curl -fsSL https://raw.githubusercontent.com/pupa-app/pupa-backend/main/install.sh | bash</code></pre>
       <p>
@@ -554,8 +584,11 @@ LLM_MODEL=anthropic/claude-sonnet-4.6</code></pre>
       </p>
 
       <h3 id="railway">Deploy to the cloud (Railway)</h3>
+      <p class="setup__lead">
+        For when you would rather not leave a laptop running.
+      </p>
       <p>
-        Don’t want to keep a laptop running? The repo ships a{' '}
+        The repo ships a{' '}
         <strong>ready-to-deploy Railway config</strong> — <code>railway.json</code>{' '}
         and a <code>Dockerfile</code> at the root, plus a baked{' '}
         <code>cloud-config.yml</code> with multi-tenant-safe defaults. You just
