@@ -209,7 +209,7 @@ const myappTravels = { icon: 'travels', lead: 'It travels.', body: 'The whole ap
         </p>
         <BackendFlow variant="compact" class="backend-flow--teaser" />
       </div>
-      <ol class="setup__steps setup__steps--num">
+      <ol class="setup__steps">
         <li>
           <strong>Install the backend and run setup.</strong> Make sure the{' '}
           <a href="https://claude.com/claude-code">Claude Code</a> CLI is installed
@@ -509,6 +509,10 @@ LLM_MODEL=anthropic/claude-sonnet-4.6</code></pre>
       </p>
 
       <h3 id="channels">Connection channels</h3>
+      <p class="setup__lead">
+        Plain English: how does your phone find the backend running on your
+        laptop? Three ways, from quietest to most reachable.
+      </p>
       <BackendFlow />
       <p>
         “How will your iPhone reach the backend?” is the question in{' '}
@@ -557,6 +561,10 @@ LLM_MODEL=anthropic/claude-sonnet-4.6</code></pre>
       </p>
 
       <h3 id="screenshare">Screen-share</h3>
+      <p class="setup__lead">
+        Optional, and macOS only. Lets the agent see your screen. You build this
+        one from source.
+      </p>
       <p>
         Screen-share lets the agent see your screen as live WebRTC video. It’s
         optional and macOS-only, and the sidecar is <strong>built from
@@ -577,6 +585,9 @@ LLM_MODEL=anthropic/claude-sonnet-4.6</code></pre>
       </p>
 
       <h3 id="railway">Deploy to the cloud (Railway)</h3>
+      <p class="setup__lead">
+        For when you would rather not leave a laptop running.
+      </p>
       <p>
         Don’t want to keep a laptop running? The repo ships a{' '}
         <strong>ready-to-deploy Railway config</strong> — <code>railway.json</code>{' '}
