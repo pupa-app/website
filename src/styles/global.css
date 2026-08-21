@@ -878,7 +878,10 @@ a.icon-point:hover .icon-point__icon { color: var(--accent); }
    One inline SVG, themed via the accent + surface tokens and driven by a
    `data-active` channel on the root. Motion is packet dots travelling each
    wire; everything is disabled under prefers-reduced-motion below. */
-.backend-flow { max-width: 640px; margin: 1.5rem auto 0; }
+/* Bottom margin clears the caption and channel chips inside the diagram, which
+   would otherwise butt straight up against the paragraph that follows. The
+   --compact and --teaser variants below reset it via their own shorthand. */
+.backend-flow { max-width: 640px; margin: 1.5rem auto 2rem; }
 .backend-flow--compact { max-width: 420px; margin: 0.9rem 0 0; }
 .backend-flow--teaser { margin: 0.5rem auto 0; }
 
