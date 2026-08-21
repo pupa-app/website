@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v7.0.7"><title>From Claude on your machine to Claude in your app · Pupa</title><meta name="description" content="A developer’s tour of the three ways an agent can meet its user — on the machine, behind a chat app, and inside a MyApp — and what changes when the arrows point both ways."><meta name="color-scheme" content="light dark"><link rel="icon" type="image/png" href="/favicon.png?v=4"><link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4"><meta property="og:title" content="From Claude on your machine to Claude in your app · Pupa"><meta property="og:description" content="A developer’s tour of the three ways an agent can meet its user — on the machine, behind a chat app, and inside a MyApp — and what changes when the arrows point both ways."><meta property="og:type" content="website"><link rel="stylesheet" href="/_astro/BaseLayout.lKSGwNKM.css"></head><body><header class="site-header"><div class="container bar"><a href="/" class="brand" aria-label="Pupa — home"><img src="/pupa-mark.png" width="36" height="36" alt="Pupa logo" class="pupa-mark" decoding="async"></a><details class="nav-menu"><summary class="nav-menu__btn" aria-label="Toggle navigation menu"><span class="nav-menu__icon" aria-hidden="true"></span></summary><nav class="nav" aria-label="Primary"><a href="/tutorials">Tutorials</a><a href="/marketplace">Marketplace</a><a href="https://github.com/pupa-app">GitHub</a><a href="/blog">Blog</a><a href="/support">Support</a></nav></details></div></header><main><article class="section container"><a class="back-link" href="/blog">← All posts</a><div class="page-head" style="padding-block:0 1.5rem"><h1>From Claude on your machine to Claude in your app</h1><p class="post-subtitle">The architecture behind MyApps — and why the arrows point both ways</p><p class="page-sub">July 24, 2026 · Pupa team</p></div><details class="toc" open><summary class="toc__title">Contents</summary><nav aria-label="Table of contents"><ul><li><a href="#one-diagram-three-stages">One diagram, three stages</a></li><li><a href="#stage-1--an-agent-on-your-machine">Stage 1 — an agent on your machine</a></li><li><a href="#stage-2--a-chat-app-in-front-of-a-backend">Stage 2 — a chat app in front of a backend</a></li><li><a href="#stage-3--an-app-the-agent-operates">Stage 3 — an app the agent operates</a></li><li><a href="#what-travels-what-stays">What travels, what stays</a></li><li><a href="#where-the-standard-goes">Where the standard goes</a></li></ul></nav></details><div class="prose"><h2 id="one-diagram-three-stages">One diagram, three stages</h2>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v7.0.7"><title>From Claude on your machine to Claude in your app · Pupa</title><meta name="description" content="A developer’s tour of the three ways an agent can meet its user (on the machine, behind a chat app, and inside a MyApp) and what changes when the arrows point both ways."><meta name="color-scheme" content="light dark"><link rel="icon" type="image/png" href="/favicon.png?v=4"><link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4"><meta property="og:title" content="From Claude on your machine to Claude in your app · Pupa"><meta property="og:description" content="A developer’s tour of the three ways an agent can meet its user (on the machine, behind a chat app, and inside a MyApp) and what changes when the arrows point both ways."><meta property="og:type" content="website"><link rel="stylesheet" href="/_astro/BaseLayout.lKSGwNKM.css"></head><body><header class="site-header"><div class="container bar"><a href="/" class="brand" aria-label="Pupa, home"><img src="/pupa-mark.png" width="36" height="36" alt="Pupa logo" class="pupa-mark" decoding="async"></a><details class="nav-menu"><summary class="nav-menu__btn" aria-label="Toggle navigation menu"><span class="nav-menu__icon" aria-hidden="true"></span></summary><nav class="nav" aria-label="Primary"><a href="/tutorials">Tutorials</a><a href="/marketplace">Marketplace</a><a href="https://github.com/pupa-app">GitHub</a><a href="/blog">Blog</a><a href="/support">Support</a></nav></details></div></header><main><article class="section container"><a class="back-link" href="/blog">← All posts</a><div class="page-head" style="padding-block:0 1.5rem"><h1>From Claude on your machine to Claude in your app</h1><p class="post-subtitle">The architecture behind MyApps, and why the arrows point both ways</p><p class="page-sub">July 24, 2026 · Pupa team</p></div><details class="toc" open><summary class="toc__title">Contents</summary><nav aria-label="Table of contents"><ul><li><a href="#one-diagram-three-stages">One diagram, three stages</a></li><li><a href="#stage-1-an-agent-on-your-machine">Stage 1: an agent on your machine</a></li><li><a href="#stage-2-a-chat-app-in-front-of-a-backend">Stage 2: a chat app in front of a backend</a></li><li><a href="#stage-3-an-app-the-agent-operates">Stage 3: an app the agent operates</a></li><li><a href="#what-travels-what-stays">What travels, what stays</a></li><li><a href="#where-the-standard-goes">Where the standard goes</a></li></ul></nav></details><div class="prose"><h2 id="one-diagram-three-stages">One diagram, three stages</h2>
 <p><a href="/blog/packaging-agentic-experiences">Keep what you build with your agent</a>
 told the story from the user’s side: you chat, an app appears, you keep it,
 you hand it to a friend. This post is the companion for people who want to
@@ -6,44 +6,44 @@ see the machinery.</p>
 <p>Everything below is a walk through one diagram, top to bottom. Each panel is
 a different answer to the same question: <em>where does the agent meet its
 user, and what flows across that boundary?</em></p>
-<h2 id="stage-1--an-agent-on-your-machine">Stage 1 — an agent on your machine</h2>
+<h2 id="stage-1-an-agent-on-your-machine">Stage 1: an agent on your machine</h2>
 <p><img alt="Stage 1: Claude with tools, MCP and skills running directly on a laptop, reading and modifying OS apps and the filesystem." loading="lazy" decoding="async" width="2188" height="840" src="/_astro/information-flow-1.DkbFL3mX_28vpWR.webp" srcset=""></p>
 <p>The top panel is the setup most developers live in today: Claude on the
 laptop, armed with tools, MCP servers and skills, reading and modifying OS
 apps and the filesystem directly.</p>
 <p>This is the most capable configuration there is, and the most personal. It’s
 also architecturally a dead end for everyone except you. The session’s
-output is a transcript plus whatever files got written. The setup itself —
-the instructions, the skills, the server config — is welded to one machine,
+output is a transcript plus whatever files got written. The setup itself
+(the instructions, the skills, the server config) is welded to one machine,
 tangled with your credentials and paths, and was never designed to be handed
 to anyone. When the laptop goes, the experience goes with it.</p>
-<h2 id="stage-2--a-chat-app-in-front-of-a-backend">Stage 2 — a chat app in front of a backend</h2>
+<h2 id="stage-2-a-chat-app-in-front-of-a-backend">Stage 2: a chat app in front of a backend</h2>
 <p><img alt="Stage 2: the same agent moved behind a generic backend, reporting OS and chat data one way to a chat-focused phone app." loading="lazy" decoding="async" width="2194" height="966" src="/_astro/information-flow-2.CMwWp9vP_Z1gl0Uy.webp" srcset=""></p>
 <p>The middle panel is where most agent products stop. The agent moves behind a
 backend; a phone app goes in front. The app renders chats, clusters them
 into projects, and shows a few widgets about the conversation.</p>
 <p>Look at the arrow between them: it points one way. The backend <em>reports</em> OS
 and chat data to the app. The surface you’re looking at is a readout, not a
-workspace — the widgets aren’t tools the agent holds, so it can’t act on
+workspace. The widgets aren’t tools the agent holds, so it can’t act on
 what you’re seeing, and you can’t act on it either except by typing more
 chat. And since the app’s only durable state is a chat history, nothing you
 set up in it exists as a unit you could keep, version, or share.</p>
-<p>You gained reach — the agent is on your phone now — and lost the thing that
+<p>You gained reach (the agent is on your phone now) and lost the thing that
 made stage 1 interesting: a shared surface both sides can work on.</p>
-<h2 id="stage-3--an-app-the-agent-operates">Stage 3 — an app the agent operates</h2>
-<p><img alt="Stage 3: Pupa — the agent runs behind your own pupa-backend and reads and modifies a structured MyApp of components and Memories, both ways." loading="lazy" decoding="async" width="2198" height="966" src="/_astro/information-flow-3.I3-FAPij_Z1WdR13.webp" srcset=""></p>
+<h2 id="stage-3-an-app-the-agent-operates">Stage 3: an app the agent operates</h2>
+<p><img alt="Stage 3: Pupa, where the agent runs behind your own pupa-backend and reads and modifies a structured MyApp of components and Memories, both ways." loading="lazy" decoding="async" width="2198" height="966" src="/_astro/information-flow-3.I3-FAPij_Z1WdR13.webp" srcset=""></p>
 <p>The bottom panel is Pupa. The laptop half is unchanged: Claude still runs
 with its tools against the OS, now behind your own pupa-backend. What’s new
-is the other end of the arrow — and that the arrow points both ways. The
+is the other end of the arrow, and that the arrow points both ways. The
 backend doesn’t report to the app; it <em>reads and modifies</em> it.</p>
 <p>That’s possible because there is now a structured thing to modify. A
 <strong>MyApp</strong> is two halves:</p>
 <ul>
-<li><strong>Components</strong> — typed UI blocks (tracker, calendar, checklist, chart,
+<li><strong>Components:</strong> typed UI blocks (tracker, calendar, checklist, chart,
 chat room) holding items of data, linkable to each other. To the agent
 each component is a first-class tool: it adds a row, moves an event,
 links a diary entry to a day, as real actions you watch land.</li>
-<li><strong>Memories</strong> — a long-lived filesystem carried by the app: its documents,
+<li><strong>Memories:</strong> a long-lived filesystem carried by the app: its documents,
 the agent’s prompts, and its skills.</li>
 </ul>
 <p>The design bet behind the components is that <strong>agents don’t need pixels,
@@ -51,21 +51,21 @@ they need structure</strong>. A human app lives or dies on visual polish; an age
 operates a component through its fields, links and state, and never sees the
 styling. That tolerance is leverage. There’s no standard agent UI yet, so
 instead of chasing pixel-perfect surfaces, Pupa standardises a small set of
-plain, well-typed blocks — unfussy to render, and expressive enough to
+plain, well-typed blocks: unfussy to render, and expressive enough to
 build real experiences on because they compose and cross-link.</p>
 <h2 id="what-travels-what-stays">What travels, what stays</h2>
 <p>Notice the laptop keeps its “read/modify OS data” arrow in every panel. The
 host never stops being the capable half. Pupa’s split is about which side
 owns what:</p>
 <ul>
-<li><strong>The MyApp owns structure and intent</strong> — the components, the memories,
+<li><strong>The MyApp owns structure and intent:</strong> the components, the memories,
 the prompts and skills, the way it all links together.</li>
-<li><strong>The host owns capability</strong> — tool access, credentials, private files,
+<li><strong>The host owns capability:</strong> tool access, credentials, private files,
 the live web. These are granted fresh on whatever machine the app runs
 on, and never travel with it.</li>
 </ul>
 <p>That split is what makes the bundle safe to pass around. An exported MyApp
-is a single <code>.pupa</code> file of inert JSON — the app tree plus its memories,
+is a single <code>.pupa</code> file of inert JSON: the app tree plus its memories,
 with no code inside. The receiving client rebuilds the app from the
 description (so bundles survive version drift), shows a confirm sheet naming
 the app and any agent prompts, and nothing runs until that host grants its
@@ -74,12 +74,12 @@ own abilities.</p>
 <p>One file replaces the pile: harness config, docs, plugins, personal assets,
 workflows. The keys stay home.</p>
 <h2 id="where-the-standard-goes">Where the standard goes</h2>
-<p>The component set is an extension point, not a fixed menu. New kinds —
-multi-agent chat rooms were the first — are built against the same two
+<p>The component set is an extension point, not a fixed menu. New kinds
+(multi-agent chat rooms were the first) are built against the same two
 primitives as the built-ins, render anywhere, and export in the same
 bundle. How that works, and how it stays safe to share, is covered in
 <a href="/blog/custom-components-and-portability">Build your own component</a>.</p>
 <p>And distribution is deliberately boring: the <a href="/marketplace">marketplace</a> is
 an HTTPS <code>index.json</code> pointing at <code>.pupa</code> files. Inert data, an open
-client, and arrows that point both ways — that’s the whole architecture.</p>
+client, and arrows that point both ways. That’s the whole architecture.</p>
 </div></article></main><footer class="site-footer"><div class="container bar"><div class="foot-links"><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/support">Support</a><a href="https://github.com/pupa-app">GitHub</a></div><div>© 2026 Pupa</div></div></footer></body></html>
