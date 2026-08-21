@@ -17,12 +17,12 @@ const repos = [
   {
     name: 'pupa-backend',
     url: BACKEND_REPO,
-    desc: 'The user-owned backend. Hooks into the agent harness running on your laptop (like Claude Code). Run it locally next to the app or deploy your own in the cloud. Pair-once auth; your keys stay yours.',
+    desc: 'The user-owned backend. Hooks into the agent harness running on your laptop (like Claude Code). Run it locally or deploy your own in the cloud.',
   },
   {
     name: 'marketplace',
     url: MARKETPLACE,
-    desc: 'A catalog of .pupa bundles you can browse and install from the app. Just an HTTPS index.json anyone can host. App content is CC0; tooling is MIT.',
+    desc: 'A catalog of .pupa bundles you can browse and install from the app. Just an HTTPS index.json anyone can host.',
   },
 ];
 
@@ -87,7 +87,7 @@ const components = [
   {
     name: 'Tracker',
     icon: '🗂️',
-    blurb: 'Multi-field records in a table or kanban — fields, filters, and cards.',
+    blurb: 'Multi-field records in a table or kanban: fields, filters, and cards.',
   },
   {
     name: 'Calendar',
@@ -112,7 +112,7 @@ const components = [
   {
     name: 'Slack',
     icon: '💬',
-    blurb: 'Multi-agent chat rooms — subagent personas, channels, and @-mentions.',
+    blurb: 'Multi-agent chat rooms: subagent personas, channels, and @-mentions.',
   },
 ];
 
@@ -160,7 +160,7 @@ const myappTravels = { icon: 'travels', lead: 'It travels.', body: 'The whole ap
 ---
 <BaseLayout
   title="Tutorials"
-  description="Learn Pupa — what a MyApp is, and how to use, build, and share one, with docs and videos."
+  description="Learn Pupa: what a MyApp is, and how to use, build, and share one, with docs and videos."
 >
   <section class="section container">
     <div class="page-head" style="padding-block:0 1rem">
@@ -205,7 +205,7 @@ const myappTravels = { icon: 'travels', lead: 'It travels.', body: 'The whole ap
       <div class="flow-teaser">
         <p class="flow-teaser__cap">
           The backend runs on your machine and simply connects your own agent
-          harness — like <strong>Claude Code</strong> — to the Pupa app.
+          harness, like <strong>Claude Code</strong>, to the Pupa app.
         </p>
         <BackendFlow variant="compact" class="backend-flow--teaser" />
       </div>
@@ -219,7 +219,7 @@ pupa-backend setup</code></pre>
           In the wizard, enable the <strong>Claude Code</strong> harness, and when
           asked <em>“How will your iPhone reach the backend?”</em> pick{' '}
           <strong>Cloudflare tunnel</strong> and answer <em>no</em> to the domain
-          question — that’s the free quick tunnel, no Cloudflare account needed. (If Pupa is on the Mac running the backend, select <strong>Localhost</strong>.)
+          question: that’s the free quick tunnel, no Cloudflare account needed. (If Pupa is on the Mac running the backend, select <strong>Localhost</strong>.)
         </li>
         <li>
           <strong>Start the backend.</strong> This serves on <code>:8004</code> and
@@ -295,7 +295,7 @@ pupa-backend setup</code></pre>
           controls
           playsinline
           preload="metadata"
-          title="Exploring a MyApp — components, memories & the agent"
+          title="Exploring a MyApp: components, memories & the agent"
         />
       </div>
     </div>
@@ -330,14 +330,14 @@ pupa-backend setup</code></pre>
                 playsinline
                 preload="metadata"
                 poster={t.poster}
-                title={`${t.title} — video walkthrough`}
+                title={`${t.title}: video walkthrough`}
               />
             </div>
           ) : t.video ? (
             <div class="tut__video">
               <iframe
                 src={`https://www.youtube-nocookie.com/embed/${t.video}`}
-                title={`${t.title} — video walkthrough`}
+                title={`${t.title}: video walkthrough`}
                 loading="lazy"
                 allowfullscreen
               />
@@ -369,7 +369,7 @@ pupa-backend setup</code></pre>
             ))}
           </div>
           <p class="setup__lead" style="margin-top:1.25rem">
-            The set isn’t a fixed menu — it’s an extension point. You can add your own
+            The set isn’t a fixed menu. It’s an extension point. You can add your own
             canvas shape with a documented, compiler-enforced recipe, and every kind
             declares how it travels in a <code>.pupa</code> bundle.{' '}
             <a href={href('/blog/custom-components-and-portability')}>
@@ -388,7 +388,7 @@ pupa-backend setup</code></pre>
             loading="lazy"
           />
           <figcaption>
-            Share directly, device to device — or publish to a marketplace (a plain
+            Share directly, device to device, or publish to a marketplace (a plain
             HTTPS <code>index.json</code> anyone can host) for others to import.
           </figcaption>
         </figure>
@@ -435,7 +435,7 @@ pupa-backend setup</code></pre>
         />
         <figcaption>
           Your MyApps, memories, and settings sync across your iPhone, iPad, and
-          Mac through <strong>your own iCloud</strong> — no Pupa account, no Pupa
+          Mac through <strong>your own iCloud</strong>: no Pupa account, no Pupa
           server in the middle.
         </figcaption>
       </figure>
@@ -476,7 +476,7 @@ pupa-backend service-stop      # stop and remove it</code></pre>
 
       <h3 id="claude-code">Option A · Claude Code (subscription)</h3>
       <p>
-        <strong>Claude Code is a harness</strong> — a self-contained agent loop
+        <strong>Claude Code is a harness</strong>: a self-contained agent loop
         the backend runs on your existing Claude subscription instead of metered
         API tokens. Install the <a href="https://claude.com/claude-code">Claude
         Code</a> CLI so the <code>claude</code> binary is on your PATH, then enable
@@ -487,7 +487,7 @@ pupa-backend service-stop      # stop and remove it</code></pre>
     enabled: true</code></pre>
       <p>
         Every enabled harness is mounted separately, so the app shows a{' '}
-        <strong>Claude Code</strong> option in its per-connection harness picker —
+        <strong>Claude Code</strong> option in its per-connection harness picker,
         no app update needed. It uses Claude Code’s native host tools, gated by the
         permission controls the app renders.
       </p>
@@ -504,7 +504,7 @@ LLM_API_KEY=sk-or-...
 LLM_MODEL=anthropic/claude-sonnet-4.6</code></pre>
       <p>
         Or set just <code>OPENROUTER_API_KEY=sk-or-...</code> to unlock the
-        curated in-app model picker (GLM, Qwen, MiniMax, Kimi, DeepSeek) — the
+        curated in-app model picker (GLM, Qwen, MiniMax, Kimi, DeepSeek). The
         client chooses the model per request, no <code>LLM_MODEL</code> needed.
       </p>
 
@@ -522,29 +522,29 @@ LLM_MODEL=anthropic/claude-sonnet-4.6</code></pre>
       </p>
       <ul>
         <li>
-          <strong>Localhost</strong> — same machine only. The app talks to{' '}
+          <strong>Localhost:</strong> same machine only. The app talks to{' '}
           <code>http://localhost:8004</code> and nothing leaves your computer.
           Ideal when the macOS app runs on the same Mac as the backend: no tunnel,
           no exposure.
         </li>
         <li>
-          <strong>Cloudflare tunnel</strong> — a public HTTPS URL to your backend
+          <strong>Cloudflare tunnel:</strong> a public HTTPS URL to your backend
           with no ports to open. The free <strong>quick tunnel</strong> needs no
           domain and no account (the backend brings it up on <code>run</code>), but
           its URL changes on every restart, so you re-pair each time. Own a domain
           on Cloudflare? Choose <em>“I have a domain”</em> for a{' '}
-          <strong>named tunnel</strong> with a stable URL — pair once, never again.
+          <strong>named tunnel</strong> with a stable URL: pair once, never again.
         </li>
         <li>
-          <strong>Tailscale</strong> — a private mesh VPN across your own devices
+          <strong>Tailscale:</strong> a private mesh VPN across your own devices
           (free). You get a stable MagicDNS name and traffic stays private instead
           of being published to the internet; the wizard generates a self-signed
-          TLS cert for it. Recommended for everyday remote use — needs Tailscale
+          TLS cert for it. Recommended for everyday remote use. Needs Tailscale
           installed and running on both the backend host and your phone.
         </li>
       </ul>
       <p class="setup__note">
-        Whichever you pick, pairing is the same flow below — the channel just
+        Whichever you pick, pairing is the same flow below. The channel just
         decides which URL the QR code embeds.
       </p>
 
@@ -556,7 +556,7 @@ LLM_MODEL=anthropic/claude-sonnet-4.6</code></pre>
       <pre><code>pupa-backend pair     # prints a QR pairing code</code></pre>
       <p>
         In the app, go to <strong>Settings ▸ Backend ▸ Edit</strong> and scan the
-        QR (or paste the code). Pairing is one-time — after that the app reconnects on its
+        QR (or paste the code). Pairing is one-time. After that the app reconnects on its
         own.
       </p>
 
@@ -589,7 +589,7 @@ LLM_MODEL=anthropic/claude-sonnet-4.6</code></pre>
       </p>
       <p>
         The repo ships a{' '}
-        <strong>ready-to-deploy Railway config</strong> — <code>railway.json</code>{' '}
+        <strong>ready-to-deploy Railway config</strong>: <code>railway.json</code>{' '}
         and a <code>Dockerfile</code> at the root, plus a baked{' '}
         <code>cloud-config.yml</code> with multi-tenant-safe defaults. You just
         fork it, point Railway at your fork, add a database, and set a few
@@ -601,7 +601,7 @@ LLM_MODEL=anthropic/claude-sonnet-4.6</code></pre>
           On <a href="https://railway.com">Railway</a>: <strong>New Project ▸ Deploy
           from GitHub repo</strong> → pick your fork. Railway auto-detects{' '}
           <code>railway.json</code> + <code>Dockerfile</code> and builds the image.
-          The first deploy fails until env vars are set — that’s expected.
+          The first deploy fails until env vars are set. That’s expected.
         </li>
         <li>
           Add the <strong>Postgres</strong> plugin (New ▸ Database ▸ PostgreSQL).
@@ -615,7 +615,7 @@ PUPA_API_KEY=&lt;random&gt;                     # openssl rand -hex 32 — boots
 DATABASE_URL=$&#123;&#123;Postgres.DATABASE_URL&#125;&#125;      # reference the Postgres plugin</code></pre>
       <p>
         The safety posture (shell off, screen-share off, no MCP servers) is baked
-        into the image — don’t override it on a public deployment. Railway
+        into the image. Don’t override it on a public deployment. Railway
         redeploys on every push, so your fork stays in sync. Once the deploy is
         green, <a href="#pairing">pair</a> against your{' '}
         <code>https://&lt;svc&gt;.up.railway.app</code> URL.
@@ -632,12 +632,10 @@ DATABASE_URL=$&#123;&#123;Postgres.DATABASE_URL&#125;&#125;      # reference the
       <p class="section-eyebrow">Open source</p>
       <h2 style="margin-top:0">Contribute</h2>
       <p class="setup__lead">
-        Add new blocks — canvas components — to the app, or new agent hookups to
+        Add new blocks (canvas components) to the app, or new agent hookups to
         the backend. Components are just SwiftUI views with a typed model, so you
-        can build agent-compatible surfaces without any agentic knowledge. The
-        client, backend, and marketplace are all developed in the open — see{' '}
-        <a href={`${GITHUB_ORG}/pupa/issues`}>the repos</a> for each project’s
-        terms.
+        can build agent-compatible surfaces without any agentic knowledge. 
+        {' '}<a href={`${GITHUB_ORG}/`}>The repos</a>, client, backend, and marketplace, are all open-source.
       </p>
       <div class="repo-grid">
         {repos.map((r) => (
