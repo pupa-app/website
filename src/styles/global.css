@@ -439,8 +439,15 @@ main {
   color: var(--text-dim);
 }
 .hero .hero-points li { margin-bottom: 0.35rem; }
-/* Each bullet is a link into the matching tutorial walkthrough. */
-.hero .hero-point {
+/* Icon bullet list. Shared by the homepage hero and the tutorials page, so
+   these stay unscoped. The hero's own centring lives on .hero .hero-points. */
+.icon-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.icon-list li { margin-bottom: 0.35rem; }
+.icon-point {
   display: flex;
   align-items: flex-start;
   gap: 0.65rem;
@@ -450,16 +457,16 @@ main {
   border-radius: var(--radius-sm);
   transition: background 0.15s ease, color 0.15s ease;
 }
-.hero .hero-point:hover { background: var(--accent-soft); color: var(--text); text-decoration: none; }
-.hero .hero-point:hover .hero-point__icon { color: var(--accent); }
-.hero .hero-point__icon {
+.icon-point:hover { background: var(--accent-soft); color: var(--text); text-decoration: none; }
+.icon-point:hover .icon-point__icon { color: var(--accent); }
+.icon-point__icon {
   flex: none;
   width: 1.2rem;
   height: 1.2rem;
   margin-top: 0.16em;
   color: var(--accent);
 }
-.hero .hero-points strong { color: var(--text); }
+.icon-point strong { color: var(--text); }
 
 /* Hero content self-caps its measure (typography-driven) regardless of
    container width, so it reads lost on very wide monitors. Scale the caps

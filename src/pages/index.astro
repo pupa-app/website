@@ -94,8 +94,8 @@ const tags = [
     <ul class="hero-points">
       {heroPoints.map((p) => (
         <li>
-          <a class="hero-point" href={p.href}>
-            <svg class="hero-point__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={pointIcons[p.icon]}></svg>
+          <a class="icon-point" href={p.href}>
+            <svg class="icon-point__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={pointIcons[p.icon]}></svg>
             <span><strong>{p.verb}</strong> {p.body}</span>
           </a>
         </li>
