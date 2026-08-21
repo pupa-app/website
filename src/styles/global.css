@@ -464,7 +464,7 @@ main {
 /* Hero content self-caps its measure (typography-driven) regardless of
    container width, so it reads lost on very wide monitors. Scale the caps
    up past 1200px only — mobile/tablet sizing above is untouched. */
-@media (min-width: 1200px) {
+@media (min-width: 1800px) {
   .hero-wordmark img { width: min(460px, 34%); }
   .hero .hero-tags { max-width: 50rem; }
   .hero .lead { font-size: clamp(1.3rem, 1.6vw, 1.7rem); max-width: 52ch; }
@@ -540,7 +540,7 @@ main {
 /* Percentage here resolves against the grid column, not the viewport, so the
    phone mockup grows with its column on wide screens instead of vw-scaling
    against the full monitor width (which blew it up on ultrawide). */
-@media (min-width: 1200px) {
+@media (min-width: 1800px) {
   .showcase__media { width: min(420px, 60%); }
 }
 .showcase__video {
@@ -642,7 +642,7 @@ main {
 }
 .why__lead:last-child { margin-bottom: 0; }
 .why__lead strong { color: var(--text); }
-@media (min-width: 1200px) {
+@media (min-width: 1800px) {
   .why { max-width: 900px; }
 }
 
