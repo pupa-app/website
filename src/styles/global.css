@@ -457,8 +457,8 @@ main {
   border-radius: var(--radius-sm);
   transition: background 0.15s ease, color 0.15s ease;
 }
-.icon-point:hover { background: var(--accent-soft); color: var(--text); text-decoration: none; }
-.icon-point:hover .icon-point__icon { color: var(--accent); }
+a.icon-point:hover { background: var(--accent-soft); color: var(--text); text-decoration: none; }
+a.icon-point:hover .icon-point__icon { color: var(--accent); }
 .icon-point__icon {
   flex: none;
   width: 1.2rem;
@@ -776,6 +776,9 @@ main {
 .panel__body ul { color: var(--text-dim); padding-left: 1.2rem; }
 .panel__body li { margin-bottom: 0.5rem; }
 .panel__body li strong { color: var(--text); }
+/* .icon-list is a flex icon-bullet list, not a bulleted ul: it must keep its
+   flush left edge even inside .panel__body, whose ul rule indents lists. */
+.panel__body .icon-list { padding-left: 0; }
 /* Diagram figure inside a split panel (e.g. the iCloud-sync sketch). The art is
    a white-background PNG, so it keeps a light card in both themes to stay legible. */
 .panel__figure { margin: 0; text-align: center; }

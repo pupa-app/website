@@ -71,7 +71,7 @@ const tutorials = [
     steps: [
       'From Settings ▸ Import & Export, export your MyApp as a .pupa file.',
       'Send it straight to someone, or publish it to a marketplace.',
-      'When they open it, Pupa shows them what is inside before anything installs.',
+      'When they open it, Pupa names the app and its agent prompts before anything installs.',
       'The file holds no code. It cannot do anything until they give it permission.',
     ],
     videoSrc: href('/videos/export.mp4'),
@@ -141,8 +141,8 @@ const sections = [
 const myappIcons = {
   blocks: '<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>',
   chat: '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
-  equal: '<path d="M5 9h14"/><path d="M5 15h14"/>',
-  memory: '<path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/>',
+  equal: '<path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>',
+  memory: '<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>',
   travels: '<path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
 };
 
@@ -407,10 +407,10 @@ pupa-backend setup</code></pre>
         </p>
         <ul>
           <li>
-            <strong>Everything stays on your devices.</strong> Your MyApps and
-            settings sync between your iPhone, iPad, and Mac through your own{' '}
-            <strong>iCloud</strong>. There’s no Pupa account and no Pupa server in
-            the middle.
+            <strong>Your MyApps live on your devices.</strong> They sync between
+            your iPhone, iPad, and Mac through your own{' '}
+            <strong>iCloud</strong>, under your own Apple ID. There’s no Pupa
+            account and no Pupa server in the middle.
           </li>
           <li>
             <strong>Your keys never leave your machine.</strong> The app connects
@@ -419,7 +419,7 @@ pupa-backend setup</code></pre>
           </li>
           <li>
             <strong>The only thing that leaves is your chat with the model.</strong>{' '}
-            What you send the agent goes to your provider (Anthropic, OpenRouter
+            What you send the agent goes to your LLM provider (Anthropic, OpenRouter
             and so on) under your own key. That’s the same trust you already place
             in that provider, and nowhere else.
           </li>
@@ -518,7 +518,7 @@ LLM_MODEL=anthropic/claude-sonnet-4.6</code></pre>
         “How will your iPhone reach the backend?” is the question in{' '}
         <code>pupa-backend setup</code> that picks your <em>connection channel</em>.
         It’s saved as <code>connectivity</code> in <code>config.yml</code>; re-run
-        setup any time to change it. Three options, quietest to most reachable:
+        setup any time to change it. Three options:
       </p>
       <ul>
         <li>
@@ -566,10 +566,9 @@ LLM_MODEL=anthropic/claude-sonnet-4.6</code></pre>
         one from source.
       </p>
       <p>
-        Screen-share lets the agent see your screen as live WebRTC video. It’s
-        optional and macOS-only, and the sidecar is <strong>built from
-        source</strong> — so use the one-line source installer instead of the PyPI
-        package (it clones the repo and compiles the sidecar):
+        The sidecar is <strong>built from source</strong>, so use the one-line
+        source installer instead of the PyPI package (it clones the repo and
+        compiles the sidecar):
       </p>
       <pre><code>curl -fsSL https://raw.githubusercontent.com/pupa-app/pupa-backend/main/install.sh | bash</code></pre>
       <p>
@@ -589,7 +588,7 @@ LLM_MODEL=anthropic/claude-sonnet-4.6</code></pre>
         For when you would rather not leave a laptop running.
       </p>
       <p>
-        Don’t want to keep a laptop running? The repo ships a{' '}
+        The repo ships a{' '}
         <strong>ready-to-deploy Railway config</strong> — <code>railway.json</code>{' '}
         and a <code>Dockerfile</code> at the root, plus a baked{' '}
         <code>cloud-config.yml</code> with multi-tenant-safe defaults. You just
