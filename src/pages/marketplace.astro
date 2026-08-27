@@ -117,26 +117,49 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
         }
       };
 
-      // Build a card with DOM APIs — all catalog text goes through textContent,
-      // so nothing from the manifest is ever interpreted as HTML.
+      // Build a row with DOM APIs — all catalog text goes through textContent,
+      // so nothing from the manifest is ever interpreted as HTML. The row is a
+      // native <details>: collapsed it is one dense line, and opening it reveals
+      // the summary, meta and actions. No toggle JS, and it stays keyboard and
+      // screen-reader correct for free.
       const card = (e: Entry): HTMLElement => {
         const li = document.createElement('li');
         li.className = 'app-card';
 
-        const head = el('div', 'app-card__head');
+        const d = document.createElement('details');
+        d.className = 'app-card__d';
+        li.append(d);
+
+        const head = document.createElement('summary');
+        head.className = 'app-card__head';
         head.append(el('span', 'app-card__icon', monogram(e.name), { 'aria-hidden': 'true' }));
         const id = el('div', 'app-card__id');
         id.append(el('h2', 'app-card__name', e.name), el('p', 'app-card__by', `by ${e.author}`));
         head.append(id);
-        li.append(head);
 
-        li.append(el('p', 'app-card__summary', e.summary));
+        // Collapsed-row affordances: the first couple of tags and the size give
+        // the line enough signal to scan without opening it. Hidden on narrow
+        // viewports by CSS so the row never wraps.
+        if (e.tags?.length) {
+          const peek = el('ul', 'app-card__tags app-card__tags--peek');
+          peek.setAttribute('aria-hidden', 'true');
+          e.tags.slice(0, 2).forEach((t) => peek.append(el('li', 'app-card__tag', t)));
+          head.append(peek);
+        }
+        head.append(el('span', 'app-card__size', kb(e.sizeBytes), { 'aria-hidden': 'true' }));
+        head.append(el('span', 'app-card__chev', '', { 'aria-hidden': 'true' }));
+        d.append(head);
+
+        const body = el('div', 'app-card__body');
+        d.append(body);
+
+        body.append(el('p', 'app-card__summary', e.summary));
 
         if (e.tags?.length) {
           const tags = el('ul', 'app-card__tags');
           tags.setAttribute('aria-label', 'Tags');
           e.tags.forEach((t) => tags.append(el('li', 'app-card__tag', t)));
-          li.append(tags);
+          body.append(tags);
         }
 
         const meta = el('dl', 'app-card__meta');
@@ -144,7 +167,7 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
         meta.append(metaPair('Exported by', `Pupa ${e.appVersion}`));
         if (e.includedRecords) meta.append(metaPair('Includes', 'sample data'));
         if (e.includedMemories) meta.append(metaPair('Includes', 'memories'));
-        li.append(meta);
+        body.append(meta);
 
         const actions = el('div', 'app-card__actions');
         const open = document.createElement('a');
@@ -195,7 +218,7 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
           });
           actions.append(save);
         }
-        li.append(actions);
+        body.append(actions);
         return li;
       };
 
@@ -215,11 +238,27 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
       fetch(BASE + 'index.json', { cache: 'no-cache' })
         .then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json() as Promise<Index>; })
         .then((data) => {
+          const entries = data.entries ?? [];
           const ul = document.createElement('ul');
-          ul.className = 'mkt__grid';
+          ul.className = 'mkt__list';
           ul.setAttribute('role', 'list');
-          (data.entries ?? []).forEach((e) => ul.append(card(e)));
-          status.replaceChildren(ul);
+          entries.forEach((e) => ul.append(card(e)));
+
+          const bar = el('div', 'mkt__bar');
+          bar.append(el('p', 'mkt__count', `${entries.length} app${entries.length === 1 ? '' : 's'}`));
+          const toggle = document.createElement('button');
+          toggle.type = 'button';
+          toggle.className = 'mkt__toggle';
+          toggle.textContent = 'Expand all';
+          toggle.addEventListener('click', () => {
+            const rows = [...ul.querySelectorAll<HTMLDetailsElement>('.app-card__d')];
+            const open = !rows.every((r) => r.open);
+            rows.forEach((r) => { r.open = open; });
+            toggle.textContent = open ? 'Collapse all' : 'Expand all';
+          });
+          bar.append(toggle);
+
+          status.replaceChildren(bar, ul);
         })
         .catch((err) => { console.warn(`[marketplace] ${err}`); showError(); });
 
