@@ -1,0 +1,257 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { href } from '../lib/href';
+
+// Releases are read CLIENT-SIDE from the GitHub API, the same way the
+// marketplace reads its catalog: the page reflects what is published right
+// now, with no website rebuild per release. A fetch failure degrades to an
+// inline "unavailable" state rather than an empty page.
+//
+// While `pupa-app/pupa` is private the API answers 404 to the public, so the
+// page shows that unavailable state. Nothing here needs changing when the repo
+// is made public.
+const RELEASES_API = 'https://api.github.com/repos/pupa-app/pupa/releases';
+const RELEASES_PAGE = 'https://github.com/pupa-app/pupa/releases';
+// Backend versions come from PyPI, which is public and CORS-open. There is no
+// declared client/backend compatibility pin anywhere (the backend only reports
+// its own version from `GET /auth/config`), so the pairing below is derived
+// from publication dates, and the page says so.
+const BACKEND_API = 'https://pypi.org/pypi/pupa-backend/json';
+const BACKEND_PAGE = 'https://pypi.org/project/pupa-backend/';
+---
+<BaseLayout
+  title="Releases"
+  description="Every published Pupa release: version, date, what changed, the macOS download, and the backend version that was current at the time."
+>
+  <section
+    class="section container rel"
+    data-api={RELEASES_API}
+    data-releases-page={RELEASES_PAGE}
+    data-backend-api={BACKEND_API}
+  >
+    <h1 class="rel__title">Releases</h1>
+    <p class="rel__lead">
+      Every published Pupa release, newest first. Each Mac download is a
+      notarized <code>.dmg</code>: macOS 14 or later, opens with no Gatekeeper
+      warning. Open it and drag Pupa to Applications.
+    </p>
+
+    <details class="rel__how">
+      <summary>How the backend version is worked out</summary>
+      <div class="rel__how-body">
+        <p>
+          Pupa the app and <a href={BACKEND_PAGE}>pupa-backend</a> ship
+          separately and neither one pins the other: the backend reports its
+          version from <code>GET /auth/config</code>, and the app uses that for
+          its own checks. There is no published compatibility table.
+        </p>
+        <p>
+          So the version shown against a release is not a declared guarantee.
+          It is the <strong>newest pupa-backend on PyPI at the moment that
+          release was published</strong>, which is the build that release was
+          developed and tested against. In practice, running the latest backend
+          is the right answer.
+        </p>
+      </div>
+    </details>
+
+    <!-- Populated by the client fetch. Loading, then list or error. -->
+    <div data-rel-status>
+      <p class="rel__loading" role="status">Loading releases…</p>
+    </div>
+
+    <p class="rel__foot">
+      Live from <a href={RELEASES_PAGE}>GitHub Releases</a>. Backend versions
+      from <a href={BACKEND_PAGE}>PyPI</a>.
+    </p>
+  </section>
+
+  <script>
+    interface Asset { name: string; browser_download_url: string; size: number }
+    interface Release {
+      tag_name: string; name: string | null; body: string | null;
+      published_at: string | null; html_url: string;
+      prerelease: boolean; draft: boolean; assets: Asset[];
+    }
+    /** One PyPI release, reduced to what the pairing needs. */
+    interface BackendRelease { version: string; published: number }
+
+    const root = document.querySelector<HTMLElement>('.rel');
+    const status = root?.querySelector<HTMLElement>('[data-rel-status]');
+    if (root && status) {
+      const API = root.dataset.api!;
+      const RELEASES_PAGE = root.dataset.releasesPage!;
+      const BACKEND_API = root.dataset.backendApi!;
+
+      const el = (tag: string, cls?: string, text?: string): HTMLElement => {
+        const n = document.createElement(tag);
+        if (cls) n.className = cls;
+        if (text !== undefined) n.textContent = text;
+        return n;
+      };
+      const metaPair = (k: string, v: string, title?: string): HTMLElement => {
+        const wrap = document.createElement('div');
+        wrap.append(el('dt', '', k), el('dd', '', v));
+        if (title) wrap.title = title;
+        return wrap;
+      };
+      const fmtDate = (iso: string | null) =>
+        iso
+          ? new Date(iso).toLocaleDateString('en-US', {
+              year: 'numeric', month: 'long', day: 'numeric',
+            })
+          : 'Unpublished';
+      const mb = (b: number) => `${(b / 1024 / 1024).toFixed(1)} MB`;
+
+      // Release notes are the CHANGELOG section verbatim, so the body is
+      // Markdown. Reduce it to a plain-text lede: drop headings and list
+      // markers, unwrap emphasis and links, then cut on a word boundary.
+      const summarise = (body: string | null): string => {
+        if (!body) return '';
+        const lines = body
+          .replace(/<!--[\s\S]*?-->/g, '')
+          .split('\n')
+          .map((l) => l.trim())
+          .filter((l) => l && !l.startsWith('#') && !/^[-*_]{3,}$/.test(l))
+          .map((l) => l.replace(/^[-*+]\s+/, '').replace(/^\d+\.\s+/, ''));
+        const text = lines
+          .join(' ')
+          .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+          .replace(/[*_`]/g, '')
+          .replace(/\s+/g, ' ')
+          .trim();
+        if (text.length <= 260) return text;
+        const cut = text.slice(0, 260);
+        return `${cut.slice(0, cut.lastIndexOf(' '))}…`;
+      };
+
+      // The DMG is uploaded under a constant name so that
+      // `releases/latest/download/Pupa.dmg` resolves; older releases may carry
+      // a versioned name, so fall back to any .dmg.
+      const dmgOf = (r: Release): Asset | undefined =>
+        r.assets?.find((a) => a.name === 'Pupa.dmg')
+        ?? r.assets?.find((a) => a.name.toLowerCase().endsWith('.dmg'));
+
+      // Newest backend published at or before the client release. `null` when
+      // the client release predates every backend publish, which is rendered
+      // as an honest blank rather than a guess.
+      const backendAt = (
+        backends: BackendRelease[],
+        iso: string | null,
+      ): string | null => {
+        if (!iso || !backends.length) return null;
+        const t = Date.parse(iso);
+        if (Number.isNaN(t)) return null;
+        const match = backends.filter((b) => b.published <= t).pop();
+        return match ? match.version : null;
+      };
+
+      const card = (r: Release, backends: BackendRelease[], known: boolean): HTMLElement => {
+        const li = el('li', 'rel-card');
+
+        const head = el('div', 'rel-card__head');
+        head.append(el('h2', 'rel-card__version', r.name?.trim() || r.tag_name));
+        head.append(el('span', 'rel-card__date', fmtDate(r.published_at)));
+        if (r.prerelease) head.append(el('span', 'rel-card__badge', 'Pre-release'));
+        li.append(head);
+
+        const summary = summarise(r.body);
+        if (summary) li.append(el('p', 'rel-card__summary', summary));
+
+        const meta = el('dl', 'rel-card__meta');
+        const backend = backendAt(backends, r.published_at);
+        if (!known) {
+          meta.append(metaPair(
+            'Backend', 'unavailable',
+            'The PyPI index could not be reached, so no backend version could be paired with this release.',
+          ));
+        } else if (backend) {
+          meta.append(metaPair(
+            'Backend at release', backend,
+            'Newest pupa-backend published on PyPI when this release shipped. Not a declared compatibility pin.',
+          ));
+        } else {
+          meta.append(metaPair(
+            'Backend at release', 'not yet published',
+            'No pupa-backend release had been published to PyPI at this date.',
+          ));
+        }
+        const dmg = dmgOf(r);
+        if (dmg) meta.append(metaPair('Download', mb(dmg.size)));
+        li.append(meta);
+
+        const actions = el('div', 'rel-card__actions');
+        if (dmg) {
+          const dl = document.createElement('a');
+          dl.className = 'btn btn-primary';
+          dl.href = dmg.browser_download_url;
+          dl.textContent = `Download for Mac (${r.tag_name})`;
+          actions.append(dl);
+        }
+        const notes = document.createElement('a');
+        notes.className = 'btn';
+        notes.href = r.html_url;
+        notes.textContent = 'Full release notes';
+        actions.append(notes);
+        li.append(actions);
+        return li;
+      };
+
+      const showError = () => {
+        status.innerHTML = '';
+        const box = el('div', 'rel__error');
+        box.setAttribute('role', 'alert');
+        box.append(el('h2', 'rel__error-title', 'Releases unavailable'));
+        const p = el('p', '', 'The release list could not be reached right now. Try again later, or see ');
+        const a = document.createElement('a');
+        a.href = RELEASES_PAGE;
+        a.textContent = 'the releases on GitHub';
+        p.append(a, '.');
+        box.append(p);
+        status.append(box);
+      };
+
+      // PyPI is a best-effort side lookup: if it fails the releases still
+      // render, with the backend pairing marked unavailable.
+      const loadBackends = (): Promise<BackendRelease[] | null> =>
+        fetch(BACKEND_API, { cache: 'no-cache' })
+          .then((r) => { if (!r.ok) throw new Error(String(r.status)); return r.json(); })
+          .then((d: { releases: Record<string, { upload_time_iso_8601?: string }[]> }) =>
+            Object.entries(d.releases ?? {})
+              .map(([version, files]) => {
+                const stamps = (files ?? [])
+                  .map((f) => Date.parse(f.upload_time_iso_8601 ?? ''))
+                  .filter((n) => !Number.isNaN(n));
+                return stamps.length ? { version, published: Math.min(...stamps) } : null;
+              })
+              .filter((b): b is BackendRelease => b !== null)
+              .sort((a, b) => a.published - b.published))
+          .catch((err) => {
+            console.warn(`[releases] backend index unavailable: ${err}`);
+            return null;
+          });
+
+      Promise.all([
+        fetch(API, { cache: 'no-cache', headers: { Accept: 'application/vnd.github+json' } })
+          .then((r) => { if (!r.ok) throw new Error(String(r.status)); return r.json() as Promise<Release[]>; }),
+        loadBackends(),
+      ])
+        .then(([releases, backends]) => {
+          const published = (releases ?? []).filter((r) => !r.draft);
+          status.innerHTML = '';
+          if (!published.length) {
+            status.append(el('p', 'rel__empty', 'No releases published yet.'));
+            return;
+          }
+          const ul = el('ul', 'rel__list');
+          ul.setAttribute('role', 'list');
+          published.forEach((r) => ul.append(card(r, backends ?? [], backends !== null)));
+          status.append(ul);
+        })
+        .catch((err) => {
+          console.warn(`[releases] fetch failed: ${err}`);
+          showError();
+        });
+    }
+  </script>
+</BaseLayout>

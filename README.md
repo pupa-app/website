@@ -10,6 +10,7 @@ open-source native iOS / macOS agent app.
 | `/` | Home — hero, the four verbs (Use / Build / Share / Contribute), the `.pupa` bundle, open-source repos. |
 | `/blog` | Blog index. |
 | `/blog/<slug>` | A blog post. |
+| `/releases` | Releases, live from GitHub Releases: version, date, notes, Mac download, backend version at the time. |
 | `/privacy` | Privacy Policy (Apple App Store requirement). |
 | `/support` | Support page (Apple App Store requirement) — GitHub issues, email, FAQ. |
 | `/terms` | Terms of Use. |

@@ -314,28 +314,28 @@ main {
 .appstore > summary::-webkit-details-marker { display: none; }
 .appstore > summary svg { display: block; }
 .appstore[open] > summary { filter: brightness(1.06); }
-.appstore__soon {
+/* The popup: one platform choice per row (Mac download / iOS TestFlight). */
+.appstore__menu {
   position: absolute;
   top: calc(100% + 0.55rem);
   left: 50%;
   transform: translateX(-50%);
   width: max-content;
-  max-width: min(300px, 82vw);
+  max-width: min(340px, 86vw);
   margin: 0;
   z-index: 20;
   background: var(--bg-elev-2);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 0.7rem 0.9rem;
+  padding: 0.35rem;
   font-size: 0.88rem;
   line-height: 1.5;
   color: var(--text-dim);
   text-align: left;
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
 }
-.appstore__soon strong { color: var(--text); }
 /* Little pointer up toward the button */
-.appstore__soon::before {
+.appstore__menu::before {
   content: "";
   position: absolute;
   bottom: 100%;
@@ -343,6 +343,36 @@ main {
   transform: translateX(-50%);
   border: 6px solid transparent;
   border-bottom-color: var(--border);
+}
+.appstore__opt {
+  display: block;
+  padding: 0.6rem 0.7rem;
+  border-radius: var(--radius-sm);
+  color: inherit;
+}
+.appstore__opt + .appstore__opt { border-top: 1px solid var(--border-soft); }
+a.appstore__opt:hover {
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+.appstore__opt-head {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--text);
+  margin-bottom: 0.15rem;
+}
+.appstore__opt-head svg { flex: 0 0 auto; color: var(--accent); }
+.appstore__opt-body { display: block; }
+.appstore__opt-body code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+}
+.appstore__all {
+  display: block;
+  padding: 0.5rem 0.7rem 0.35rem;
+  border-top: 1px solid var(--border-soft);
+  font-size: 0.84rem;
 }
 
 /* ---- Hero ---- */
@@ -1841,3 +1871,96 @@ button.btn { font: inherit; font-weight: 550; font-size: 0.97rem; cursor: pointe
 .mkt__error p { margin: 0 auto; max-width: 46ch; color: var(--text-dim); line-height: 1.6; }
 .mkt__error strong { color: var(--text); }
 
+
+/* ===========================================================================
+   Releases — client-fetched list of published Pupa releases
+   =========================================================================== */
+.rel__title { margin: 0 0 0.4rem; font-size: clamp(1.7rem, 4vw, 2.3rem); }
+.rel__lead { color: var(--text-dim); max-width: 62ch; margin: 0 0 1.5rem; }
+.rel__lead code { font-family: var(--font-mono); font-size: 0.9em; }
+
+/* "How the backend version is worked out" disclosure */
+.rel__how {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elev);
+  padding: 0.4rem 1rem;
+  margin-bottom: 2rem;
+}
+.rel__how > summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.4rem 0;
+  list-style: none;
+}
+.rel__how > summary::-webkit-details-marker { display: none; }
+.rel__how > summary::before { content: "▸ "; color: var(--accent); }
+.rel__how[open] > summary::before { content: "▾ "; }
+.rel__how-body { color: var(--text-dim); padding-bottom: 0.6rem; line-height: 1.6; }
+.rel__how-body p { margin: 0 0 0.75rem; max-width: 70ch; }
+.rel__how-body strong { color: var(--text); }
+
+.rel__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+  overflow: hidden;
+}
+.rel-card { padding: 1.1rem 1.1rem 1.2rem; }
+.rel-card + .rel-card { border-top: 1px solid var(--border); }
+
+.rel-card__head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.rel-card__version { margin: 0; font-size: 1.1rem; line-height: 1.3; }
+.rel-card__date { font-size: 0.85rem; color: var(--text-faint); }
+.rel-card__badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.rel-card__summary { margin: 0 0 0.8rem; color: var(--text-dim); line-height: 1.55; max-width: 78ch; }
+
+.rel-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+  margin: 0 0 1rem;
+  font-size: 0.82rem;
+  color: var(--text-faint);
+}
+.rel-card__meta div { display: flex; gap: 0.35rem; }
+.rel-card__meta dt::after { content: ":"; }
+.rel-card__meta dd { margin: 0; color: var(--text-dim); }
+
+.rel-card__actions { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.rel-card__actions .btn { justify-content: center; }
+@media (max-width: 559px) {
+  .rel-card__actions .btn { flex: 1 1 auto; }
+}
+
+.rel__foot { margin-top: 2rem; color: var(--text-dim); font-size: 0.92rem; }
+.rel__loading { color: var(--text-faint); padding: 2rem 0; }
+.rel__empty { color: var(--text-faint); padding: 1.5rem 0; }
+
+/* Graceful releases-unavailable state (the private-repo case included) */
+.rel__error {
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  background: var(--accent-soft);
+  border-radius: var(--radius);
+  padding: clamp(1.4rem, 4vw, 2rem);
+  text-align: center;
+}
+.rel__error-title { margin: 0 0 0.6rem; font-size: 1.2rem; }
+.rel__error p { margin: 0 auto; max-width: 46ch; color: var(--text-dim); line-height: 1.6; }
