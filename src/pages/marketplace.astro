@@ -11,11 +11,21 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
 ---
 <BaseLayout
   title="Marketplace"
-  description="Browse the official Pupa marketplace: ready-made MyApp bundles you can open straight in Pupa. Each app is inert, portable .pupa data; review its agent prompts on import."
+  description="Browse the official Pupa marketplace: ready-made MyApp bundles you can open straight in Pupa. Each app is inert, portable .pupa data; review what's inside before installing."
 >
   <section class="section container mkt" data-base={BASE} data-repo={MARKETPLACE_REPO}>
     <h1 class="mkt__title">Pupa Marketplace</h1>
     <p class="mkt__lead">Ready-made MyApp bundles you can open straight in Pupa.</p>
+
+    <!-- Populated by the client fetch. Loading → grid, or → error. -->
+    <div data-mkt-status>
+      <p class="mkt__loading" role="status">Loading apps…</p>
+    </div>
+
+    <p class="mkt__foot">
+      Live from the <a href={MARKETPLACE_REPO}>marketplace repo</a>.
+      Want your app here? <a href={`${MARKETPLACE_REPO}#publish-your-app`}>Publish it →</a>
+    </p>
 
     <!-- How opening works (honest about the current file-open flow). -->
     <details class="mkt__how">
@@ -24,8 +34,8 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
         <p>
           A <code>.pupa</code> bundle is inert, portable data: no code runs on
           import. No matter how it reaches Pupa, the app shows a confirm preview
-          so you can <strong>review the app’s agent prompts before
-          installing</strong>.
+          naming the <strong>agents and automation rules it includes, before
+          you install</strong>.
         </p>
         <ul class="mkt__how-steps">
           <li>
@@ -42,16 +52,6 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
         </p>
       </div>
     </details>
-
-    <!-- Populated by the client fetch. Loading → grid, or → error. -->
-    <div data-mkt-status>
-      <p class="mkt__loading" role="status">Loading apps…</p>
-    </div>
-
-    <p class="mkt__foot">
-      Live from the <a href={MARKETPLACE_REPO}>marketplace repo</a>.
-      Want your app here? <a href={`${MARKETPLACE_REPO}#publish-your-app`}>Publish it →</a>
-    </p>
   </section>
 
   <script>
@@ -125,6 +125,9 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
       const card = (e: Entry): HTMLElement => {
         const li = document.createElement('li');
         li.className = 'app-card';
+        li.dataset.search = [e.name, e.author, e.summary, ...(e.tags ?? [])]
+          .join(' ')
+          .toLowerCase();
 
         const d = document.createElement('details');
         d.className = 'app-card__d';
@@ -244,8 +247,15 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
           ul.setAttribute('role', 'list');
           entries.forEach((e) => ul.append(card(e)));
 
+          const search = document.createElement('input');
+          search.type = 'search';
+          search.className = 'mkt__search';
+          search.placeholder = 'Search apps…';
+          search.setAttribute('aria-label', 'Search marketplace apps');
+
           const bar = el('div', 'mkt__bar');
-          bar.append(el('p', 'mkt__count', `${entries.length} app${entries.length === 1 ? '' : 's'}`));
+          const count = el('p', 'mkt__count', `${entries.length} app${entries.length === 1 ? '' : 's'}`);
+          bar.append(count);
           const toggle = document.createElement('button');
           toggle.type = 'button';
           toggle.className = 'mkt__toggle';
@@ -258,7 +268,26 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
           });
           bar.append(toggle);
 
-          status.replaceChildren(bar, ul);
+          const empty = el('p', 'mkt__empty', 'No apps match your search.');
+          empty.hidden = true;
+
+          const cards = [...ul.children] as HTMLElement[];
+          search.addEventListener('input', () => {
+            const q = search.value.trim().toLowerCase();
+            let shown = 0;
+            cards.forEach((li) => {
+              const match = !q || (li.dataset.search ?? '').includes(q);
+              li.hidden = !match;
+              if (match) shown++;
+            });
+            count.textContent = q
+              ? `${shown} of ${entries.length} app${entries.length === 1 ? '' : 's'}`
+              : `${entries.length} app${entries.length === 1 ? '' : 's'}`;
+            empty.hidden = shown > 0;
+            ul.hidden = shown === 0;
+          });
+
+          status.replaceChildren(search, bar, ul, empty);
         })
         .catch((err) => { console.warn(`[marketplace] ${err}`); showError(); });
 
