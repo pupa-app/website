@@ -363,6 +363,8 @@ a.appstore__opt:hover {
   margin-bottom: 0.15rem;
 }
 .appstore__opt-head svg { flex: 0 0 auto; color: var(--accent); }
+/* The Mac row is head-only, so drop the gap meant to sit above a body. */
+.appstore__opt-head:last-child { margin-bottom: 0; }
 .appstore__opt-body { display: block; }
 .appstore__opt-body code {
   font-family: var(--font-mono);
