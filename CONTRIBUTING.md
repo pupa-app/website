@@ -50,7 +50,7 @@ website/
 │   ├── content/blog/   ← Markdown blog posts
 │   ├── content.config.ts
 │   ├── layouts/        ← BaseLayout (shared shell)
-│   ├── pages/          ← routes (index, blog, privacy, support, terms)
+│   ├── pages/          ← routes (index, blog, releases, privacy, support, terms)
 │   └── styles/         ← global.css
 └── public/             ← static assets (favicon)
 ```
