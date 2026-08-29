@@ -214,7 +214,7 @@ const myappTravels = { icon: 'travels', lead: 'It travels.', body: 'The whole ap
           <strong>Install the backend and run setup.</strong> Make sure the{' '}
           <a href="https://claude.com/claude-code">Claude Code</a> CLI is installed
           and logged in first, the wizard checks for it, then:
-          <pre><code>uv tool install "pupa-backend[setup]"
+          <pre><code>uv tool install pupa-backend
 pupa-backend setup</code></pre>
           In the wizard, enable the <strong>Claude Code</strong> harness, and when
           asked <em>“How will your iPhone reach the backend?”</em> pick{' '}
@@ -456,7 +456,7 @@ pupa-backend setup</code></pre>
         Install <code>pupa-backend</code> from PyPI with{' '}
         <a href="https://docs.astral.sh/uv/">uv</a>:
       </p>
-      <pre><code>uv tool install "pupa-backend[setup]"          # latest</code></pre>
+      <pre><code>uv tool install pupa-backend          # latest</code></pre>
       <p>Run the setup wizard once, then start the server:</p>
       <pre><code>pupa-backend setup    # interactive — writes ~/.pupa-backend/config.yml
 pupa-backend run      # serves on http://localhost:8004</code></pre>
