@@ -1794,6 +1794,9 @@ button.btn { font: inherit; font-weight: 550; font-size: 0.97rem; cursor: pointe
   font-weight: 700;
   font-size: 0.95rem;
 }
+/* Drawn glyph instead of a monogram: same badge, no text metrics to fight. */
+.app-card__icon--glyph { font-size: 0; }
+.app-card__icon--glyph svg { display: block; }
 .app-card__id { flex: 1 1 auto; min-width: 0; display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
 .app-card__name { margin: 0; font-size: 1rem; line-height: 1.3; }
 .app-card__by { margin: 0; font-size: 0.8rem; color: var(--text-faint); }
