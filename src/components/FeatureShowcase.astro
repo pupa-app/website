@@ -6,7 +6,6 @@ import { href } from '../lib/href';
 
 interface Item {
   src: string;
-  eyebrow: string;
   title: string;
   body: string;
   alt: string;
@@ -19,7 +18,6 @@ const { items } = Astro.props as Props;
   {items.map((it, i) => (
     <article class:list={['showcase__row', i % 2 === 1 && 'showcase__row--flip']} data-showcase-row>
       <div class="showcase__copy">
-        <p class="section-eyebrow">{it.eyebrow}</p>
         <h2 class="showcase__title">{it.title}</h2>
         <p class="showcase__body">{it.body}</p>
         {it.link && (

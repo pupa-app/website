@@ -394,41 +394,6 @@ a.appstore__opt:hover {
   border-radius: 999px;
   margin-bottom: 1.4rem;
 }
-.hero .hero-tags {
-  list-style: none;
-  padding: 0;
-  margin: 0 auto 1.6rem;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-  max-width: 44rem;
-}
-.hero .hero-tags .tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.78rem;
-  font-weight: 550;
-  line-height: 1;
-  letter-spacing: 0.01em;
-  color: var(--text-dim);
-  background: var(--bg-elev);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 0.4rem 0.7rem;
-  white-space: nowrap;
-}
-.hero .hero-tags .tag-icon {
-  flex-shrink: 0;
-}
-.hero .hero-tags .tag--accent {
-  color: var(--accent);
-  background: var(--accent-soft);
-  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
-  font-weight: 650;
-  font-family: var(--font-mono);
-}
 
 .hero h1 {
   margin-bottom: 0.4em;
@@ -505,7 +470,6 @@ a.icon-point:hover .icon-point__icon { color: var(--accent); }
    up past 1200px only — mobile/tablet sizing above is untouched. */
 @media (min-width: 1800px) {
   .hero-wordmark img { width: min(460px, 34%); }
-  .hero .hero-tags { max-width: 50rem; }
   .hero .lead { font-size: clamp(1.3rem, 1.6vw, 1.7rem); max-width: 52ch; }
   .hero .hero-points { max-width: 58ch; }
 }
