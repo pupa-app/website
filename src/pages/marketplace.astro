@@ -55,10 +55,12 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
   </section>
 
   <script>
+    import { appIconSVG } from '../lib/app-icons';
+
     interface Entry {
       id: string; name: string; author: string; summary: string;
       tags: string[]; appVersion: string; path: string; sizeBytes: number;
-      sha256: string; homepage?: string;
+      sha256: string; homepage?: string; icon?: string;
       includedMemories: boolean; includedRecords: boolean;
     }
     interface Index { entries: Entry[] }
@@ -135,7 +137,18 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
 
         const head = document.createElement('summary');
         head.className = 'app-card__head';
-        head.append(el('span', 'app-card__icon', monogram(e.name), { 'aria-hidden': 'true' }));
+        // The catalog's `icon` is the bundle's SF Symbol name; appIconSVG draws
+        // our own equivalent, or returns null for a symbol we don't cover — in
+        // which case the monogram stands in, as it always did.
+        const badge = el('span', 'app-card__icon', undefined, { 'aria-hidden': 'true' });
+        const glyph = appIconSVG(e.icon);
+        if (glyph) {
+          badge.classList.add('app-card__icon--glyph');
+          badge.innerHTML = glyph; // our own markup, not catalog text
+        } else {
+          badge.textContent = monogram(e.name);
+        }
+        head.append(badge);
         const id = el('div', 'app-card__id');
         id.append(el('h2', 'app-card__name', e.name), el('p', 'app-card__by', `by ${e.author}`));
         head.append(id);
