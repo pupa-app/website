@@ -52,8 +52,8 @@ its own; the link between them is where the value shows up. And a link is
 something the agent can make from one sentence.
 
 Everything the app learns lives in its own long-term memory, which we call
-**Memories**, so it's all still there next week, and on your other devices
-too.
+**Memories**, along with the items your components use, so it's all still
+there next week, and on your other devices too.
 
 ## Make something just for you
 
@@ -124,4 +124,4 @@ want to keep.
 
 If you'd rather see the machinery (what the agent actually reads and
 writes), there's a technical companion:
-[From Claude on your machine to Claude in your app](/blog/from-machine-to-myapp).
+[From a skill on your machine to an app in your pocket](/blog/from-machine-to-myapp).

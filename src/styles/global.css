@@ -1025,6 +1025,9 @@ a.icon-point:hover .icon-point__icon { color: var(--accent); }
 .prose img {
   display: block;
   max-width: 100%;
+  /* `width: auto` lets the height cap below reshape the box: Astro stamps
+     width/height attributes, and without it a capped image squashes. */
+  width: auto;
   height: auto;
   margin: 1.6rem auto;
   border: 1px solid var(--border-soft);
@@ -1039,6 +1042,10 @@ a.icon-point:hover .icon-point__icon { color: var(--accent); }
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-sm);
 }
+/* Phone-shaped captures scale to the column and swamp it; cap the height so
+   every portrait clip and screenshot reads at one size. Wide diagrams are
+   shorter than this and stay full width. */
+.prose :is(img, video) { max-height: 53rem; }
 .prose table { border-collapse: collapse; width: 100%; margin: 1.2rem 0; font-size: 0.95rem; }
 .prose th, .prose td { border: 1px solid var(--border); padding: 0.5rem 0.7rem; text-align: left; }
 .prose th { background: var(--bg-elev); }

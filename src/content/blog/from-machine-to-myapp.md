@@ -1,59 +1,79 @@
 ---
-title: "From Claude on your machine to Claude in your app"
-subtitle: "The architecture behind MyApps, and why the arrows point both ways"
-description: "A developer’s tour of the three ways an agent can meet its user (on the machine, behind a chat app, and inside a MyApp) and what changes when the arrows point both ways."
+title: "From a skill on your machine to an app in your pocket"
+subtitle: "Skill, plugin, remote control, MyApp: four steps for packaging an agentic experience"
+description: "A developer's tour of the four ways an agentic setup gets packaged — a skill, a plugin, an app that remote-controls your agent, and a MyApp — and why only the last one gives the agent a native environment instead of a native interface."
 author: "Pupa team"
 date: 2026-07-24
 draft: false
 ---
 
-## One diagram, three stages
+## Four steps, one question
 
 [Keep what you build with your agent](/blog/packaging-agentic-experiences)
 told the story from the user's side: you chat, an app appears, you keep it,
 you hand it to a friend. This post is the companion for people who want to
 see the machinery.
 
-Everything below is a walk through one diagram, top to bottom. Each panel is
-a different answer to the same question: *where does the agent meet its
-user, and what flows across that boundary?*
+One question runs through all of it. The thing you and your agent built
+together — *where does it live, and what can it do there?* There are four
+answers in common use today. Each step fixes something the one before it got
+wrong. The last one changes what the agent is pointed at.
 
-## Stage 1: an agent on your machine
+## Step 1: a skill
 
-![Stage 1: Claude with tools, MCP and skills running directly on a laptop, reading and modifying OS apps and the filesystem.](./information-flow-1.png)
+![Step 1: Claude with tools, MCP and skills running directly on a laptop, reading and modifying OS apps and the filesystem.](./information-flow-1.png)
 
-The top panel is the setup most developers live in today: Claude on the
-laptop, armed with tools, MCP servers and skills, reading and modifying OS
-apps and the filesystem directly.
+A skill is a folder: a markdown file telling the agent how to do something,
+maybe a script or two beside it. Put a few of those next to your MCP servers
+and your hooks and you have the setup most developers live in today — Claude
+on the laptop, reading and modifying OS apps and the filesystem directly.
 
 This is the most capable configuration there is, and the most personal. It's
-also architecturally a dead end for everyone except you. The session's
-output is a transcript plus whatever files got written. The setup itself
-(the instructions, the skills, the server config) is welded to one machine,
-tangled with your credentials and paths, and was never designed to be handed
-to anyone. When the laptop goes, the experience goes with it.
+also the least portable. The session's output is a transcript plus whatever
+files got written. The setup itself is welded to one machine, tangled with
+your credentials and paths, and was never designed to be handed to anyone.
+When the laptop goes, the experience goes with it.
 
-## Stage 2: a chat app in front of a backend
+## Step 2: a plugin
 
-![Stage 2: the same agent moved behind a generic backend, reporting OS and chat data one way to a chat-focused phone app.](./information-flow-2.png)
+Same diagram. That's the point.
 
-The middle panel is where most agent products stop. The agent moves behind a
-backend; a phone app goes in front. The app renders chats, clusters them
-into projects, and shows a few widgets about the conversation.
+A plugin bundles skills, MCP servers, scripts and hooks into one installable
+unit with a marketplace behind it. It solves distribution, and solves it
+properly: versioned, one command, someone else's carefully tuned setup
+running on your machine in seconds.
 
-Look at the arrow between them: it points one way. The backend *reports* OS
-and chat data to the app. The surface you're looking at is a readout, not a
-workspace. The widgets aren't tools the agent holds, so it can't act on
-what you're seeing, and you can't act on it either except by typing more
-chat. And since the app's only durable state is a chat history, nothing you
-set up in it exists as a unit you could keep, version, or share.
+What it doesn't change is where the agent meets you. That's still a terminal.
+One of those scripts can put up a dashboard, and people do, but it's a page
+the script drew: the agent can't hold it as state, it doesn't outlive the
+run, and it doesn't come with you to the phone. A plugin makes the *setup*
+portable. The *experience* still evaporates when the session ends.
 
-You gained reach (the agent is on your phone now) and lost the thing that
-made stage 1 interesting: a shared surface both sides can work on.
+## Step 3: a remote control for your agent
 
-## Stage 3: an app the agent operates
+![Step 3: the same agent moved behind a backend, reporting session and OS data one way to a chat-focused phone app.](./information-flow-2.png)
 
-![Stage 3: Pupa, where the agent runs behind your own pupa-backend and reads and modifies a structured MyApp of components and Memories, both ways.](./information-flow-3.png)
+Then the phone. Agent-control apps put the agent behind a backend and a
+polished client in front: sessions grouped into projects, diffs to approve,
+a notification when a long run finishes. This is where most agent products
+are right now, and it is a genuine quality-of-life jump — the agent keeps
+working while you're away from the desk.
+
+Look at the arrow, though. It points one way. The backend *reports* session
+and OS data to the app. What you're holding is a readout of work happening
+on a machine somewhere else, not a workspace. The widgets aren't tools the
+agent holds, so it can't act on what you're seeing, and you can't act on it
+either except by typing more chat.
+
+That's the distinction worth naming, and it's the whole reason for the next
+step: these apps give the agent a **native interface**, not a **native
+environment**. The app is a window onto your laptop. Nothing lives in it that
+outlasts the session — nothing you could keep, grow, version, or hand to
+someone else.
+
+## Step 4: a MyApp, a plugin with a native app attached
+
+![Step 4: Pupa, where the agent runs behind your own pupa-backend and reads and modifies a structured MyApp of components and Memories, both ways.](./information-flow-3.png)
 
 The bottom panel is Pupa. The laptop half is unchanged: Claude still runs
 with its tools against the OS, now behind your own pupa-backend. What's new
@@ -70,13 +90,36 @@ That's possible because there is now a structured thing to modify. A
 - **Memories:** a long-lived filesystem carried by the app: its documents,
   the agent's prompts, and its skills.
 
-The design bet behind the components is that **agents don't need pixels,
-they need structure**. A human app lives or dies on visual polish; an agent
-operates a component through its fields, links and state, and never sees the
-styling. That tolerance is leverage. There's no standard agent UI yet, so
-instead of chasing pixel-perfect surfaces, Pupa standardises a small set of
-plain, well-typed blocks: unfussy to render, and expressive enough to
-build real experiences on because they compose and cross-link.
+Read it as a plugin that grew a body. The prompts, skills and scripts a
+plugin would ship are still in there, in Memories. What's added is a native
+app for them to operate, and the state that app accumulates while they do.
+
+## The four steps side by side
+
+| | Surface | Durable state | What ships | Capability |
+|---|---|---|---|---|
+| **Skill** | your terminal | files the run wrote | a folder you copy | the host machine's |
+| **Plugin** | your terminal | files the run wrote | a versioned bundle from a marketplace | the host machine's |
+| **Remote control app** | a chat client on your phone | session history | nothing; you sign in | the machine the session runs on |
+| **MyApp** | a native app the agent operates | components and memories, on device | one `.pupa` file | granted fresh by whichever host runs it |
+
+Every step keeps the one before it: a MyApp still has skills in it, still
+installs like a plugin, still lets you watch a run from your pocket.
+
+## Agents don't need pixels, they need structure
+
+The design bet behind the components is that a human app lives or dies on
+visual polish, while an agent operates a component through its fields, links
+and state, and never sees the styling. That tolerance is leverage. There's
+no standard agent UI yet, so instead of chasing pixel-perfect surfaces, Pupa
+standardises a small set of plain, well-typed blocks: unfussy to render, and
+expressive enough to build real experiences on because they compose and
+cross-link.
+
+Being native is what makes those blocks worth having. A component can fire a
+local notification, land on the share sheet, sit on the home screen, and stay
+readable with the backend offline. The app stops being a window onto a
+session and becomes a place the rest of the phone can reach.
 
 ## What travels, what stays
 
