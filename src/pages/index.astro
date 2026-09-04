@@ -59,6 +59,10 @@ const heroPoints = [
 // touching when a new DMG ships. It 404s while `pupa-app/pupa` is private.
 const MAC_DMG_URL = 'https://github.com/pupa-app/pupa/releases/latest/download/Pupa.dmg';
 
+// The iOS / iPadOS beta. A TestFlight public link needs no invite: testers
+// open it, install TestFlight, and join. Same build as the Mac download.
+const TESTFLIGHT_URL = 'https://testflight.apple.com/join/XDfWeVp5';
+
 ---
 <BaseLayout title="Pupa">
   <!-- Hero -->
@@ -98,7 +102,7 @@ const MAC_DMG_URL = 'https://github.com/pupa-app/pupa/releases/latest/download/P
               <strong>Mac</strong>
             </span>
           </a>
-          <div class="appstore__opt appstore__opt--static">
+          <a class="appstore__opt" href={TESTFLIGHT_URL}>
             <span class="appstore__opt-head">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <rect x="6" y="2" width="12" height="20" rx="2.5"/>
@@ -107,11 +111,10 @@ const MAC_DMG_URL = 'https://github.com/pupa-app/pupa/releases/latest/download/P
               <strong>iPhone and iPad, TestFlight</strong>
             </span>
             <span class="appstore__opt-body">
-              Pupa isn’t on the App Store just yet. Email{' '}
-              <a href="mailto:support@pupa-app.com?subject=TestFlight%20request">support@pupa-app.com</a>{' '}
-              to request a TestFlight invite and try it early.
+              Pupa isn’t on the App Store just yet. Join the public beta — no
+              invite needed — and try it early.
             </span>
-          </div>
+          </a>
           <a class="appstore__all" href={href('/releases')}>All releases →</a>
         </div>
       </details>
