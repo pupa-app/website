@@ -1,7 +1,7 @@
 ---
 title: "Build your own component"
 subtitle: "How a new canvas shape ships, and stays safe to share"
-description: "Pupa’s component set is an extension point, not a fixed menu. A conceptual tour of the two primitives every component is built from, how a new shape travels safely inside an inert bundle, and why every MyApp stays sandboxed from the next."
+description: "Pupa’s component set is an extension point, not a fixed menu. A conceptual tour of the primitive every component is built from, how a new shape travels safely inside an inert bundle, and why every MyApp stays sandboxed from the next."
 author: "Pupa team"
 date: 2026-07-17
 draft: false
@@ -13,11 +13,10 @@ Once people see a Pupa MyApp made of typed blocks, two questions follow: *"can I
 add my own block?"* and *"if I share the app, how does my new block travel
 safely?"* This post answers both at a conceptual level. They turn out to be the
 same story told from two ends: a component is only finished when it also knows how
-to travel, and both ends are made possible by the same two primitives underneath.
+to travel, and both ends are made possible by the same primitive underneath.
 
-> A component isn't just a view. It's built from **items** and **agents**, and it
-> inherits their rules, which is what gives you isolation and composability for
-> free.
+> A component isn't just a view. It's built from **items**, and it inherits their
+> rules, which is what gives you isolation and composability for free.
 
 ## Components are an extension point
 
@@ -36,13 +35,11 @@ That list isn't a fixed menu. Each component is a self-contained block, so the
 set grows by *adding* a new one, not by rewiring the others. New shapes can come
 from the community.
 
-## The two primitives every component is built from
+## Items: the primitive every component is built from
 
-You rarely build a component from raw materials. Two shared primitives do the
-load-bearing work, and their built-in rules are what hand you data isolation and
+You rarely build a component from raw materials. One shared primitive does the
+load-bearing work, and its built-in rules are what hand you data isolation and
 cross-component composability without having to design either yourself.
-
-### Items: owned by one app, linkable only within it
 
 <figure class="bd-fig">
   <div class="bd-sandbox">
@@ -87,44 +84,6 @@ So the *same boundary* gives you both things at once: links compose freely insid
 an app, and nothing composes across apps. Build a new component and it inherits
 exactly that: your items are automatically isolated and automatically linkable.
 
-### Agents: structured interaction, kept on a leash
-
-<figure class="bd-fig">
-  <div class="bd-flow">
-    <div class="bd-flow__step is-accent"><b>You</b><span>start a run</span></div>
-    <div class="bd-flow__arrow"><span>&rarr;</span></div>
-    <div class="bd-flow__step"><b>An agent</b><span>can delegate…</span></div>
-    <div class="bd-flow__arrow"><span>&rarr;</span></div>
-    <div class="bd-flow__step"><b>Another agent</b><span>…a few levels deep</span></div>
-  </div>
-  <div class="bd-guards-label">The loop is bounded by simple rules:</div>
-  <div class="bd-guards">
-    <span class="bd-guard">no calling back into its own chain</span>
-    <span class="bd-guard">limited depth</span>
-    <span class="bd-guard">limited turns per pair</span>
-    <span class="bd-guard">can’t reach another app</span>
-  </div>
-  <figcaption>Agent runs form a bounded tree, scoped to one MyApp, so a component
-  can drive several agents in a structured back-and-forth without runaway loops or
-  cross-app reach.</figcaption>
-</figure>
-
-A component can also put **agents** to work, not just data. The slack component is
-the obvious case: several personas talking across channels. What makes that safe
-to build on is the *shape* of the agent loop. Runs form a **tree** (you start one
-at the top, and any agent it calls hangs off it) and that tree is fenced in by a
-few plain rules:
-
-- an agent **can't call back into its own chain**, so there are no infinite loops;
-- the chain can only go **so deep**, and each caller/agent pair gets a **limited
-  number of turns**, so nothing runs away;
-- the whole tree is **scoped to one MyApp**, so a delegated agent can't reach into
-  a sibling app's data or tools.
-
-Because those limits live in the primitive, any component you build on top of
-agents inherits them. You get structured multi-agent behaviour without inventing
-your own guardrails.
-
 ## Adding a component: the shape of the work
 
 You don't start by writing code; you start by asking whether you need a *new
@@ -137,7 +96,7 @@ together:
   by older versions still open cleanly.
 - **How the agent operates it:** the handful of actions the agent uses to build
   and change it, each one reporting back what changed.
-- **When to reach for it:** a short note that tells the agent *why* it would pick
+- **When to reach for it:** a short prompt that tells the agent *why* it would pick
   this shape over the others.
 - **How it travels:** its export rule (below).
 
@@ -211,24 +170,23 @@ moderation) is the next layer, and it arrives with the marketplace.
 
 ## Case study: how the Slack component was built on this base
 
-The **slack rooms** component is the best proof that these primitives are enough
+The **slack rooms** component is the best proof that this primitive is enough
 to build something that barely resembles the others. It's multi-agent chat,
 several agent personas talking across channels, yet underneath it's just another
-typed block that leaned on both primitives and followed the recipe above:
+typed block that leaned on the same primitive and followed the recipe above:
 
 - **On items:** its channels and messages are items like any other, owned by the
   app, linkable within it. Its @-mentions and cross-links ride the same in-app
   linking every block uses, so they survive export and re-import intact.
-- **On agents:** the personas are ordinary app agents, and their back-and-forth
-  runs inside the same bounded, app-scoped agent tree, so a room full of agents
-  can't loop forever or reach a sibling app.
+- **On agents:** the personas are ordinary app agents, scoped to this app like
+  every other agent, so a room full of agents can't reach a sibling app.
 - **How the agent operates it:** a few actions to spin up the room, add personas
   and channels, and post: the same kind of first-class tools a tracker exposes.
 - **How it travels:** its export rule keeps the room and its personas but leaves
   the message history behind, so a friend inherits your *setup*, not your chats.
 
 The payoff is the whole thesis in one component: Slack rooms feel bespoke, but
-because they were built *from* the standard primitives rather than *around* them,
+because they were built *from* the standard primitive rather than *around* it,
 they compose, isolate, export in the same inert bundle, clear the same import
 gate, and run on any harness, exactly like every other block.
 
@@ -237,7 +195,7 @@ gate, and run on any harness, exactly like every other block.
 Contributing a component and trusting a shared app are the same promise seen from
 opposite ends. You can't ship a shape without saying how it travels; the importer
 won't rebuild a shape whose travel rule it can't find. And because both are built
-on items and agents, a new block is isolated and composable the moment it exists:
+on items, a new block is isolated and composable the moment it exists:
 inert, re-checked on arrival, sandboxed, and honest about what it leaves behind.
 That's what makes the component set safe to open up.
 
