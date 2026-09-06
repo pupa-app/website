@@ -15,7 +15,10 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
 >
   <section class="section container mkt" data-base={BASE} data-repo={MARKETPLACE_REPO}>
     <h1 class="mkt__title">Pupa Marketplace</h1>
-    <p class="mkt__lead">Ready-made MyApp bundles you can open straight in Pupa.</p>
+    <p class="mkt__lead">
+      Ready-made MyApps you can open straight in Pupa.
+      Run the skill <code class="mkt__cmd">/setup</code> in each MyApp to get started.
+    </p>
 
     <!-- Populated by the client fetch. Loading → grid, or → error. -->
     <div data-mkt-status>
@@ -26,32 +29,6 @@ const BASE = 'https://raw.githubusercontent.com/pupa-app/marketplace/main/';
       Live from the <a href={MARKETPLACE_REPO}>marketplace repo</a>.
       Want your app here? <a href={`${MARKETPLACE_REPO}#publish-your-app`}>Publish it →</a>
     </p>
-
-    <!-- How opening works (honest about the current file-open flow). -->
-    <details class="mkt__how">
-      <summary>How “Open in Pupa” works</summary>
-      <div class="mkt__how-body">
-        <p>
-          A <code>.pupa</code> bundle is inert, portable data: no code runs on
-          import. No matter how it reaches Pupa, the app shows a confirm preview
-          naming the <strong>agents and automation rules it includes, before
-          you install</strong>.
-        </p>
-        <ul class="mkt__how-steps">
-          <li>
-            <strong>iPhone &amp; iPad:</strong> tap → Pupa opens and fetches the
-            app, then shows the confirm preview. Nothing is saved to your device
-            first. Don’t have Pupa yet? Use the download button beside it to save
-            the <code>.pupa</code> file for later.
-          </li>
-          <li><strong>macOS:</strong> the file downloads. Open it to launch Pupa.</li>
-        </ul>
-        <p class="mkt__how-note">
-          Want to publish your own app? See the{' '}
-          <a href={MARKETPLACE_REPO}>marketplace repo</a>.
-        </p>
-      </div>
-    </details>
   </section>
 
   <script>
