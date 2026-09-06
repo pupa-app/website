@@ -8,6 +8,8 @@ const MARKETPLACE = 'https://github.com/pupa-app/marketplace';
 const BACKEND_REPO = `${GITHUB_ORG}/pupa-backend`;
 // Same permanent GitHub alias the get-app menu on the home page uses.
 const MAC_DMG_URL = `${GITHUB_ORG}/pupa/releases/latest/download/Pupa.dmg`;
+// Same TestFlight public link the get-app menu on the home page uses.
+const TESTFLIGHT_URL = 'https://testflight.apple.com/join/XDfWeVp5';
 
 // Open-source repos, shown in the Contribute section below.
 const repos = [
@@ -231,9 +233,8 @@ pupa-backend setup</code></pre>
         <li>
           <strong>Install the app.</strong> On a Mac,{' '}
           <a href={MAC_DMG_URL}>download Pupa</a> and drag it to Applications.
-          On iPhone and iPad it is TestFlight for now: email{' '}
-          <a href="mailto:support@pupa-app.com?subject=TestFlight%20request">support@pupa-app.com</a>{' '}
-          to request an invite.
+          On iPhone and iPad it is TestFlight for now:{' '}
+          <a href={TESTFLIGHT_URL}>join the public beta</a> — no invite needed.
         </li>
         <li>
           <strong>Pair, then chat.</strong> Mint a QR code and scan it from the app:
