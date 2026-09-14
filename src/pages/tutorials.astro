@@ -21,7 +21,7 @@ const repos = [
   {
     name: 'pupa-backend',
     url: BACKEND_REPO,
-    desc: 'The user-owned backend. Hooks into the agent harness running on your laptop (like Claude Code). Run it locally or deploy your own in the cloud.',
+    desc: 'The user-owned backend. Hooks into the agent harness running on your laptop (like Claude Code or Codex). Run it locally or deploy your own in the cloud.',
   },
   {
     name: 'marketplace',
@@ -133,6 +133,7 @@ const sections = [
   { id: 'backend-setup', label: 'Backend setup' },
   { id: 'install', label: 'Install', sub: true },
   { id: 'claude-code', label: 'Claude Code', sub: true },
+  { id: 'codex', label: 'Codex', sub: true },
   { id: 'openrouter', label: 'OpenRouter', sub: true },
   { id: 'channels', label: 'Connection channels', sub: true },
   { id: 'pairing', label: 'Pair the app', sub: true },
@@ -202,25 +203,29 @@ const myappTravels = { icon: 'travels', lead: 'It travels.', body: 'The whole ap
       <h2 style="margin-top:0">Quick setup</h2>
       <p class="setup__lead">
         The fastest path to a working Pupa: run the backend on your own machine
-        with Claude Code, install the app,
+        with Claude Code or Codex, install the app,
         pair, and start chatting. About five minutes. Every step has a fuller
         version in <a href="#backend-setup">Backend setup</a> below.
       </p>
       <div class="flow-teaser">
         <p class="flow-teaser__cap">
           The backend runs on your machine and simply connects your own agent
-          harness, like <strong>Claude Code</strong>, to the Pupa app.
+          harness, like <strong>Claude Code</strong> or <strong>Codex</strong>, to
+          the Pupa app.
         </p>
         <BackendFlow variant="compact" class="backend-flow--teaser" />
       </div>
       <ol class="setup__steps">
         <li>
-          <strong>Install the backend and run setup.</strong> Make sure the{' '}
-          <a href="https://claude.com/claude-code">Claude Code</a> CLI is installed
-          and logged in first, the wizard checks for it, then:
+          <strong>Install the backend and run setup.</strong> Install and log in to
+          either the{' '}
+          <a href="https://claude.com/claude-code">Claude Code</a> CLI or the{' '}
+          <a href="https://github.com/openai/codex">Codex</a> CLI first. The wizard
+          checks the subscription harness you enable, then:
           <pre><code>uv tool install pupa-backend
 pupa-backend setup</code></pre>
-          In the wizard, enable the <strong>Claude Code</strong> harness, and when
+          In the wizard, enable the <strong>Claude Code</strong> or{' '}
+          <strong>Codex</strong> harness, and when
           asked <em>“How will your iPhone reach the backend?”</em> pick{' '}
           <strong>Cloudflare tunnel</strong> and answer <em>no</em> to the domain
           question: that’s the free quick tunnel, no Cloudflare account needed. (If Pupa is on the Mac running the backend, select <strong>Localhost</strong>.)
@@ -496,7 +501,27 @@ pupa-backend service-stop      # stop and remove it</code></pre>
         permission controls the app renders.
       </p>
 
-      <h3 id="openrouter">Option B · OpenRouter (300+ models)</h3>
+      <h3 id="codex">Option B · Codex (subscription)</h3>
+      <p>
+        <strong>Codex is also a first-class harness</strong>. It runs through your
+        ChatGPT subscription instead of metered API tokens. Install the{' '}
+        <a href="https://github.com/openai/codex">Codex CLI</a>, make sure the{' '}
+        <code>codex</code> binary is on your PATH, and sign in before enabling it:
+      </p>
+      <pre><code>codex login
+
+harnesses:
+  codex:
+    enabled: true</code></pre>
+      <p>
+        The app then shows <strong>Codex</strong> in the same per-connection harness
+        picker. Codex brings its native file, shell, and web tools, while Pupa
+        renders controls for read-only, workspace, or full host access. The backend
+        requires a ChatGPT login and does not pass API billing keys to the Codex
+        child process.
+      </p>
+
+      <h3 id="openrouter">Option C · OpenRouter (300+ models)</h3>
       <p>
         Prefer metered API access or non-Claude models? Point the backend at{' '}
         <a href="https://openrouter.ai">OpenRouter</a>, an OpenAI-compatible
