@@ -1,7 +1,7 @@
 ---
 title: "From a skill on your machine to an app in your pocket"
-subtitle: "Skill, plugin, remote control, MyApp: four steps for packaging an agentic experience"
-description: "A developer's tour of the four ways an agentic setup gets packaged — a skill, a plugin, an app that remote-controls your agent, and a MyApp — and why only the last one gives the agent a native environment instead of a native interface."
+subtitle: "Skill, plugin, remote control, MiniApp: four steps for packaging an agentic experience"
+description: "A developer's tour of the four ways an agentic setup gets packaged — a skill, a plugin, an app that remote-controls your agent, and a MiniApp — and why only the last one gives the agent a native environment instead of a native interface."
 author: "Pupa team"
 date: 2026-07-24
 draft: false
@@ -71,9 +71,9 @@ environment**. The app is a window onto your laptop. Nothing lives in it that
 outlasts the session — nothing you could keep, grow, version, or hand to
 someone else.
 
-## Step 4: a MyApp, a plugin with a native app attached
+## Step 4: a MiniApp, a plugin with a native app attached
 
-![Step 4: Pupa, where the agent runs behind your own pupa-backend and reads and modifies a structured MyApp of components and Memories, both ways.](./information-flow-3.png)
+![Step 4: Pupa, where the agent runs behind your own pupa-backend and reads and modifies a structured MiniApp of components and Memories, both ways.](./information-flow-3.png)
 
 The bottom panel is Pupa. The laptop half is unchanged: Claude still runs
 with its tools against the OS, now behind your own pupa-backend. What's new
@@ -81,7 +81,7 @@ is the other end of the arrow, and that the arrow points both ways. The
 backend doesn't report to the app; it *reads and modifies* it.
 
 That's possible because there is now a structured thing to modify. A
-**MyApp** is two halves:
+**MiniApp** is two halves:
 
 - **Components:** typed UI blocks (tracker, calendar, checklist, chart,
   chat room) holding items of data, linkable to each other. To the agent
@@ -101,9 +101,9 @@ app for them to operate, and the state that app accumulates while they do.
 | **Skill** | your terminal | files the run wrote | a folder you copy | the host machine's |
 | **Plugin** | your terminal | files the run wrote | a versioned bundle from a marketplace | the host machine's |
 | **Remote control app** | a chat client on your phone | session history | nothing; you sign in | the machine the session runs on |
-| **MyApp** | a native app the agent operates | components and memories, on device | one `.pupa` file | granted fresh by whichever host runs it |
+| **MiniApp** | a native app the agent operates | components and memories, on device | one `.pupa` file | granted fresh by whichever host runs it |
 
-Every step keeps the one before it: a MyApp still has skills in it, still
+Every step keeps the one before it: a MiniApp still has skills in it, still
 installs like a plugin, still lets you watch a run from your pocket.
 
 ## Agents don't need pixels, they need structure
@@ -127,20 +127,20 @@ Notice the laptop keeps its "read/modify OS data" arrow in every panel. The
 host never stops being the capable half. Pupa's split is about which side
 owns what:
 
-- **The MyApp owns structure and intent:** the components, the memories,
+- **The MiniApp owns structure and intent:** the components, the memories,
   the prompts and skills, the way it all links together.
 - **The host owns capability:** tool access, credentials, private files,
   the live web. These are granted fresh on whatever machine the app runs
   on, and never travel with it.
 
-That split is what makes the bundle safe to pass around. An exported MyApp
+That split is what makes the bundle safe to pass around. An exported MiniApp
 is a single `.pupa` file of inert JSON: the app tree plus its memories,
 with no code inside. The receiving client rebuilds the app from the
 description (so bundles survive version drift), shows a confirm sheet naming
 the app and any agent prompts, and nothing runs until that host grants its
 own abilities.
 
-![What collapses into the bundle: a specific harness setup, scattered docs, plugins, personal app assets and workflows on the left become a single portable Pupa MyApp on the right.](./agentic-setup.png)
+![What collapses into the bundle: a specific harness setup, scattered docs, plugins, personal app assets and workflows on the left become a single portable Pupa MiniApp on the right.](./agentic-setup.png)
 
 One file replaces the pile: harness config, docs, plugins, personal assets,
 workflows. The keys stay home.

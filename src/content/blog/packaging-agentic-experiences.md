@@ -32,9 +32,9 @@ It reads the schedule off the photo and builds you a small app: a calendar
 with every dose on it, and a reminder that fires on your phone when it's time.
 That's the entire setup. You took a picture; you got a working app.
 
-<video src="/videos/myapp-schedule.mp4" controls playsinline preload="metadata" title="Building a MyApp: from a request to a working schedule"></video>
+<video src="/videos/myapp-schedule.mp4" controls playsinline preload="metadata" title="Building a MiniApp: from a request to a working schedule"></video>
 
-We call these little apps **MyApps**. They're built from a handful of plain,
+We call these little apps **MiniApps**. They're built from a handful of plain,
 well-made parts: a calendar, a tracker, a checklist, a chart, a chat room. An
 agent doesn't need a beautiful interface to work with you. It needs a few
 honest parts it can read and update. So the parts stay simple, and the agent
@@ -57,7 +57,7 @@ there next week, and on your other devices too.
 
 ## Make something just for you
 
-Not everything worth building is practical. One of our favourite MyApps is a
+Not everything worth building is practical. One of our favourite MiniApps is a
 bedtime-story studio for a small child: a cast of characters the child
 invented, each with a name and a portrait and a temper; a shelf of finished
 stories; and an agent that writes tonight's episode with that cast, at the
@@ -68,17 +68,17 @@ Nobody sells an app like that. It's too particular: one child, one cast, one
 family's in-jokes. Which is exactly the point. When an app takes an afternoon
 of chatting to make, rather than a team of engineers, it becomes worth
 building things with an audience of one. We think this space is wide open,
-and it's where MyApps feel most like themselves.
+and it's where MiniApps feel most like themselves.
 
 ## It scales when you need it to
 
 The same shape carries real work too. Take a job search. The messy parts
 (reading company pages, tailoring a CV, drafting cover letters) happen in
 conversation, on your own computer, with your own files and logins. The parts
-worth keeping tidy live in the MyApp: a tracker of where you've applied, a
+worth keeping tidy live in the MiniApp: a tracker of where you've applied, a
 calendar of interviews, your experience and the questions you like to ask.
 
-![The Job Search MyApp home: linked parts for skills, an experience library, questions to ask, company research and an interview scheduler, with a prep chat room.](./job-search-app.png)
+![The Job Search MiniApp home: linked parts for skills, an experience library, questions to ask, company research and an interview scheduler, with a prep chat room.](./job-search-app.png)
 
 Notice what the app holds and what it doesn't. Your record and your method
 stay in the app. Your logins, your private files and your web access belong
@@ -87,7 +87,7 @@ home.
 
 ## Hand it to a friend
 
-A MyApp travels as a single file, a **`.pupa`**. There's no code inside:
+A MiniApp travels as a single file, a **`.pupa`**. There's no code inside:
 just a description of the app and the memories you chose to include. When a
 friend opens it, their own Pupa rebuilds the app from that description and
 shows them exactly what's inside before anything runs.
@@ -97,7 +97,7 @@ job-search method is one tap on the share sheet. What your friend receives is
 the shape of what you built and the habits baked into it. Never your data,
 never your logins.
 
-<video src="/videos/export.mp4" controls playsinline preload="metadata" title="Sharing a MyApp: export it as a single .pupa file"></video>
+<video src="/videos/export.mp4" controls playsinline preload="metadata" title="Sharing a MiniApp: export it as a single .pupa file"></video>
 
 The parts apps are made of are an open set, too. If the built-ins don't cover
 your idea, new kinds can be added and shared the same way. How that works,
@@ -111,13 +111,13 @@ things overnight, keeping records current, sending the reminder before you
 knew you needed it. The more they do alone, the more it matters what's
 steering them.
 
-With a MyApp, that steering isn't scattered across prompts and config files.
+With a MiniApp, that steering isn't scattered across prompts and config files.
 It's one thing you can open, read, carry to another machine, and hand to
 someone you trust. An app you can see is an app you can trust with more.
 
 ## Where this goes
 
-There's an early [marketplace](/marketplace) where MyApps people have made
+There's an early [marketplace](/marketplace) where MiniApps people have made
 can be browsed and opened in your own Pupa. The agents will keep talking
 either way. Pupa is for the moment a conversation turns into something you
 want to keep.
