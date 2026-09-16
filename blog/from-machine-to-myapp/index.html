@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v7.0.7"><title>From a skill on your machine to an app in your pocket · Pupa</title><meta name="description" content="A developer's tour of the four ways an agentic setup gets packaged — a skill, a plugin, an app that remote-controls your agent, and a MyApp — and why only the last one gives the agent a native environment instead of a native interface."><meta name="color-scheme" content="light dark"><link rel="icon" type="image/png" href="/favicon.png?v=4"><link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4"><meta property="og:title" content="From a skill on your machine to an app in your pocket · Pupa"><meta property="og:description" content="A developer's tour of the four ways an agentic setup gets packaged — a skill, a plugin, an app that remote-controls your agent, and a MyApp — and why only the last one gives the agent a native environment instead of a native interface."><meta property="og:type" content="website"><link rel="stylesheet" href="/_astro/BaseLayout.suSEz9tG.css"></head><body><header class="site-header"><div class="container bar"><a href="/" class="brand" aria-label="Pupa, home"><img src="/pupa-mark.png" width="36" height="36" alt="Pupa logo" class="pupa-mark" decoding="async"></a><details class="nav-menu"><summary class="nav-menu__btn" aria-label="Toggle navigation menu"><span class="nav-menu__icon" aria-hidden="true"></span></summary><nav class="nav" aria-label="Primary"><a href="/tutorials">Tutorials</a><a href="/marketplace">Marketplace</a><a href="https://github.com/pupa-app">GitHub</a><a href="/blog">Blog</a><a href="/support">Support</a></nav></details></div></header><main><article class="section container"><a class="back-link" href="/blog">← All posts</a><div class="page-head" style="padding-block:0 1.5rem"><h1>From a skill on your machine to an app in your pocket</h1><p class="post-subtitle">Skill, plugin, remote control, MyApp: four steps for packaging an agentic experience</p><p class="page-sub">July 24, 2026 · Pupa team</p></div><details class="toc" open><summary class="toc__title">Contents</summary><nav aria-label="Table of contents"><ul><li><a href="#four-steps-one-question">Four steps, one question</a></li><li><a href="#step-1-a-skill">Step 1: a skill</a></li><li><a href="#step-2-a-plugin">Step 2: a plugin</a></li><li><a href="#step-3-a-remote-control-for-your-agent">Step 3: a remote control for your agent</a></li><li><a href="#step-4-a-myapp-a-plugin-with-a-native-app-attached">Step 4: a MyApp, a plugin with a native app attached</a></li><li><a href="#the-four-steps-side-by-side">The four steps side by side</a></li><li><a href="#agents-dont-need-pixels-they-need-structure">Agents don’t need pixels, they need structure</a></li><li><a href="#what-travels-what-stays">What travels, what stays</a></li><li><a href="#where-the-standard-goes">Where the standard goes</a></li></ul></nav></details><div class="prose"><h2 id="four-steps-one-question">Four steps, one question</h2>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v7.0.7"><title>From a skill on your machine to an app in your pocket · Pupa</title><meta name="description" content="A developer's tour of the four ways an agentic setup gets packaged — a skill, a plugin, an app that remote-controls your agent, and a MiniApp — and why only the last one gives the agent a native environment instead of a native interface."><meta name="color-scheme" content="light dark"><link rel="icon" type="image/png" href="/favicon.png?v=4"><link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4"><meta property="og:title" content="From a skill on your machine to an app in your pocket · Pupa"><meta property="og:description" content="A developer's tour of the four ways an agentic setup gets packaged — a skill, a plugin, an app that remote-controls your agent, and a MiniApp — and why only the last one gives the agent a native environment instead of a native interface."><meta property="og:type" content="website"><link rel="stylesheet" href="/_astro/BaseLayout.suSEz9tG.css"></head><body><header class="site-header"><div class="container bar"><a href="/" class="brand" aria-label="Pupa, home"><img src="/pupa-mark.png" width="36" height="36" alt="Pupa logo" class="pupa-mark" decoding="async"></a><details class="nav-menu"><summary class="nav-menu__btn" aria-label="Toggle navigation menu"><span class="nav-menu__icon" aria-hidden="true"></span></summary><nav class="nav" aria-label="Primary"><a href="/tutorials">Tutorials</a><a href="/marketplace">Marketplace</a><a href="https://github.com/pupa-app">GitHub</a><a href="/blog">Blog</a><a href="/support">Support</a></nav></details></div></header><main><article class="section container"><a class="back-link" href="/blog">← All posts</a><div class="page-head" style="padding-block:0 1.5rem"><h1>From a skill on your machine to an app in your pocket</h1><p class="post-subtitle">Skill, plugin, remote control, MiniApp: four steps for packaging an agentic experience</p><p class="page-sub">July 24, 2026 · Pupa team</p></div><details class="toc" open><summary class="toc__title">Contents</summary><nav aria-label="Table of contents"><ul><li><a href="#four-steps-one-question">Four steps, one question</a></li><li><a href="#step-1-a-skill">Step 1: a skill</a></li><li><a href="#step-2-a-plugin">Step 2: a plugin</a></li><li><a href="#step-3-a-remote-control-for-your-agent">Step 3: a remote control for your agent</a></li><li><a href="#step-4-a-miniapp-a-plugin-with-a-native-app-attached">Step 4: a MiniApp, a plugin with a native app attached</a></li><li><a href="#the-four-steps-side-by-side">The four steps side by side</a></li><li><a href="#agents-dont-need-pixels-they-need-structure">Agents don’t need pixels, they need structure</a></li><li><a href="#what-travels-what-stays">What travels, what stays</a></li><li><a href="#where-the-standard-goes">Where the standard goes</a></li></ul></nav></details><div class="prose"><h2 id="four-steps-one-question">Four steps, one question</h2>
 <p><a href="/blog/packaging-agentic-experiences">Keep what you build with your agent</a>
 told the story from the user’s side: you chat, an app appears, you keep it,
 you hand it to a friend. This post is the companion for people who want to
@@ -46,14 +46,14 @@ step: these apps give the agent a <strong>native interface</strong>, not a <stro
 environment</strong>. The app is a window onto your laptop. Nothing lives in it that
 outlasts the session — nothing you could keep, grow, version, or hand to
 someone else.</p>
-<h2 id="step-4-a-myapp-a-plugin-with-a-native-app-attached">Step 4: a MyApp, a plugin with a native app attached</h2>
-<p><img alt="Step 4: Pupa, where the agent runs behind your own pupa-backend and reads and modifies a structured MyApp of components and Memories, both ways." loading="lazy" decoding="async" width="2198" height="966" src="/_astro/information-flow-3.I3-FAPij_Z1WdR13.webp" srcset=""></p>
+<h2 id="step-4-a-miniapp-a-plugin-with-a-native-app-attached">Step 4: a MiniApp, a plugin with a native app attached</h2>
+<p><img alt="Step 4: Pupa, where the agent runs behind your own pupa-backend and reads and modifies a structured MiniApp of components and Memories, both ways." loading="lazy" decoding="async" width="2198" height="966" src="/_astro/information-flow-3.I3-FAPij_Z1WdR13.webp" srcset=""></p>
 <p>The bottom panel is Pupa. The laptop half is unchanged: Claude still runs
 with its tools against the OS, now behind your own pupa-backend. What’s new
 is the other end of the arrow, and that the arrow points both ways. The
 backend doesn’t report to the app; it <em>reads and modifies</em> it.</p>
 <p>That’s possible because there is now a structured thing to modify. A
-<strong>MyApp</strong> is two halves:</p>
+<strong>MiniApp</strong> is two halves:</p>
 <ul>
 <li><strong>Components:</strong> typed UI blocks (tracker, calendar, checklist, chart,
 chat room) holding items of data, linkable to each other. To the agent
@@ -99,7 +99,7 @@ app for them to operate, and the state that app accumulates while they do.</p>
 <td>the machine the session runs on</td>
 </tr>
 <tr>
-<td><strong>MyApp</strong></td>
+<td><strong>MiniApp</strong></td>
 <td>a native app the agent operates</td>
 <td>components and memories, on device</td>
 <td>one <code>.pupa</code> file</td>
@@ -107,7 +107,7 @@ app for them to operate, and the state that app accumulates while they do.</p>
 </tr>
 </tbody>
 </table>
-<p>Every step keeps the one before it: a MyApp still has skills in it, still
+<p>Every step keeps the one before it: a MiniApp still has skills in it, still
 installs like a plugin, still lets you watch a run from your pocket.</p>
 <h2 id="agents-dont-need-pixels-they-need-structure">Agents don’t need pixels, they need structure</h2>
 <p>The design bet behind the components is that a human app lives or dies on
@@ -126,19 +126,19 @@ session and becomes a place the rest of the phone can reach.</p>
 host never stops being the capable half. Pupa’s split is about which side
 owns what:</p>
 <ul>
-<li><strong>The MyApp owns structure and intent:</strong> the components, the memories,
+<li><strong>The MiniApp owns structure and intent:</strong> the components, the memories,
 the prompts and skills, the way it all links together.</li>
 <li><strong>The host owns capability:</strong> tool access, credentials, private files,
 the live web. These are granted fresh on whatever machine the app runs
 on, and never travel with it.</li>
 </ul>
-<p>That split is what makes the bundle safe to pass around. An exported MyApp
+<p>That split is what makes the bundle safe to pass around. An exported MiniApp
 is a single <code>.pupa</code> file of inert JSON: the app tree plus its memories,
 with no code inside. The receiving client rebuilds the app from the
 description (so bundles survive version drift), shows a confirm sheet naming
 the app and any agent prompts, and nothing runs until that host grants its
 own abilities.</p>
-<p><img alt="What collapses into the bundle: a specific harness setup, scattered docs, plugins, personal app assets and workflows on the left become a single portable Pupa MyApp on the right." loading="lazy" decoding="async" width="608" height="709" src="/_astro/agentic-setup.BXxX84Qn_ix00.webp" srcset=""></p>
+<p><img alt="What collapses into the bundle: a specific harness setup, scattered docs, plugins, personal app assets and workflows on the left become a single portable Pupa MiniApp on the right." loading="lazy" decoding="async" width="608" height="709" src="/_astro/agentic-setup.BXxX84Qn_ix00.webp" srcset=""></p>
 <p>One file replaces the pile: harness config, docs, plugins, personal assets,
 workflows. The keys stay home.</p>
 <h2 id="where-the-standard-goes">Where the standard goes</h2>
