@@ -1,7 +1,7 @@
 ---
 title: "Build your own component"
 subtitle: "How a new canvas shape ships, and stays safe to share"
-description: "Pupa’s component set is an extension point, not a fixed menu. A conceptual tour of the primitive every component is built from, how a new shape travels safely inside an inert bundle, and why every MyApp stays sandboxed from the next."
+description: "Pupa’s component set is an extension point, not a fixed menu. A conceptual tour of the primitive every component is built from, how a new shape travels safely inside an inert bundle, and why every MiniApp stays sandboxed from the next."
 author: "Pupa team"
 date: 2026-07-17
 draft: false
@@ -9,7 +9,7 @@ draft: false
 
 ## Why this post
 
-Once people see a Pupa MyApp made of typed blocks, two questions follow: *"can I
+Once people see a Pupa MiniApp made of typed blocks, two questions follow: *"can I
 add my own block?"* and *"if I share the app, how does my new block travel
 safely?"* This post answers both at a conceptual level. They turn out to be the
 same story told from two ends: a component is only finished when it also knows how
@@ -60,7 +60,7 @@ cross-component composability without having to design either yourself.
       <span class="bd-app__note">⚠ can’t point an item at yours</span>
     </div>
   </div>
-  <figcaption>Every record is an item that belongs to exactly one MyApp. Items
+  <figcaption>Every record is an item that belongs to exactly one MiniApp. Items
   link freely to other items <em>inside</em> the same app, and never across the
   boundary.</figcaption>
 </figure>
@@ -69,7 +69,7 @@ Every record a component shows (a tracker row, a calendar event, a checklist
 line) is an **item** with its own permanent identity. Two rules about items do
 most of the safety and composition work:
 
-- **An item belongs to exactly one MyApp, and can never change owners.** Anything
+- **An item belongs to exactly one MiniApp, and can never change owners.** Anything
   that tries to touch an item in another app is refused outright. That single
   guarantee is what keeps your apps from bleeding into each other. No matter what
   components you bolt on, one app's data can't end up in another's hands.
@@ -108,7 +108,7 @@ to ship a block the agent can create but can't safely share.
 
 <figure class="bd-fig">
   <div class="bd-flow">
-    <div class="bd-flow__step"><b>Your MyApp</b><span>components, items, agents, memories</span></div>
+    <div class="bd-flow__step"><b>Your MiniApp</b><span>components, items, agents, memories</span></div>
     <div class="bd-flow__arrow"><span>&rarr;</span><small>export: keep the structure, drop your records</small></div>
     <div class="bd-flow__step is-accent"><b>.pupa file</b><span>inert data: no code</span></div>
     <div class="bd-flow__arrow"><span>&rarr;</span><small>import: re-checked before anything runs</small></div>
@@ -122,12 +122,12 @@ to ship a block the agent can create but can't safely share.
     <span class="bd-guard">fresh IDs, links kept in-app</span>
     <span class="bd-guard">memory writes sandboxed</span>
   </div>
-  <figcaption>A shared MyApp leaves your host as inert data (structure, not your
+  <figcaption>A shared MiniApp leaves your host as inert data (structure, not your
   records or your tools) and is re-checked on the other host before it rebuilds.
   It can’t do anything until that host grants it capabilities.</figcaption>
 </figure>
 
-Sharing a MyApp means exporting a **`.pupa` bundle**: plain, inert data (the app
+Sharing a MiniApp means exporting a **`.pupa` bundle**: plain, inert data (the app
 and its memories, and **no code**). Everything needed to rebuild the app already
 lives in the client, keyed by each block's kind. That one choice turns
 portability into a question of *policy*, not code distribution.
@@ -146,7 +146,7 @@ Two ideas do most of the work, and neither is really technical:
 ## Every app is its own sandbox
 
 Notice that the safety story is really the *item* story again. Because an item
-belongs to one app and can never change owners, a whole MyApp can only ever see
+belongs to one app and can never change owners, a whole MiniApp can only ever see
 itself: its components, its items, its memories, its agents are walled off from
 every other app you have. Importing a stranger's app doesn't hand it a window into
 your others.
